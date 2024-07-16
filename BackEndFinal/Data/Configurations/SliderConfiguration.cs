@@ -10,6 +10,8 @@ namespace BackEndFinal.Data.Configurations
         public void Configure(EntityTypeBuilder<Slider> builder)
         {
             builder.Property(s => s.ImageUrl).IsRequired();
+            builder.Property(s => s.CreatedTime).HasDefaultValueSql("GETDATE()");
         }
+
     }
 }

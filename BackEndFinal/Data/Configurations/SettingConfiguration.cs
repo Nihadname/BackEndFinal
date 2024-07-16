@@ -13,6 +13,7 @@ namespace BackEndFinal.Data.Configurations
 
             builder.HasIndex(s => s.Key)
                    .IsUnique();
+            builder.Property(s=>s.CreatedTime).HasDefaultValueSql("GETDATE()");
         }
     }
 }

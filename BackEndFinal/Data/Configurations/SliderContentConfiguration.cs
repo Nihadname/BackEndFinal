@@ -12,6 +12,8 @@ namespace BackEndFinal.Data.Configurations
             {
                 builder.Property(property.Name).IsRequired();
             }
+            builder.Property(s => s.CreatedTime).HasDefaultValueSql("GETDATE()");
+
 
         }
     }

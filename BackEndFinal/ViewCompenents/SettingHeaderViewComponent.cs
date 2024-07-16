@@ -12,7 +12,8 @@ namespace BackEndFinal.ViewCompenents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View();
+            var settings = _context.settings.ToDictionary(Key => Key.Key, val => val.Value);
+            return View(await Task.FromResult(settings));
         }
 
     }
