@@ -1,8 +1,11 @@
+using BackEndFinal;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-
+var config = builder.Configuration;
+// Add services to the container
+builder.Services.Register(config);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
