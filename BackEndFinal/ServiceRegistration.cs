@@ -17,6 +17,7 @@ namespace BackEndFinal
             );
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ISliderService, SliderService>();
+            services.AddScoped<ISliderContentService, SliderContentService>();
         }
     }
 }

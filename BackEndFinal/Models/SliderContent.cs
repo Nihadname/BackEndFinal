@@ -6,6 +6,7 @@ namespace BackEndFinal.Models
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool IsMain  { get; set; }
+        public int SliderId     { get; set; }
+        public Slider Slider { get; set; }
     }
 }

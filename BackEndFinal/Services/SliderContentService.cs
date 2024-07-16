@@ -1,34 +1,38 @@
 ﻿using BackEndFinal.Models;
 using BackEndFinal.Services.interfaces;
 using System.Linq.Expressions;
+using WebApplication11.Repositories.interfaces;
 
 namespace BackEndFinal.Services
 {
     public class SliderContentService : ISliderContentService
     {
+        private readonly IRepository<SliderContent> _SliderContentRepository;
         public Task AddSliderAsync(SliderContent Slider)
         {
-            throw new NotImplementedException();
+         return   _SliderContentRepository.AddAsync(Slider);
         }
 
         public Task DeleteSliderAsync(SliderContent Slider)
         {
-            throw new NotImplementedException();
+            return _SliderContentRepository.DeleteAsync(Slider);
         }
 
-        public Task<List<SliderContent>> GetAllSlidersAsync(int skip, int take, params Expression<Func<Slider, object>>[] includes)
+        public Task<List<SliderContent>> GetAllSlidersAsync(int skip, int take, params Expression<Func<SliderContent, object>>[] includes)
         {
-            throw new NotImplementedException();
+            return _SliderContentRepository.GetAllAsync(skip, take, includes);
         }
+         
+       
 
         public Task<SliderContent> GetSliderByIdAsync(int? id)
         {
-            throw new NotImplementedException();
+            return _SliderContentRepository.GetByIdAsync(id);
         }
 
         public Task UpdateSliderAsync(SliderContent Slider)
         {
-            throw new NotImplementedException();
+            return _SliderContentRepository.UpdateAsync(Slider);
         }
     }
 }

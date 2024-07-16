@@ -12,6 +12,7 @@
 			stick.removeClass("sticky");
 		}else{
 			stick.addClass("sticky");
+			stick.addClass("sticky");
 		}
 	});  
 /*------------------------------------

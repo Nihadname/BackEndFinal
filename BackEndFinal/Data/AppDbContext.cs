@@ -28,6 +28,10 @@ namespace BackEndFinal.Data
         {
             //modelBuilder.ApplyConfiguration(new SliderConfiguration());
             //modelBuilder.ApplyConfiguration(new SliderContentConfiguration());
+            modelBuilder.Entity<Slider>()
+               .HasOne(s => s.SliderContent)
+               .WithOne(sc => sc.Slider)
+               .HasForeignKey<SliderContent>(sc => sc.SliderId);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
