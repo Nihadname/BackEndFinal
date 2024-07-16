@@ -1,5 +1,7 @@
 ﻿using BackEndFinal.Data;
+using BackEndFinal.Repositories;
 using Microsoft.EntityFrameworkCore;
+using WebApplication11.Repositories.interfaces;
 
 namespace BackEndFinal
 {
@@ -11,6 +13,7 @@ namespace BackEndFinal
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("AppConnectionString"))
             );
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
     }
 }
