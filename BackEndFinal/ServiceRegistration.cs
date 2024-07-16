@@ -1,5 +1,7 @@
 ﻿using BackEndFinal.Data;
 using BackEndFinal.Repositories;
+using BackEndFinal.Services;
+using BackEndFinal.Services.interfaces;
 using Microsoft.EntityFrameworkCore;
 using WebApplication11.Repositories.interfaces;
 
@@ -14,6 +16,7 @@ namespace BackEndFinal
                 options.UseSqlServer(configuration.GetConnectionString("AppConnectionString"))
             );
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ISliderService, SliderService>();
         }
     }
 }
