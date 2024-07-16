@@ -12,7 +12,7 @@ namespace BackEndFinal.Data
         }
         public DbSet<Slider> sliders { get; set; }
         public DbSet<SliderContent> contents { get; set; }
-       
+       public DbSet<Setting> settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
