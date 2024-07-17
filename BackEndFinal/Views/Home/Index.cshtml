@@ -192,28 +192,33 @@
         </div>
         <!-- Event Area End -->
         <!-- Testimonial Area Start -->
-        <div class="testimonial-area pt-110 pb-105 text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="testimonial-owl owl-theme owl-carousel">
-                        <div class="col-md-8 col-md-offset-2 col-sm-12">
-                            <div class="single-testimonial">
-                                <div class="testimonial-info">
-                                    <div class="testimonial-img">
-                                        <img src="~/img/testimonial/testimonial.jpg" alt="testimonial">
-                                    </div>
-                                    <div class="testimonial-content">
-                                        <p>I must explain to you how all this mistaken idea of denoung pleure and praising pain was born and I will give you a coete account of the system, and expound the actual</p>
-                                        <h4>David Morgan</h4>
-                                        <h5>Student, CSE</h5>
-                                    </div>
+
+<div class="testimonial-area pt-110 pb-105 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="testimonial-owl owl-theme owl-carousel">
+                @foreach (var comment in Model.testimonialAreas)
+                {
+                    <div class="col-md-8 col-md-offset-2 col-sm-12">
+                        <div class="single-testimonial">
+                            <div class="testimonial-info">
+                                <div class="testimonial-img">
+                                    <img src="~/img/testimonial/@comment.UserImageUrl" alt="testimonial">
+                                </div>
+                                <div class="testimonial-content">
+                                    <p>@comment.Comment</p>
+                                    <h4>@comment.FullName</h4>
+                                    <h5>@comment.Status, @comment.field</h5>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
+    </div>
+</div>
+
         <!-- Testimonial Area End -->
         <!-- Blog Area Start -->
         <div class="blog-area pt-150 pb-150">

@@ -50,7 +50,7 @@ namespace BackEndFinal.Repositories
             {
                 queryForAddingDataInto = queryForAddingDataInto.Take(take); 
             }
-            return await queryForAddingDataInto.ToListAsync();
+            return await queryForAddingDataInto.AsNoTracking().ToListAsync();
         }
         public async Task<T> GetByIdAsync(int? id, params Expression<Func<T, object>>[] includes)
         {
@@ -63,7 +63,7 @@ namespace BackEndFinal.Repositories
                     queryForAddingDataInto = queryForAddingDataInto.Include(include);
                 }
             }
-            return await queryForAddingDataInto.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+            return await queryForAddingDataInto.AsNoTracking().FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
 
         public async Task UpdateAsync(T entity)

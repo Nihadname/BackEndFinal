@@ -4,6 +4,7 @@ using BackEndFinal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndFinal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717213323_TestimonialArea")]
+    partial class TestimonialArea
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,40 +47,11 @@ namespace BackEndFinal.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Writer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.ToTable("blogs");
-                });
-
-            modelBuilder.Entity("BackEndFinal.Models.BlogImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("imageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
-
-                    b.ToTable("blogImages");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Category", b =>
@@ -563,17 +537,6 @@ namespace BackEndFinal.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("BackEndFinal.Models.BlogImage", b =>
-                {
-                    b.HasOne("BackEndFinal.Models.Blog", "Blog")
-                        .WithMany("Images")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Blog");
-                });
-
             modelBuilder.Entity("BackEndFinal.Models.Course", b =>
                 {
                     b.HasOne("BackEndFinal.Models.Category", "Category")
@@ -668,11 +631,6 @@ namespace BackEndFinal.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("BackEndFinal.Models.Blog", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Category", b =>

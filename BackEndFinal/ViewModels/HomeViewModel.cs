@@ -8,5 +8,6 @@ namespace BackEndFinal.ViewModels
         public ICollection<OfferedAdvantages> offeredAdvantages { get; set; }
         public List<Event> events { get; set; } 
         public WhyChoose WhyChoose { get; set; }
+        public ICollection<TestimonialArea> testimonialAreas { get; set; }
     }
 }
