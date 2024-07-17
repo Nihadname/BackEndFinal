@@ -4,71 +4,32 @@
         <section id="slider-container" class="slider-area"> 
             <div class="slider-owl owl-theme owl-carousel"> 
                 <!-- Start Slingle Slide -->
-                <div class="single-slide item" style="background-image: url(img/slider/slider1.jpg)">
-                    <!-- Start Slider Content -->
-                    <div class="slider-content-area">  
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-md-offset-left-5"> 
-                                    <div class="slide-content-wrapper">
-                                        <div class="slide-content">
-                                            <h3>EDUCATION MAKES </h3>
-                                            <h2>PROPER HUMANITY </h2>
-                                            <p>I must explain to you how all this mistaken idea of denouncing pleasure and prsing pain was born and I will give you a complete account of the system  </p>
-                                            <a class="default-btn" href="about.html">Learn more</a>
-                                        </div>
+        @foreach(var item in Model.sliders)
+        {
+            <div class="single-slide item" style="background-image: url(img/slider/@item.ImageUrl)">
+                <!-- Start Slider Content -->
+                <div class="slider-content-area">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-7 col-md-offset-left-5">
+                                <div class="slide-content-wrapper">
+                                    <div class="slide-content">
+                                        <h3>@item.SliderContent.Title </h3>
+                                      
+                                        <p>@item.SliderContent.Description  </p>
+                                        <a class="default-btn" href="about.html">Learn more</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Start Slider Content -->
                 </div>
-                <!-- End Slingle Slide -->
+                <!-- Start Slider Content -->
+            </div>
+        }
+        <!-- End Slingle Slide -->
                 <!-- Start Slingle Slide -->
-                <div class="single-slide item" style="background-image: url(img/slider/slider2.jpg)">
-                    <!-- Start Slider Content -->
-                    <div class="slider-content-area">   
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-md-offset-left-5"> 
-                                    <div class="slide-content-wrapper text-left">
-                                        <div class="slide-content">
-                                            <h3>EDUCATION MAKES </h3>
-                                            <h2>PROPER HUMANITY </h2>
-                                            <p>I must explain to you how all this mistaken idea of denouncing pleasure and prsing pain was born and I will give you a complete account of the system  </p>
-                                            <a class="default-btn" href="about.html">Learn more</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Start Slider Content -->
-                </div>
-                <!-- End Slingle Slide -->
-                <!-- Start Slingle Slide -->
-                <div class="single-slide item" style="background-image: url(img/slider/slider3.jpg)">
-                    <!-- Start Slider Content -->
-                    <div class="slider-content-area">  
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-7 col-md-offset-left-5"> 
-                                    <div class="slide-content-wrapper">
-                                        <div class="slide-content">
-                                            <h3>EDUCATION MAKES </h3>
-                                            <h2>PROPER HUMANITY </h2>
-                                            <p>I must explain to you how all this mistaken idea of denouncing pleasure and prsing pain was born and I will give you a complete account of the system  </p>
-                                            <a class="default-btn" href="about.html">Learn more</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Start Slider Content -->
-                </div>
-                <!-- End Slingle Slide -->								
+               
             </div>
         </section>
 		<!-- Background Area End -->
@@ -79,58 +40,27 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <div class="notice-left">
                             <h3>notice board</h3>
-                            <div class="single-notice-left mb-25 pb-25">
-                                <h4>5, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left mb-25 pb-25">
-                                <h4>4, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left pb-75">
-                                <h4>3, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left mb-25 pb-25">
-                                <h4>5, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left mb-25 pb-25">
-                                <h4>4, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left pb-70">
-                                <h4>3, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left mb-25 pb-25">
-                                <h4>5, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left mb-25 pb-25">
-                                <h4>4, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
-                            <div class="single-notice-left pb-70">
-                                <h4>3, June 2017</h4>
-                                <p>I must explain to you how all this mistaken idea of denouncing plasure and praising pain was born and I will give you a complete </p>
-                            </div>
+                    @foreach(var noticeEvent in Model.events)
+                    {
+                        <div class="single-notice-left mb-25 pb-25">
+                            <h4>@noticeEvent.HeldTime.ToString("dd.MM.yyyy")</h4>
+                            <p>@noticeEvent.Description </p>
+                        </div>
+                    }
+                   
+                       
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <div class="notice-right">
-                            <div class="single-notice-right mb-25 pb-25">
-                                <h3>PROFESSIONAL TEACHER</h3>
-                                <p>I must explain to you how all this mistaken idea of denouncing pleure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings </p>
-                            </div> 
-                            <div class="single-notice-right mb-25 pb-25">
-                                <h3>Online courses</h3>
-                                <p>I must explain to you how all this mistaken idea of denouncing pleure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings </p>
-                            </div> 
-                            <div class="single-notice-right">
-                                <h3>easy to addmission</h3>
-                                <p>I must explain to you how all this mistaken idea of denouncing pleure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings </p>
-                            </div>   
+                    @foreach(var Advantage in Model.offeredAdvantages)
+                    {
+                        <div class="single-notice-right mb-25 pb-25">
+                            <h3>@Advantage.Title</h3>
+                            <p>@Advantage.Description </p>
+                        </div>
+                    }
+
                         </div>
                     </div>
                 </div>

@@ -5,10 +5,10 @@ namespace BackEndFinal.Services.interfaces
 {
     public interface IOfferedAdvantageService
     {
-        Task<List<OfferedAdvantages>> GetAllSlidersAsync(int skip, int take, params Expression<Func<OfferedAdvantages, object>>[] includes);
-        Task<OfferedAdvantages> GetSliderByIdAsync(int? id);
-        Task AddSliderAsync(OfferedAdvantages OfferedAdvantages);
-        Task UpdateSliderAsync(OfferedAdvantages OfferedAdvantages);
-        Task DeleteSliderAsync(OfferedAdvantages OfferedAdvantages);
+        Task<List<OfferedAdvantages>> GetAllOfferedAdvantagesAsync(int skip, int take, params Expression<Func<OfferedAdvantages, object>>[] includes);
+        Task<OfferedAdvantages> GetOfferedAdvantagesByIdAsync(int? id);
+        Task AddOfferedAdvantagesAsync(OfferedAdvantages OfferedAdvantages);
+        Task UpdateOfferedAdvantagesAsync(OfferedAdvantages OfferedAdvantages);
+        Task DeleteOfferedAdvantagesAsync(OfferedAdvantages OfferedAdvantages);
     }
 }

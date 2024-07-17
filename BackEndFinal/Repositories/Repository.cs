@@ -32,7 +32,7 @@ namespace BackEndFinal.Repositories
         //    return await _context.Set<T>().AsNoTracking().ToListAsync();
         //}
 
-        public async Task<List<T>> GetAllAsync(int skip = 0, int take = 0,  params Expression<Func<T, object>>[] includes)
+        public async Task<List<T>> GetAllAsync(int skip = 0, int take = 0, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> queryForAddingDataInto = _context.Set<T>();
             if (includes != null)
@@ -40,20 +40,18 @@ namespace BackEndFinal.Repositories
                 foreach (var include in includes)
                 {
                     queryForAddingDataInto = queryForAddingDataInto.Include(include);
-
                 }
             }
             if (skip > 0)
             {
-                queryForAddingDataInto.Skip(skip);
+                queryForAddingDataInto = queryForAddingDataInto.Skip(skip); 
             }
             if (take > 0)
             {
-                queryForAddingDataInto.Take(take);
+                queryForAddingDataInto = queryForAddingDataInto.Take(take); 
             }
             return await queryForAddingDataInto.ToListAsync();
         }
-
         public async Task<T> GetByIdAsync(int? id, params Expression<Func<T, object>>[] includes)
         {
             if (id is null) return null;

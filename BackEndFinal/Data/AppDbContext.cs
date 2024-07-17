@@ -23,6 +23,7 @@ namespace BackEndFinal.Data
         public DbSet<CourseTeacher> coursesTeachers { get; set; }
         public DbSet<Event> events { get; set; }
         public DbSet<Teacher> teachers { get; set; }
+        public DbSet<OfferedAdvantages> OfferedAdvantages {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
