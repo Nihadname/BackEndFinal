@@ -26,7 +26,7 @@ namespace BackEndFinal.Data
         public DbSet<Teacher> teachers { get; set; }
         public DbSet<OfferedAdvantages> OfferedAdvantages {  get; set; }
         public DbSet<WhyChoose> whyChooses  { get; set; }
-        public DbSet<CourseFeature> courseFeatures { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new SliderConfiguration());
@@ -36,10 +36,7 @@ namespace BackEndFinal.Data
                .WithOne(sc => sc.Slider)
                .HasForeignKey<SliderContent>(sc => sc.SliderId);
 
-            modelBuilder.Entity<Course>()
-              .HasOne(c => c.courseFeature)
-              .WithOne(cf => cf.Course)
-              .HasForeignKey<CourseFeature>(cf => cf.CourseId);
+           
 
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }

@@ -4,6 +4,7 @@ using BackEndFinal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndFinal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717165814_newwiofrjorjoefrjomko")]
+    partial class newwiofrjorjoefrjomko
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,16 +86,8 @@ namespace BackEndFinal.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Assessments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ClassDuration")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedTime")
                         .ValueGeneratedOnAdd()
@@ -102,6 +97,39 @@ namespace BackEndFinal.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("courses");
+                });
+
+            modelBuilder.Entity("BackEndFinal.Models.CourseFeature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Assessments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClassDuration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Duration")
                         .IsRequired()
@@ -121,15 +149,12 @@ namespace BackEndFinal.Data.Migrations
                     b.Property<int>("Students")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CourseId")
+                        .IsUnique();
 
-                    b.ToTable("courses");
+                    b.ToTable("courseFeatures");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.CourseImage", b =>
@@ -479,6 +504,17 @@ namespace BackEndFinal.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("BackEndFinal.Models.CourseFeature", b =>
+                {
+                    b.HasOne("BackEndFinal.Models.Course", "Course")
+                        .WithOne("courseFeature")
+                        .HasForeignKey("BackEndFinal.Models.CourseFeature", "CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("BackEndFinal.Models.CourseImage", b =>
                 {
                     b.HasOne("BackEndFinal.Models.Course", "Course")
@@ -564,6 +600,9 @@ namespace BackEndFinal.Data.Migrations
 
             modelBuilder.Entity("BackEndFinal.Models.Course", b =>
                 {
+                    b.Navigation("courseFeature")
+                        .IsRequired();
+
                     b.Navigation("courseImages");
 
                     b.Navigation("courseTeachers");

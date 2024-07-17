@@ -13,7 +13,13 @@ namespace BackEndFinal.Models
         public Category Category { get; set; }
         public List<CourseImage> courseImages { get; set; }
         public List<CourseTeacher> courseTeachers { get; set; }
-        public CourseFeature courseFeature { get; set; }
+        public DateTime Starts { get; set; }
+        public string Duration { get; set; }
+        public string ClassDuration { get; set; }
+        public string SkillLevel { get; set; }
+        public string Language { get; set; }
+        public int Students { get; set; }
+        public string Assessments { get; set; }
         //[NotMapped]
         //public string ShortDesc => Description.Length >= 50 ? Description.Substring(0, 50) : Description;
 
