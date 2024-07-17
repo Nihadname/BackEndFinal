@@ -1,4 +1,5 @@
 ﻿using BackEndFinal.Data.Configurations;
+using BackEndFinal.Data.Migrations;
 using BackEndFinal.Models;
 using BackEndFinal.Models.Common;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,8 @@ namespace BackEndFinal.Data
         public DbSet<Event> events { get; set; }
         public DbSet<Teacher> teachers { get; set; }
         public DbSet<OfferedAdvantages> OfferedAdvantages {  get; set; }
-
+        public DbSet<WhyChoose> whyChooses  { get; set; }
+        public DbSet<CourseFeature> courseFeatures { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new SliderConfiguration());
@@ -33,6 +35,12 @@ namespace BackEndFinal.Data
                .HasOne(s => s.SliderContent)
                .WithOne(sc => sc.Slider)
                .HasForeignKey<SliderContent>(sc => sc.SliderId);
+
+            modelBuilder.Entity<Course>()
+              .HasOne(c => c.courseFeature)
+              .WithOne(cf => cf.Course)
+              .HasForeignKey<CourseFeature>(cf => cf.CourseId);
+
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }

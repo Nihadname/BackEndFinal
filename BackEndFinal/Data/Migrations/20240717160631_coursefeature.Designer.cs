@@ -4,6 +4,7 @@ using BackEndFinal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndFinal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717160631_coursefeature")]
+    partial class coursefeature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("blogs", (string)null);
+                    b.ToTable("blogs");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Category", b =>
@@ -72,7 +75,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories", (string)null);
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Course", b =>
@@ -103,7 +106,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("courses", (string)null);
+                    b.ToTable("courses");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.CourseFeature", b =>
@@ -151,7 +154,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("CourseId")
                         .IsUnique();
 
-                    b.ToTable("courseFeatures", (string)null);
+                    b.ToTable("courseFeatures");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.CourseImage", b =>
@@ -176,7 +179,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("courseImages", (string)null);
+                    b.ToTable("courseImages");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.CourseTeacher", b =>
@@ -202,7 +205,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("coursesTeachers", (string)null);
+                    b.ToTable("coursesTeachers");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Event", b =>
@@ -246,7 +249,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("events", (string)null);
+                    b.ToTable("events");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Footer", b =>
@@ -267,7 +270,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("footers", (string)null);
+                    b.ToTable("footers");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.FooterContent", b =>
@@ -293,7 +296,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("FooterId");
 
-                    b.ToTable("footerContents", (string)null);
+                    b.ToTable("footerContents");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.OfferedAdvantages", b =>
@@ -317,7 +320,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OfferedAdvantages", (string)null);
+                    b.ToTable("OfferedAdvantages");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Setting", b =>
@@ -345,7 +348,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("Key")
                         .IsUnique();
 
-                    b.ToTable("settings", (string)null);
+                    b.ToTable("settings");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Slider", b =>
@@ -367,7 +370,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("sliders", (string)null);
+                    b.ToTable("sliders");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.SliderContent", b =>
@@ -399,7 +402,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("SliderId")
                         .IsUnique();
 
-                    b.ToTable("contents", (string)null);
+                    b.ToTable("contents");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Speaker", b =>
@@ -428,7 +431,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Speaker", (string)null);
+                    b.ToTable("Speaker");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Teacher", b =>
@@ -448,7 +451,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("teachers", (string)null);
+                    b.ToTable("teachers");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.WhyChoose", b =>
@@ -476,7 +479,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("whyChooses", (string)null);
+                    b.ToTable("whyChooses");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Blog", b =>

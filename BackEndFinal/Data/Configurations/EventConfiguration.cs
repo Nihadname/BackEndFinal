@@ -8,7 +8,7 @@ namespace BackEndFinal.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Event> builder)
         {
-            foreach (var property in typeof(SliderContent).GetProperties().Where(p => p.PropertyType == typeof(string)))
+            foreach (var property in typeof(Event).GetProperties().Where(p => p.PropertyType == typeof(string)))
             {
                 builder.Property(property.Name).IsRequired();
             }
