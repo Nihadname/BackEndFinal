@@ -26,7 +26,7 @@ namespace BackEndFinal.Data
         public DbSet<Teacher> teachers { get; set; }
         public DbSet<OfferedAdvantages> OfferedAdvantages {  get; set; }
         public DbSet<WhyChoose> whyChooses  { get; set; }
-
+        public DbSet<EventImage> eventImages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new SliderConfiguration());

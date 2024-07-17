@@ -13,5 +13,6 @@ namespace BackEndFinal.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public List<Speaker> Speakers { get; set; }
+        public List<EventImage> Images { get; set; }
     }
 }
