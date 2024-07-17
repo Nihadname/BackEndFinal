@@ -5,6 +5,7 @@ namespace BackEndFinal.Models
     public class EventImage:BaseEntity
     {
         public string Name { get; set; }
+        public bool IsMain { get; set; }
         public int EventId { get; set; }
         public Event Event { get; set; }
     }

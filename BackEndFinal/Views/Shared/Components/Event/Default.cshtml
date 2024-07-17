@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Event>
+@foreach (var item in Model)
+{
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="single-event mb-60">
+            <div class="event-img">
+                <a href="event-details.html">
+                    <img src="~/img/event/@item.Images.FirstOrDefault(s=>s.IsMain).Name" alt="event">
+                    <div class="course-hover">
+                        <i class="fa fa-link"></i>
+                    </div>
+                </a>
+                <div class="event-date">
+                    <h3><a href="event-details.html">@item.HeldTime.ToString("dd") <span>@item.HeldTime.ToString("MMMM")</span></a></h3>
+
+                </div>
+            </div>
+            <div class="event-content text-left">
+                <h4><a href="event-details.html">@item.Title</a></h4>
+                <ul>
+                    <li><span>time:</span> @item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")</li>
+                    <li><span>venue</span>@item.Location</li>
+                </ul>
+                <div class="event-content-right">
+                    <a class="default-btn" href="event-details.html">join now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

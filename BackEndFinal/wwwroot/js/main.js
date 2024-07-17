@@ -128,4 +128,29 @@ $(".notice-left").niceScroll({
             
         });
 
-})(jQuery);	
+})(jQuery);
+
+$(document).ready(function () {
+    //load more
+    let skip = 3;
+
+    $(document).on("click", "#loadmore", function () {
+        $.ajax({
+            url: "/Event/Loadmore?skip=" + skip,
+            method: "get",
+            success: function (datas) {
+                console.log(datas);
+                $("#EventList").append(datas);
+                skip += 3;
+                const EventCount = $("#EventCount").val();
+                console.log(skip);
+                if (skip >= EventCount) {
+                    $("#loadmore").remove();
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+});
