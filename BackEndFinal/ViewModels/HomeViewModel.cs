@@ -10,5 +10,7 @@ namespace BackEndFinal.ViewModels
         public WhyChoose WhyChoose { get; set; }
         public ICollection<TestimonialArea> testimonialAreas { get; set; }
         public ICollection<Blog> blogs { get; set; }
+        public Task<PaginationVM<Blog>> PaginatedBlogs { get; set; } 
+
     }
 }

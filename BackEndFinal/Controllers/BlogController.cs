@@ -1,5 +1,7 @@
-﻿using BackEndFinal.Services;
+﻿using BackEndFinal.Models;
+using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
+using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEndFinal.Controllers
@@ -13,17 +15,16 @@ namespace BackEndFinal.Controllers
             _blogService = blogService;
         }
 
-        public async  Task<IActionResult> Index()
+        public async  Task<IActionResult> Index(int page=1)
         {
-            var blogs = await _blogService.GetAllBlogAsync(0, 0, s => s.Images, s => s.Category);
-            ViewBag.BlogCount = blogs.Count();
-            return View(blogs);
+            ViewBag.CurrentPage = page;
+            return View();
         }
-        public async Task<IActionResult> Loadmore(int skip = 3)
+        public async Task<IActionResult> Search(string searchTerm)
         {
-            var datas = await _blogService.GetAllBlogAsync(skip, 3, s => s.Images);
-            return PartialView("_BlogPartialView", datas);
-
+            if (string.IsNullOrEmpty(searchTerm)) return BadRequest();
+            var result = await _blogService.SearchBlogsAsync(searchTerm);
+                  return PartialView("_SearchPartialView", result);
 
         }
     }

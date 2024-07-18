@@ -21,6 +21,7 @@ namespace BackEndFinal
             services.AddScoped<IOfferedAdvantageService, OfferedAdvantageService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<ICourseService, CourseService>();
         }
     }
 }

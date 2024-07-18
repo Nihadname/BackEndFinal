@@ -1,7 +1,4 @@
-﻿@{
-    Layout = "_Layout1"; 
-}
-@model IEnumerable<Event>
+﻿@model List<Course>
 <div class="banner-area-wrapper">
     <div class="banner-area text-center">
         <div class="container">
@@ -9,7 +6,7 @@
                 <div class="col-xs-12">
                     <div class="banner-content-wrapper">
                         <div class="banner-content">
-                            <h2>event</h2>
+                            <h2>courses</h2>
                         </div>
                     </div>
                 </div>
@@ -18,23 +15,34 @@
     </div>
 </div>
 <!-- Banner Area End -->
-<!-- Event Start -->
-<div class="event-area three text-center pt-150 pb-150">
+<!-- Course Start -->
+<div class="course-area pt-150 pb-150">
     <div class="container">
-        <input type="hidden" value="@ViewBag.EventCount" id="EventCount" />
-        <div class="row" id="EventList">
-            @await Component.InvokeAsync("Event", new { take = 3 })
-
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="course-title">
+                    <h3>search courses</h3>
+                </div>
+                <div class="course-form">
+                    <form id="search" action="#">
+                        <input type="search" placeholder="Search..." name="search" />
+                        <button type="submit">search</button>
+                    </form>
+                </div>
+            </div>
         </div>
-   
-    </div>
-  
-</div>
-<div class="d-flex justify-content-center" style="display: flex;
+        <input type="hidden" value="@ViewBag.CourseCount" id="CourseCount" />
+
+        <div class="row" id="CourseList">
+            @await Component.InvokeAsync("Course", new { take = 3 })
+        </div>
+        <div class="d-flex justify-content-center" style="display: flex;
     justify-content: center; margin-top:20px;">
-    <button class="btn btn-primary" id="loadmore">Load More</button>
+            <button class="btn btn-primary" id="loadmore2">Load More</button>
+        </div>
+    </div>
 </div>
-<!-- Event End -->
+<!-- Course End -->
 <!-- Subscribe Start -->
 <div class="subscribe-area pt-60 pb-70">
     <div class="container">

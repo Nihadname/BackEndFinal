@@ -20,6 +20,7 @@ namespace BackEndFinal.Models
         public string Language { get; set; }
         public int Students { get; set; }
         public string Assessments { get; set; }
+        
         //[NotMapped]
         //public string ShortDesc => Description.Length >= 50 ? Description.Substring(0, 50) : Description;
 

@@ -1,5 +1,10 @@
 ﻿@using BackEndFinal.ViewModels
 	@model HomeViewModel
+
+@{
+    var paginationModel = await Model.PaginatedBlogs;
+}
+
     <!-- Background Area Start -->
         <section id="slider-container" class="slider-area"> 
             <div class="slider-owl owl-theme owl-carousel"> 
@@ -197,6 +202,7 @@
     <div class="container">
         <div class="row">
             <div class="testimonial-owl owl-theme owl-carousel">
+                @if (Model.testimonialAreas != null){
                 @foreach (var comment in Model.testimonialAreas)
                 {
                     <div class="col-md-8 col-md-offset-2 col-sm-12">
@@ -212,7 +218,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No testimonials available.</p>
                 }
             </div>
         </div>
@@ -221,23 +232,69 @@
 
         <!-- Testimonial Area End -->
         <!-- Blog Area Start -->
-        <div class="blog-area pt-150 pb-150">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="section-title text-center">
-                            <img src="~/img/icon/section.png" alt="section-title">
-                            <h2>LATEST FROM BLOG</h2>
+<div class="blog-area pt-150 pb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="section-title text-center">
+                    <img src="~/img/icon/section.png" alt="section-title">
+                    <h2>LATEST FROM BLOG</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (var blog in paginationModel)
+            {
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="single-blog">
+                        <div class="blog-img">
+                            <a href="blog-details.html">
+                                <img src="~/img/blog/@blog.Images.FirstOrDefault(s => s.IsMain == true).imageUrl" alt="blog">
+                            </a>
+                            <div class="blog-hover">
+                                <a href="blog-details.html"><i class="fa fa-link"></i></a>
+                            </div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-top">
+                                <p>By @blog.Writer / @blog.CreatedTime?.ToString("d, MMMM yyyy") / <i class="fa fa-comments-o"></i> 4</p>
+                            </div>
+                            <div class="blog-bottom">
+                                <h2><a href="blog-details.html">@blog.Title</a></h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-        <div class="row">
-            @await Component.InvokeAsync("Blog", new { take = 3 })
-
+            }
         </div>
-            </div>
+
+        <div class="d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    @if (paginationModel.HasPrev)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = paginationModel.CurrentPage - 1 })">Previous</a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= paginationModel.TotalPage; i++)
+                    {
+                        <li class="page-item @(paginationModel.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (paginationModel.HasNext)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = paginationModel.CurrentPage + 1 })">Next</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
+    </div>
+</div>
         <!-- Blog Area End -->
         <!-- Subscribe Start -->
         <div class="subscribe-area pt-60 pb-70">

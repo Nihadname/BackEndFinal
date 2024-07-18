@@ -52,6 +52,12 @@ namespace BackEndFinal.Repositories
             }
             return await queryForAddingDataInto.AsNoTracking().ToListAsync();
         }
+
+        public IQueryable<T> GetAllQuery()
+        {
+            return _context.Set<T>().AsQueryable();
+        }
+
         public async Task<T> GetByIdAsync(int? id, params Expression<Func<T, object>>[] includes)
         {
             if (id is null) return null;

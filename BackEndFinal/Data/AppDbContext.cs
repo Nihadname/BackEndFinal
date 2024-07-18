@@ -29,6 +29,7 @@ namespace BackEndFinal.Data
         public DbSet<EventImage> eventImages { get; set; }
         public DbSet<BackEndFinal.Models.TestimonialArea> testimonialAreas { get; set; }
         public DbSet<BlogImage> blogImages  { get; set; }
+        public DbSet<Subscriber> subscribers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

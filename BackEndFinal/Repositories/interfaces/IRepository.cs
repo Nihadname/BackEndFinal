@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BackEndFinal.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace WebApplication11.Repositories.interfaces
@@ -7,7 +8,8 @@ namespace WebApplication11.Repositories.interfaces
     {
         Task<List<T>> GetAllAsync(int skip = 0, int take = 0, params Expression<Func<T, object>>[] includes);
         Task<T> GetByIdAsync(int? id, params Expression<Func<T, object>>[] includes);
-  
+       IQueryable<T> GetAllQuery();
+       
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);

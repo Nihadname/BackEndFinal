@@ -1,10 +1,13 @@
 ﻿using BackEndFinal.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace BackEndFinal.Services.interfaces
 {
     public interface IBlogService
     {
+        Task<List<Blog>> SearchBlogsAsync(string searchTerm);
+        IQueryable<Blog> GetAllBlogQuery();
         Task<List<Blog>> GetAllBlogAsync(int skip, int take, params Expression<Func<Blog, object>>[] includes);
         Task<Blog> GetBlogByIdAsync(int? id);
         Task AddBlogAsync(Blog Blog);

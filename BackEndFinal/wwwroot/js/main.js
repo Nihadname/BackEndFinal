@@ -155,15 +155,15 @@ $(document).ready(function () {
     });
     $(document).on("click", "#loadmore2", function () {
         $.ajax({
-            url: "/Blog/Loadmore?skip=" + skip2,
+            url: "/Course/Loadmore?skip=" + skip,
             method: "get",
             success: function (datas) {
                 console.log(datas);
-                $("#BlogList").append(datas);
-                skip2 += 3;
-                const EventCount = $("#BlogCount").val();
-                console.log(skip2);
-                if (skip2 >= EventCount) {
+                $("#CourseList").append(datas);
+                skip += 3;
+                const EventCount = $("#CourseCount").val();
+                console.log(skip);
+                if (skip >= EventCount) {
                     $("#loadmore2").remove();
                 }
             },
@@ -172,4 +172,5 @@ $(document).ready(function () {
             }
         });
     });
+
 });

@@ -24,7 +24,7 @@ namespace BackEndFinal.Controllers
             _appDbContext = appDbContext;
             _blogService = blogService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page=1)
         {
            HomeViewModel model = new HomeViewModel();
             model.sliders =await _sliderService.GetAllSlidersAsync(0, 0, s=>s.SliderContent);
@@ -33,9 +33,11 @@ namespace BackEndFinal.Controllers
             model.events = events.OrderByDescending(e => e.HeldTime).ToList();
            model.WhyChoose= await _appDbContext.whyChooses.AsNoTracking().FirstOrDefaultAsync();
             model.testimonialAreas=await _appDbContext.testimonialAreas.AsNoTracking().ToListAsync();
-            var blogs= await _blogService.GetAllBlogAsync(0, 0, s => s.Images, s => s.Category);
-            model.blogs = blogs;
-     
+            var query = _blogService.GetAllBlogQuery();
+            var blogsQuery = query.Include(s => s.Images).AsNoTracking();
+            var paginatedBlogs = PaginationVM<Blog>.Create(blogsQuery, page, 3);
+            model.PaginatedBlogs = paginatedBlogs;
+
             return View(model);
         }
     }
