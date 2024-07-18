@@ -9,5 +9,6 @@ namespace BackEndFinal.ViewModels
         public List<Event> events { get; set; } 
         public WhyChoose WhyChoose { get; set; }
         public ICollection<TestimonialArea> testimonialAreas { get; set; }
+        public ICollection<Blog> blogs { get; set; }
     }
 }

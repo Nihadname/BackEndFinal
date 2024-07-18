@@ -8,5 +8,7 @@ namespace BackEndFinal.Models
         public string imageUrl  { get; set; }
         public int BlogId { get; set; } 
         public Blog Blog    { get; set; }
+        public bool? IsMain { get; set; }
+
     }
 }

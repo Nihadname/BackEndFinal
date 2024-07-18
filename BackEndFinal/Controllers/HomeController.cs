@@ -13,14 +13,16 @@ namespace BackEndFinal.Controllers
         private readonly ISliderContentService _sliderContentService;
         private readonly IOfferedAdvantageService _overlayService;
         private readonly IEventService _eventService;
+        private readonly IBlogService _blogService;
         private readonly AppDbContext _appDbContext;
-        public HomeController(ISliderService sliderService, ISliderContentService sliderContentService, IOfferedAdvantageService overlayService, IEventService eventService, AppDbContext appDbContext)
+        public HomeController(ISliderService sliderService, ISliderContentService sliderContentService, IOfferedAdvantageService overlayService, IEventService eventService, AppDbContext appDbContext, IBlogService blogService)
         {
             _sliderService = sliderService;
             _sliderContentService = sliderContentService;
             _overlayService = overlayService;
             _eventService = eventService;
             _appDbContext = appDbContext;
+            _blogService = blogService;
         }
         public async Task<IActionResult> Index()
         {
@@ -31,6 +33,7 @@ namespace BackEndFinal.Controllers
             model.events = events.OrderByDescending(e => e.HeldTime).ToList();
            model.WhyChoose= await _appDbContext.whyChooses.AsNoTracking().FirstOrDefaultAsync();
             model.testimonialAreas=await _appDbContext.testimonialAreas.AsNoTracking().ToListAsync();
+            model.blogs=await _blogService.GetAllBlogAsync(0,0,s=>s.Images,s=>s.Category);
             return View(model);
         }
     }

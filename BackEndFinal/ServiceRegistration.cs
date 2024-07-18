@@ -20,6 +20,7 @@ namespace BackEndFinal
             services.AddScoped<ISliderContentService, SliderContentService>();
             services.AddScoped<IOfferedAdvantageService, OfferedAdvantageService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IBlogService, BlogService>();
         }
     }
 }
