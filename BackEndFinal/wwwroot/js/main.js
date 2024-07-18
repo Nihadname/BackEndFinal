@@ -133,7 +133,7 @@ $(".notice-left").niceScroll({
 $(document).ready(function () {
     //load more
     let skip = 3;
-
+    let skip2 = 3;
     $(document).on("click", "#loadmore", function () {
         $.ajax({
             url: "/Event/Loadmore?skip=" + skip,
@@ -146,6 +146,25 @@ $(document).ready(function () {
                 console.log(skip);
                 if (skip >= EventCount) {
                     $("#loadmore").remove();
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+    $(document).on("click", "#loadmore2", function () {
+        $.ajax({
+            url: "/Blog/Loadmore?skip=" + skip2,
+            method: "get",
+            success: function (datas) {
+                console.log(datas);
+                $("#BlogList").append(datas);
+                skip2 += 3;
+                const EventCount = $("#BlogCount").val();
+                console.log(skip2);
+                if (skip2 >= EventCount) {
+                    $("#loadmore2").remove();
                 }
             },
             error: function (error) {

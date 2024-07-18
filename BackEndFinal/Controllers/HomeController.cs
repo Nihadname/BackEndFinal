@@ -33,7 +33,9 @@ namespace BackEndFinal.Controllers
             model.events = events.OrderByDescending(e => e.HeldTime).ToList();
            model.WhyChoose= await _appDbContext.whyChooses.AsNoTracking().FirstOrDefaultAsync();
             model.testimonialAreas=await _appDbContext.testimonialAreas.AsNoTracking().ToListAsync();
-            model.blogs=await _blogService.GetAllBlogAsync(0,0,s=>s.Images,s=>s.Category);
+            var blogs= await _blogService.GetAllBlogAsync(0, 0, s => s.Images, s => s.Category);
+            model.blogs = blogs;
+     
             return View(model);
         }
     }
