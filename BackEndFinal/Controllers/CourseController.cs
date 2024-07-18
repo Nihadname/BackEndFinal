@@ -15,18 +15,19 @@ public CourseController(ICourseService courseService)
             this.courseService = courseService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string keyword = "")
         {
-            var courses =await courseService.GetAlCourseAsync(0, 0, s => s.courseImages, s => s.Category);
-            ViewBag.CourseCount = courses.Count();
-            return View(courses);
+            var datas = await courseService.GetAlCourseAsync(0, 0, s => s.courseImages, s => s.Category);
+            ViewBag.Count=datas.Count();
+            ViewBag.Keyword = keyword;
+            return View();
         }
         public async Task<IActionResult> Loadmore(int skip = 3)
         {
             var datas = await courseService.GetAlCourseAsync(skip, 3, s => s.courseImages, s => s.Category);
             return PartialView("_CoursePartialView", datas);
-
-
         }
+        
+       
     }
 }

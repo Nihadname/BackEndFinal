@@ -24,20 +24,20 @@
                     <h3>search courses</h3>
                 </div>
                 <div class="course-form">
-                    <form id="search" action="#">
-                        <input type="search" placeholder="Search..." name="search" />
+                    <form id="search" method="get" asp-action="Index" asp-controller="Course">
+                        <input type="search" placeholder="Search..." name="keyword" value="@ViewBag.Keyword" />
                         <button type="submit">search</button>
                     </form>
                 </div>
             </div>
         </div>
-        <input type="hidden" value="@ViewBag.CourseCount" id="CourseCount" />
+        <input type="hidden" value="@ViewBag.Count" id="CourseCount" />
 
         <div class="row" id="CourseList">
-            @await Component.InvokeAsync("Course", new { take = 3 })
+            @await Component.InvokeAsync("Course", new { keyword = ViewBag.Keyword })
+
         </div>
-        <div class="d-flex justify-content-center" style="display: flex;
-    justify-content: center; margin-top:20px;">
+        <div class="d-flex justify-content-center" style="display: flex; justify-content: center; margin-top:20px;">
             <button class="btn btn-primary" id="loadmore2">Load More</button>
         </div>
     </div>

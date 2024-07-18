@@ -14,10 +14,13 @@ namespace BackEndFinal.ViewCompenents
         {
             _courseService = courseService;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int take = 3)
+        public async Task<IViewComponentResult> InvokeAsync(string keyword = "", int skip = 0, int take = 3)
         {
-            var courses = await _courseService.GetAlCourseAsync(0, take, s => s.Category, s=>s.courseImages);
-            return View(await Task.FromResult(courses));
+            var courses = string.IsNullOrEmpty(keyword)
+                ? await _courseService.GetAlCourseAsync(skip, take, s => s.Category, s => s.courseImages)
+                : await _courseService.SearchCoursesAsync(keyword, skip, take, s => s.Category, s => s.courseImages);
+
+            return View(courses);
         }
     }
 }

@@ -155,15 +155,17 @@ $(document).ready(function () {
     });
     $(document).on("click", "#loadmore2", function () {
         $.ajax({
-            url: "/Course/Loadmore?skip=" + skip,
+            url: "/Course/Loadmore?skip=" + skip2,
             method: "get",
             success: function (datas) {
                 console.log(datas);
                 $("#CourseList").append(datas);
-                skip += 3;
-                const EventCount = $("#CourseCount").val();
-                console.log(skip);
-                if (skip >= EventCount) {
+                skip2 += 3;
+                const CourseCount = $("#CourseCount").val();
+                console.log(CourseCount);
+
+                console.log(skip2);
+                if (skip2 >= CourseCount) {
                     $("#loadmore2").remove();
                 }
             },

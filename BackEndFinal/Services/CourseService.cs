@@ -1,5 +1,6 @@
 ﻿using BackEndFinal.Models;
 using BackEndFinal.Services.interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WebApplication11.Repositories.interfaces;
 
@@ -35,6 +36,34 @@ namespace BackEndFinal.Services
         {
            return _courseService.GetByIdAsync(id);
         }
+
+        public async Task<List<Course>> SearchCoursesAsync(string keyword, int skip, int take, params Expression<Func<Course, object>>[] includes)
+        {
+            IQueryable<Course> query = _courseService.GetAllQuery();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(c => c.Title.Contains(keyword) || c.Description.Contains(keyword));
+            }
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            if (skip > 0)
+            {
+                query = query.Skip(skip);
+            }
+
+            if (take > 0)
+            {
+                query = query.Take(take);
+            }
+
+            return await query.ToListAsync();
+        }
+
 
         public Task UpdateCourseAsync(Course Course)
         {
