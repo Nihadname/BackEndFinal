@@ -45,13 +45,9 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <div class="notice-left">
                             <h3>notice board</h3>
-                    @foreach(var noticeEvent in Model.events)
-                    {
-                        <div class="single-notice-left mb-25 pb-25">
-                            <h4>@noticeEvent.HeldTime.ToString("d, MMMM yyyy");</h4>
-                            <p>@noticeEvent.Description </p>
-                        </div>
-                    }
+                    @await Component.InvokeAsync("EventTable")
+
+                    
                    
                        
                         </div>

@@ -32,7 +32,7 @@ namespace BackEndFinal.Controllers
             ICollection<Event> events = await _eventService.GetAllEventAsync(0, 8, s => s.Speakers, skip => skip.Category);
             model.events = events.OrderByDescending(e => e.HeldTime).ToList();
            model.WhyChoose= await _appDbContext.whyChooses.AsNoTracking().FirstOrDefaultAsync();
-            model.testimonialAreas=await _appDbContext.testimonialAreas.AsNoTracking().ToListAsync();
+            //model.testimonialAreas=await _appDbContext.testimonialAreas.AsNoTracking().ToListAsync();
             var query = _blogService.GetAllBlogQuery();
             var blogsQuery = query.Include(s => s.Images).AsNoTracking();
             var paginatedBlogs = PaginationVM<Blog>.Create(blogsQuery, page, 3);

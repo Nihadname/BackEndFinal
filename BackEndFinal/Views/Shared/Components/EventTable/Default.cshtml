@@ -1,0 +1,8 @@
+﻿@model Task<List<Event>>
+@foreach (var noticeEvent in await Model)
+{
+    <div class="single-notice-left mb-25 pb-25">
+        <h4>@noticeEvent.HeldTime.ToString("d, MMMM yyyy");</h4>
+        <p>@noticeEvent.Description </p>
+    </div>
+}
