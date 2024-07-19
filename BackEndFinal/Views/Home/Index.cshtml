@@ -156,29 +156,8 @@
     <div class="container">
         <div class="row">
             <div class="testimonial-owl owl-theme owl-carousel">
-                @if (Model.testimonialAreas != null){
-                @foreach (var comment in Model.testimonialAreas)
-                {
-                    <div class="col-md-8 col-md-offset-2 col-sm-12">
-                        <div class="single-testimonial">
-                            <div class="testimonial-info">
-                                <div class="testimonial-img">
-                                    <img src="~/img/testimonial/@comment.UserImageUrl" alt="testimonial">
-                                </div>
-                                <div class="testimonial-content">
-                                    <p>@comment.Comment</p>
-                                    <h4>@comment.FullName</h4>
-                                    <h5>@comment.Status, @comment.field</h5>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <p>No testimonials available.</p>
-                }
+                @await Component.InvokeAsync("TestimonialArea")
+
             </div>
         </div>
     </div>
