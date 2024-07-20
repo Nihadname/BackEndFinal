@@ -49,26 +49,23 @@ namespace BackEndFinal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.ToDictionary(
-            kvp => kvp.Key,
-            kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-        );
-                return BadRequest(JsonConvert.SerializeObject(errors));
+                TempData["ErroreEmailMessage"] = "dont write empty value";
+                return RedirectToAction(nameof(Index));
             }
             if (await _subscriberService.GetAllSubscriberQuery().AnyAsync(s => s.EmailAddress.ToLower() == subscriber.EmailAddress))
             {
 
-                ModelState.AddModelError("EmailAddress", "Bele bir EmailAddress mövcuddur");
-                var errors = ModelState.ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-                return BadRequest(JsonConvert.SerializeObject(errors));
+                ModelState.AddModelError("EmailAddress", "email already exists");
+
+                TempData["TheSameEmailMessage"] = "email already exists";
+                return RedirectToAction(nameof(Index));
             }
             var newSubscriber = new Subscriber() { 
                 EmailAddress = subscriber.EmailAddress,
             };
 await _subscriberService.AddSubscriberAsync(newSubscriber);
+            TempData["SuccessMessage"] = "Subscription successful!";
+
             return RedirectToAction(nameof(Index));
         }
     }

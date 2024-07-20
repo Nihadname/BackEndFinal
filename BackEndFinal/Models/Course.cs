@@ -1,4 +1,5 @@
 ﻿using BackEndFinal.Models.Common;
+using Humanizer;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,7 +21,11 @@ namespace BackEndFinal.Models
         public string Language { get; set; }
         public int Students { get; set; }
         public string Assessments { get; set; }
-        
+        public string? AboutCourse { get; set; }
+        public string? HowToApply { get; set; }
+        public string? CERTIFICATION { get; set; }
+
+
         //[NotMapped]
         //public string ShortDesc => Description.Length >= 50 ? Description.Substring(0, 50) : Description;
 

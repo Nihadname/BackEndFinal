@@ -17,10 +17,9 @@ namespace BackEndFinal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var teachers =  _teacherService.GetAllTeacherQuery();
-            var teachersWithCourses=await teachers.Include(s=>s.courseTeachers).ThenInclude(s=>s.Course).ToListAsync();
+            
 
-            return View(teachersWithCourses);
+            return View();
         }
     }
 }
