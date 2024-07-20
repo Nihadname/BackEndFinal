@@ -9,6 +9,7 @@ namespace BackEndFinal.Models
 
         public string Position { get; set; }
         public string ImageUrl { get; set; }
+        public TeacherContactInfo TeacherContactInfo { get; set; }
         public List<CourseTeacher> courseTeachers { get; set; }
     }
 }

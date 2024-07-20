@@ -31,6 +31,7 @@ namespace BackEndFinal.Data
         public DbSet<BlogImage> blogImages  { get; set; }
         public DbSet<Subscriber> subscribers { get; set; }
         public DbSet<About> abouts { get; set; }
+        public DbSet<TeacherContactInfo> teacherContactInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,7 +42,6 @@ namespace BackEndFinal.Data
                .WithOne(sc => sc.Slider)
                .HasForeignKey<SliderContent>(sc => sc.SliderId);
 
-           
 
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }

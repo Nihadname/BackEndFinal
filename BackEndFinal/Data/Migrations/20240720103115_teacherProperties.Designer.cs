@@ -4,6 +4,7 @@ using BackEndFinal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndFinal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240720103115_teacherProperties")]
+    partial class teacherProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -556,52 +559,6 @@ namespace BackEndFinal.Data.Migrations
                     b.ToTable("teachers");
                 });
 
-            modelBuilder.Entity("BackEndFinal.Models.TeacherContactInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FaceBookUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IntaUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SkypeUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("pinterestUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeacherId")
-                        .IsUnique();
-
-                    b.ToTable("teacherContactInfos");
-                });
-
             modelBuilder.Entity("BackEndFinal.Models.TestimonialArea", b =>
                 {
                     b.Property<int>("Id")
@@ -786,17 +743,6 @@ namespace BackEndFinal.Data.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("BackEndFinal.Models.TeacherContactInfo", b =>
-                {
-                    b.HasOne("BackEndFinal.Models.Teacher", "Teacher")
-                        .WithOne("TeacherContactInfo")
-                        .HasForeignKey("BackEndFinal.Models.TeacherContactInfo", "TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Teacher");
-                });
-
             modelBuilder.Entity("BackEndFinal.Models.Blog", b =>
                 {
                     b.Navigation("Images");
@@ -838,9 +784,6 @@ namespace BackEndFinal.Data.Migrations
 
             modelBuilder.Entity("BackEndFinal.Models.Teacher", b =>
                 {
-                    b.Navigation("TeacherContactInfo")
-                        .IsRequired();
-
                     b.Navigation("courseTeachers");
                 });
 #pragma warning restore 612, 618

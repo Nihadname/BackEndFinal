@@ -23,6 +23,8 @@ namespace BackEndFinal
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ISubscriberService, SubscriberService>();
+            services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<ITeacherContactInfoService, TeacherContactInfoService>();
         }
     }
 }

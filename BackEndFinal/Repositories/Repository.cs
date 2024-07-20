@@ -34,30 +34,37 @@ namespace BackEndFinal.Repositories
 
         public async Task<List<T>> GetAllAsync(int skip = 0, int take = 0, params Expression<Func<T, object>>[] includes)
         {
-            IQueryable<T> queryForAddingDataInto = _context.Set<T>();
-            if (includes != null)
+            IQueryable<T> query = _context.Set<T>();
+
+            foreach (var include in includes)
             {
-                foreach (var include in includes)
-                {
-                    queryForAddingDataInto = queryForAddingDataInto.Include(include);
-                }
+                query = query.Include(include);
             }
+
             if (skip > 0)
             {
-                queryForAddingDataInto = queryForAddingDataInto.Skip(skip); 
+                query = query.Skip(skip);
             }
+
             if (take > 0)
             {
-                queryForAddingDataInto = queryForAddingDataInto.Take(take); 
+                query = query.Take(take);
             }
-            return await queryForAddingDataInto.AsNoTracking().ToListAsync();
+
+            return await query.AsNoTracking().ToListAsync();
         }
 
-        public IQueryable<T> GetAllQuery()
+        public IQueryable<T> GetAllQuery(params Expression<Func<T, object>>[] includes)
         {
-            return _context.Set<T>().AsQueryable();
-        }
+            IQueryable<T> query = _context.Set<T>();
 
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.AsQueryable();
+        }
         public async Task<T> GetByIdAsync(int? id, params Expression<Func<T, object>>[] includes)
         {
             if (id is null) return null;
@@ -71,6 +78,7 @@ namespace BackEndFinal.Repositories
             }
             return await queryForAddingDataInto.AsNoTracking().FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
+
 
         public async Task UpdateAsync(T entity)
         {
