@@ -24,6 +24,7 @@ namespace BackEndFinal.Models
         public string? AboutCourse { get; set; }
         public string? HowToApply { get; set; }
         public string? CERTIFICATION { get; set; }
+        public int Price { get; set; }
 
 
         //[NotMapped]

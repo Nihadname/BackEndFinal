@@ -25,6 +25,7 @@ namespace BackEndFinal
             services.AddScoped<ISubscriberService, SubscriberService>();
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<ITeacherContactInfoService, TeacherContactInfoService>();
+            services.AddScoped<ICategoryService, CategoryService>();
         }
     }
 }

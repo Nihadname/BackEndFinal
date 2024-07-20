@@ -6,7 +6,7 @@
     <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="single-course mb-70">
             <div class="course-img">
-                <a href="course-details.html">
+                <a asp-action="Detail" asp-controller="Course" asp-route-id="@item.Id">
                     <img src="~/img/course/@item.courseImages.FirstOrDefault().Name" alt="course">
                     <div class="course-hover">
                         <i class="fa fa-link"></i>

@@ -32,9 +32,9 @@ namespace BackEndFinal.Services
             return _courseService.GetAllAsync(skip, take, includes);
         }
 
-        public Task<Course> GetCourseByIdAsync(int? id)
+        public Task<Course> GetCourseByIdAsync(int? id, params Expression<Func<Course, object>>[] includes)
         {
-           return _courseService.GetByIdAsync(id);
+           return _courseService.GetByIdAsync(id,includes);
         }
 
         public async Task<List<Course>> SearchCoursesAsync(string keyword, int skip, int take, params Expression<Func<Course, object>>[] includes)

@@ -1,0 +1,27 @@
+﻿@model Category
+
+<div class="container">
+    <h2>@Model.Name</h2>
+    <div class="row">
+        @foreach (var course in Model.Courses)
+        {
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="single-course mb-70">
+                    <div class="course-img">
+                        <a asp-action="Detail" asp-controller="Course" asp-route-id="@course.Id">
+                            <img src="~/img/course/@course?.courseImages?.FirstOrDefault()?.Name" alt="course">
+                            <div class="course-hover">
+                                <i class="fa fa-link"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course-content">
+                        <h3><a asp-action="Detail" asp-controller="Course" asp-route-id="@course.Id">@course.Title</a></h3>
+                        <p>@(course.Description.Length >= 50 ? course.Description.Substring(0, 50) : course.Description)...</p>
+                        <a class="default-btn" asp-action="Detail" asp-controller="Course" asp-route-id="@course.Id">read more</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
