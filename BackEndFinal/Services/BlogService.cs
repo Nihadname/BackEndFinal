@@ -47,12 +47,32 @@ return _blogRepository.GetAllAsync(skip, take, includes);
            return _blogRepository.GetByIdAsync(id);
         }
 
-        public async Task<List<Blog>> SearchBlogsAsync(string searchTerm)
+        public async Task<List<Blog>> SearchCoursesAsync(string keyword, int skip, int take, params Expression<Func<Blog, object>>[] includes)
         {
-        var blogs=await _blogRepository.GetAllAsync(0,0,s=>s.Images,s=>s.Category);
-            return blogs.Where(b => b.Title.Contains(searchTerm) || b.Content.Contains(searchTerm)).Take(4).ToList();
-        }
+            IQueryable<Blog> query = _blogRepository.GetAllQuery();
 
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(c => c.Title.Contains(keyword) || c.Content.Contains(keyword));
+            }
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            if (skip > 0)
+            {
+                query = query.Skip(skip);
+            }
+
+            if (take > 0)
+            {
+                query = query.Take(take);
+            }
+
+            return await query.ToListAsync();
+        }
         public Task UpdateBlogAsync(Blog OfferedAdvantages)
         {
            if(OfferedAdvantages is null) throw new ArgumentNullException(nameof(Blog));

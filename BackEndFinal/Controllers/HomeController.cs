@@ -4,6 +4,8 @@ using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BackEndFinal.Controllers
 {
@@ -14,8 +16,9 @@ namespace BackEndFinal.Controllers
         private readonly IOfferedAdvantageService _overlayService;
         private readonly IEventService _eventService;
         private readonly IBlogService _blogService;
+        private readonly ISubscriberService _subscriberService;
         private readonly AppDbContext _appDbContext;
-        public HomeController(ISliderService sliderService, ISliderContentService sliderContentService, IOfferedAdvantageService overlayService, IEventService eventService, AppDbContext appDbContext, IBlogService blogService)
+        public HomeController(ISliderService sliderService, ISliderContentService sliderContentService, IOfferedAdvantageService overlayService, IEventService eventService, AppDbContext appDbContext, IBlogService blogService, ISubscriberService subscriberService)
         {
             _sliderService = sliderService;
             _sliderContentService = sliderContentService;
@@ -23,6 +26,7 @@ namespace BackEndFinal.Controllers
             _eventService = eventService;
             _appDbContext = appDbContext;
             _blogService = blogService;
+            _subscriberService = subscriberService;
         }
         public async Task<IActionResult> Index(int page=1)
         {
@@ -39,6 +43,33 @@ namespace BackEndFinal.Controllers
             model.PaginatedBlogs = paginatedBlogs;
 
             return View(model);
+        }
+        [HttpPost]
+       public async Task<IActionResult> SendEmailToSubscribe(SubscriberVM subscriber)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+            kvp => kvp.Key,
+            kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+        );
+                return BadRequest(JsonConvert.SerializeObject(errors));
+            }
+            if (await _subscriberService.GetAllSubscriberQuery().AnyAsync(s => s.EmailAddress.ToLower() == subscriber.EmailAddress))
+            {
+
+                ModelState.AddModelError("EmailAddress", "Bele bir EmailAddress mövcuddur");
+                var errors = ModelState.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                return BadRequest(JsonConvert.SerializeObject(errors));
+            }
+            var newSubscriber = new Subscriber() { 
+                EmailAddress = subscriber.EmailAddress,
+            };
+await _subscriberService.AddSubscriberAsync(newSubscriber);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

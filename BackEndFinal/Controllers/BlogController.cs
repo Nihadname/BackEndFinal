@@ -23,7 +23,7 @@ namespace BackEndFinal.Controllers
         public async Task<IActionResult> Search(string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm)) return BadRequest();
-            var result = await _blogService.SearchBlogsAsync(searchTerm);
+            var result = await _blogService.SearchCoursesAsync(searchTerm,0,4,s=>s.Images);
                   return PartialView("_SearchPartialView", result);
 
         }

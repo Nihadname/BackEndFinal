@@ -108,7 +108,7 @@
                                                 <li><a href="blog-details.html">blog details</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        <li><a asp-action="index" asp-controller="Contact">Contact</a></li>
                                         <li><a href="#">Buy Now</a>
                                     </ul>
                                 </nav>
@@ -225,21 +225,18 @@
     <script src="~/js/main.js"></script>
     <script>
         $(document).ready(function () {
-            //load more
-      
-           
             $(document).on("keyup", "#input-search", function () {
                 let value = $(this).val().trim();
-                console.log(value);
                 if (value) {
                     $.ajax({
                         url: "/Blog/Search?searchTerm=" + value,
                         method: "get",
                         success: function (datas) {
-                            $("#SearchList").append(datas);
+                            $("#SearchList").empty().append(datas);
                         }
-
-                    })
+                    });
+                } else {
+                    $("#SearchList").empty();
                 }
             });
         });

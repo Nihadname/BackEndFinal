@@ -1,0 +1,33 @@
+﻿@using BackEndFinal.ViewModels
+@model SubscriberVM
+
+<div class="subscribe-area pt-60 pb-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="subscribe-content section-title text-center">
+                    <h2>Subscribe to our newsletter</h2>
+                    <p>I must explain to you how all this mistaken idea</p>
+                </div>
+                <div class="newsletter-form mc_embed_signup">
+                    <form method="post" asp-action="SendEmailToSubscribe" asp-controller="Home">
+                        <div id="mc_embed_signup_scroll" class="mc-form">
+                            <input asp-for="EmailAddress" class="email" placeholder="Enter your e-mail address">
+                            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+
+                            <button class="default-btn" type="submit"><span>Subscribe</span></button>
+                        </div>
+                    </form>
+                    <div class="mailchimp-alerts">
+                        <div class="mailchimp-submitting"></div>
+                        <div class="mailchimp-success"></div>
+                        <div class="mailchimp-error"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
