@@ -42,9 +42,9 @@ return _blogRepository.GetAllAsync(skip, take, includes);
             return   _blogRepository.GetAllQuery();
         }
 
-        public Task<Blog> GetBlogByIdAsync(int? id)
+        public Task<Blog> GetBlogByIdAsync(int? id, params Expression<Func<Blog, object>>[] includes)
         {
-           return _blogRepository.GetByIdAsync(id);
+           return _blogRepository.GetByIdAsync(id,includes);
         }
 
         public async Task<List<Blog>> SearchCoursesAsync(string keyword, int skip, int take, params Expression<Func<Blog, object>>[] includes)

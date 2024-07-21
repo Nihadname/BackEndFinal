@@ -1,18 +1,22 @@
 ﻿using BackEndFinal.Data;
+using BackEndFinal.Services;
+using BackEndFinal.Services.interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEndFinal.ViewCompenents
 {
     public class SettingHeaderViewComponent:ViewComponent
     {
-        private readonly AppDbContext _context;
-        public SettingHeaderViewComponent(AppDbContext context)
+        private readonly ISettingService settingService;
+
+        public SettingHeaderViewComponent(ISettingService settingService)
         {
-            _context = context;
+            this.settingService = settingService;
         }
+
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var settings = _context.settings.ToDictionary(Key => Key.Key, val => val.Value);
+            var settings = await settingService.GetSettingsAsDictionaryAsync();
             return View(await Task.FromResult(settings));
         }
 

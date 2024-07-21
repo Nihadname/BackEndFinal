@@ -11,7 +11,7 @@
         <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="single-blog">
                 <div class="blog-img">
-                    <a href="blog-details.html">
+                    <a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id">
                         <img src="~/img/blog/@blog.Images.FirstOrDefault(s => s.IsMain==true).imageUrl" alt="blog">
                     </a>
                     <div class="blog-hover">
