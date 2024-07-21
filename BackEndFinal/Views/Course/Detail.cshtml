@@ -97,11 +97,8 @@
                     <div class="single-blog-widget mb-50">
                         <h3>Categories</h3>
                         <ul>
-                            @foreach(var category in Model.categories)
-                            {
-                                <li><a asp-action="CoursesInCategory" asp-route-id="@category.Id">@category.Name (@category.Courses.Count)</a></li>
+                            @await Component.InvokeAsync("Category", new { itemType = "courses", actionType = "CoursesInCategory", controllerType = "course" })
 
-                            }
                          
                         </ul>
                     </div>

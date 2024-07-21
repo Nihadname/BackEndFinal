@@ -37,12 +37,10 @@ namespace BackEndFinal.Controllers
         {
             if (id is null) return BadRequest();
             var existedCourse=await courseService.GetCourseByIdAsync(id,s=>s.courseImages);
-            var categories = await _categoryService.GetAllCategoryAsync(0, 6, s => s.Courses);
             var blogs =await _blogService.GetAllBlogAsync(0, 3, s => s.Images);
             if(existedCourse is null)  return NotFound();
             CourseDetailVM courseDetailVM = new CourseDetailVM();
             courseDetailVM.course = existedCourse;
-            courseDetailVM.categories=categories;
             courseDetailVM.blogs = blogs;
 
             return View(courseDetailVM);

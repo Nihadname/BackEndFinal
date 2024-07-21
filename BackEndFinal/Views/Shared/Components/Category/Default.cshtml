@@ -1,0 +1,31 @@
+﻿@model CategoryViewModel
+
+@foreach (var cat in Model.Categories)
+{
+    string action = Model.ActionType switch
+    {
+        "CoursesInCategory" => "CoursesInCategory",
+        "EventsInCategory" => "EventsInCategory",
+        _ => "BlogInCategory"
+    };
+
+    string controller = Model.ControllerType switch
+    {
+        "course" => "course",
+        "event" => "event",
+        _ => "blog"
+    };
+
+    string itemCount = Model.itemType switch
+    {
+        "courses" => cat.Courses.Count().ToString(),
+        "events" => cat.events.Count().ToString(),
+        _ => cat.blogs.Count().ToString()
+    };
+
+    <li>
+        <a asp-action="@action" asp-controller="@controller" asp-route-id="@cat.Id">
+            @cat.Name (@itemCount)
+        </a>
+    </li>
+}

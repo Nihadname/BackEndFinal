@@ -39,12 +39,10 @@ namespace BackEndFinal.Controllers
             if (id == null) return BadRequest();
            var existedOne=await _blogService.GetBlogByIdAsync(id, s=>s.Images);
             if (existedOne == null) return NotFound();
-            var categories = await _categoryService.GetAllCategoryAsync(0, 6, s => s.blogs);
             var blogs = await _blogService.GetAllBlogAsync(0, 3, s => s.Images);
 
             BlogDetailVm vm = new BlogDetailVm();
             vm.blog = existedOne;
-            vm.categories = categories;
             vm.blogs = blogs;
             return View(vm);
         }

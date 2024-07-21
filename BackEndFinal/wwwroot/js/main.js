@@ -134,45 +134,38 @@ $(document).ready(function () {
     //load more
     let skip = 3;
     let skip2 = 3;
-    $(document).on("click", "#loadmore", function () {
-        $.ajax({
-            url: "/Event/Loadmore?skip=" + skip,
-            method: "get",
-            success: function (datas) {
-                console.log(datas);
-                $("#EventList").append(datas);
-                skip += 3;
-                const EventCount = $("#EventCount").val();
-                console.log(skip);
-                if (skip >= EventCount) {
-                    $("#loadmore").remove();
-                }
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    });
-    $(document).on("click", "#loadmore2", function () {
-        $.ajax({
-            url: "/Course/Loadmore?skip=" + skip2,
-            method: "get",
-            success: function (datas) {
-                console.log(datas);
-                $("#CourseList").append(datas);
-                skip2 += 3;
-                const CourseCount = $("#CourseCount").val();
-                console.log(CourseCount);
+    $(document).ready(function () {
+        let skip = 3;
+        let skip2 = 3;
 
-                console.log(skip2);
-                if (skip2 >= CourseCount) {
-                    $("#loadmore2").remove();
+        function loadMoreData(url, skipCount, listSelector, buttonSelector, countSelector) {
+            $.ajax({
+                url: `${url}?skip=${skipCount}`,
+                method: "get",
+                success: function (datas) {
+                    console.log(datas);
+                    $(listSelector).append(datas);
+                    skipCount += 3;
+                    const itemCount = $(countSelector).val();
+                    console.log(skipCount);
+                    if (skipCount >= itemCount) {
+                        $(buttonSelector).remove();
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
                 }
-            },
-            error: function (error) {
-                console.log(error);
-            }
+            });
+        }
+
+        $(document).on("click", "#loadmore", function () {
+            loadMoreData("/Event/Loadmore", skip, "#EventList", "#loadmore", "#EventCount");
+        });
+
+        $(document).on("click", "#loadmore2", function () {
+            loadMoreData("/Course/Loadmore", skip2, "#CourseList", "#loadmore2", "#CourseCount");
         });
     });
+
 
 });
