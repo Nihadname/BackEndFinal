@@ -38,26 +38,6 @@
     </div>
 </div>
 <div class="d-flex justify-content-center">
-    <nav>
-        <ul class="pagination">
-            @if (paginationModel.HasPrev)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("BlogInCategory", new { id = category.Id, page = paginationModel.CurrentPage - 1 })">Previous</a>
-                </li>
-            }
-            @for (int i = 1; i <= paginationModel.TotalPage; i++)
-            {
-                <li class="page-item @(paginationModel.CurrentPage == i ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("BlogInCategory", new { id = category.Id, page = i })">@i</a>
-                </li>
-            }
-            @if (paginationModel.HasNext)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("BlogInCategory", new { id = category.Id, page = paginationModel.CurrentPage + 1 })">Next</a>
-                </li>
-            }
-        </ul>
-    </nav>
+    @await Component.InvokeAsync("Pagination", new { paginationModel = paginationModel, actionName = "BlogInCategory", categoryId = category.Id })
+
 </div>

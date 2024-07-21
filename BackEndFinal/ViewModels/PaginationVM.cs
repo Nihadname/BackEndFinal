@@ -2,7 +2,7 @@
 
 namespace BackEndFinal.ViewModels
 {
-    public class PaginationVM<T> : List<T>
+    public class PaginationVM<T> : List<T>, IPaginationVM
     {
         public PaginationVM(List<T> items, int currentPage, int totalPage)
         {

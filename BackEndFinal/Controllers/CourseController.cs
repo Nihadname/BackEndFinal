@@ -45,14 +45,25 @@ namespace BackEndFinal.Controllers
 
             return View(courseDetailVM);
         }
-        public async Task<IActionResult> CoursesInCategory(int? id)
+        public async Task<IActionResult> CoursesInCategory(int? id, int page=1)
         {
             if (id is null) return BadRequest();
             var category =  _categoryService.GetAllCategoryQuery();
             var existedCategoryWithCourses = category.Include(s=>s.Courses).ThenInclude(s=>s.courseImages).FirstOrDefault(s=>s.Id==id);
             if (existedCategoryWithCourses is null) return NotFound();
+            var CoursesQuery = courseService.GetAllCourseQuery()
+                                        .Where(b => b.CategoryId == id)
+                                        .Include(s => s.courseImages)
+                                        .AsNoTracking();
 
-            return View(existedCategoryWithCourses);
+            var paginatedCourses = PaginationVM<Course>.Create(CoursesQuery, page, 3);
+
+            CourseInCategoryVM CourseInCategoryVM = new CourseInCategoryVM
+            {
+                Category = existedCategoryWithCourses,
+                PaginationCourse = paginatedCourses
+            };
+            return View(CourseInCategoryVM);
         }
 
 

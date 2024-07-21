@@ -32,6 +32,11 @@ namespace BackEndFinal.Services
             return _courseService.GetAllAsync(skip, take, includes);
         }
 
+        public IQueryable<Course> GetAllCourseQuery()
+        {
+            return _courseService.GetAllQuery();
+        }
+
         public Task<Course> GetCourseByIdAsync(int? id, params Expression<Func<Course, object>>[] includes)
         {
            return _courseService.GetByIdAsync(id,includes);

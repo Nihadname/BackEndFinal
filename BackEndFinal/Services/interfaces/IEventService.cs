@@ -8,6 +8,8 @@ namespace BackEndFinal.Services.interfaces
     {
         Task<List<Event>> GetAllEventAsync(int skip, int take, params Expression<Func<Event, object>>[] includes);
         Task<Event> GetEventByIdAsync(int? id, params Expression<Func<Event, object>>[] includes);
+        IQueryable<Event> GetAllEventQuery();
+
         Task AddEventAsync(Event OfferedAdvantages);
         Task UpdateEventAsync(Event OfferedAdvantages);
         Task DeleteEventAsync(Event OfferedAdvantages);

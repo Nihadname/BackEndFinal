@@ -37,6 +37,11 @@ namespace BackEndFinal.Services
             return _repository.GetAllAsync(skip, take, includes);
         }
 
+        public IQueryable<Event> GetAllEventQuery()
+        {
+            return _repository.GetAllQuery();
+        }
+
         public Task<Event> GetEventByIdAsync(int? id, params Expression<Func<Event, object>>[] includes)
         {
             return _repository.GetByIdAsync(id,includes);

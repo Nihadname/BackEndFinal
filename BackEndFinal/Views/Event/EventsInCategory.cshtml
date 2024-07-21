@@ -1,11 +1,14 @@
-﻿@model Category
-
+﻿@model EventInCategoryVM
+@{
+    var category = Model.Category;
+    var paginationModel = await Model.PaginationEvents;
+}
 <div class="container">
-    <h2>@Model.Name</h2>
+    <h2>@category.Name</h2>
     <div class="row">
-        @if (Model.events != null && Model.events.Any())
+        @if (paginationModel != null && paginationModel.Any())
         {
-            @foreach (var course in Model.events)
+            @foreach (var course in paginationModel)
             {
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <div class="single-course mb-70">
@@ -33,4 +36,8 @@
             <h1>There is no blog relating to this category</h1>
         }
     </div>
+</div>
+<div class="d-flex justify-content-center">
+    @await Component.InvokeAsync("Pagination", new { paginationModel = paginationModel, actionName = "EventsInCategory", categoryId = category.Id })
+
 </div>

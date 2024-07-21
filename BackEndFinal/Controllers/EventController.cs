@@ -1,6 +1,8 @@
-﻿using BackEndFinal.Services;
+﻿using BackEndFinal.Models;
+using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,14 +39,26 @@ namespace BackEndFinal.Controllers
             eventDetail.ProjectEvent = existedEvent;
             return View(eventDetail);
         }
-        public async Task<IActionResult> EventsInCategory(int? id)
+        public async Task<IActionResult> EventsInCategory(int? id,int page=1)
         {
             if (id == null) return BadRequest();
             var categories = categoryService.GetAllCategoryQuery();
             var categorieWithEvents = await categories.AsNoTracking().Include(s => s.events).ThenInclude(s => s.Images)
                 .FirstOrDefaultAsync(s=>s.Id==id);
             if (categorieWithEvents == null) return NotFound();
-            return View(categorieWithEvents);
+            var EventsQuery = _eventService.GetAllEventQuery()
+                                        .Where(b => b.CategoryId == id)
+                                        .Include(s => s.Images)
+                                        .AsNoTracking();
+
+            var paginatedEvents = PaginationVM<Event>.Create(EventsQuery, page, 3);
+
+            EventInCategoryVM EventInCategoryVM = new EventInCategoryVM
+            {
+                Category = categorieWithEvents,
+                PaginationEvents = paginatedEvents
+            };
+            return View(EventInCategoryVM);
 
         }
     }
