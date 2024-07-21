@@ -84,24 +84,8 @@
                     </div>
                     <div class="single-blog-widget mb-47">
                         <h3>latest post</h3>
-                        @foreach (var item in Model.blogs)
-                        {
-                            <div class="single-post mb-30">
-                                <div class="single-post-img">
-                                    <a href="blog-details.html">
-                                        <img src="~/img/blog/@item.Images.FirstOrDefault(s=>s.IsMain==true).imageUrl" width="60px" alt="post">
-                                        <div class="blog-hover">
-                                            <i class="fa fa-link"></i>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="single-post-content">
-                                    <h4><a href="blog-details.html">@item.Title</a></h4>
-                                    <p>By @item.Writer  /  @item.CreatedTime?.ToString("d, MMMM yyyy")</p>
-                                </div>
-                            </div>
+                        @await Component.InvokeAsync("BlogDetail")
 
-                        }                       
                     </div>
                     <div class="single-blog-widget">
                         <h3>tags</h3>

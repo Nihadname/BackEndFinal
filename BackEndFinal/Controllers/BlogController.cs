@@ -46,13 +46,32 @@ namespace BackEndFinal.Controllers
             vm.blogs = blogs;
             return View(vm);
         }
-        public async Task<IActionResult> BlogInCategory(int? id)
+        public async Task<IActionResult> BlogInCategory(int? id, int page = 1)
         {
-            if(id == null) return BadRequest(); 
-            var categories= _categoryService.GetAllCategoryQuery();
-            var categorieWithBlog=await categories.AsNoTracking().Include(s=>s.blogs).ThenInclude(s=>s.Images).FirstOrDefaultAsync(s=>s.Id==id);
-            if(categorieWithBlog == null)   return NotFound();
-          return  View(categorieWithBlog);
+            if (id == null) return BadRequest();
+
+            var categories = _categoryService.GetAllCategoryQuery();
+            var categoryWithBlogs = await categories.AsNoTracking()
+                                                    .Include(s => s.blogs)
+                                                    .ThenInclude(s => s.Images)
+                                                    .FirstOrDefaultAsync(s => s.Id == id);
+            if (categoryWithBlogs == null) return NotFound();
+
+            var blogsQuery = _blogService.GetAllBlogQuery()
+                                         .Where(b => b.CategoryId == id)
+                                         .Include(s => s.Images)
+                                         .AsNoTracking();
+
+            var paginatedBlogs =  PaginationVM<Blog>.Create(blogsQuery, page, 3);
+
+            BlogInCategoryVM blogInCategoryVM = new BlogInCategoryVM
+            {
+                Category = categoryWithBlogs,
+                PaginationBlog = paginatedBlogs
+            };
+
+            return View(blogInCategoryVM);
         }
+
     }
 }

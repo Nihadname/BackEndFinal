@@ -1,17 +1,20 @@
-﻿@model Category
-
+﻿@model BlogInCategoryVM
+@{
+    var category = Model.Category;
+    var paginationModel =await Model.PaginationBlog;
+}
 <div class="container">
-    <h2>@Model.Name</h2>
+    <h2>@category.Name</h2>
     <div class="row">
-        @if (Model.blogs != null && Model.blogs.Any())
+        @if (paginationModel != null && paginationModel.Any())
         {
-            @foreach (var course in Model.blogs)
+            @foreach (var course in paginationModel)
             {
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <div class="single-course mb-70">
                         <div class="course-img">
                             <a asp-action="Detail" asp-controller="blog" asp-route-id="@course.Id">
-                                <img src="~/img/blog/@course?.Images?.FirstOrDefault()?.imageUrl" alt="course">
+                                <img src="~/img/blog/@(course.Images?.FirstOrDefault()?.imageUrl ?? "default-image.jpg")" alt="course">
                                 <div class="course-hover">
                                     <i class="fa fa-link"></i>
                                 </div>
@@ -33,4 +36,28 @@
             <h1>There is no blog relating to this category</h1>
         }
     </div>
+</div>
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            @if (paginationModel.HasPrev)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("BlogInCategory", new { id = category.Id, page = paginationModel.CurrentPage - 1 })">Previous</a>
+                </li>
+            }
+            @for (int i = 1; i <= paginationModel.TotalPage; i++)
+            {
+                <li class="page-item @(paginationModel.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("BlogInCategory", new { id = category.Id, page = i })">@i</a>
+                </li>
+            }
+            @if (paginationModel.HasNext)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("BlogInCategory", new { id = category.Id, page = paginationModel.CurrentPage + 1 })">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
 </div>

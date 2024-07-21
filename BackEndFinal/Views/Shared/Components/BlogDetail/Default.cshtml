@@ -1,0 +1,18 @@
+﻿@model List<Blog>
+@foreach (var blog in Model)
+{
+    <div class="single-post mb-30">
+        <div class="single-post-img">
+            <a href="blog-details.html">
+                <img src="~/img/blog/@blog.Images.FirstOrDefault(s=>s.IsMain==true).imageUrl" width="60px" alt="post">
+                <div class="blog-hover">
+                    <i class="fa fa-link"></i>
+                </div>
+            </a>
+        </div>
+        <div class="single-post-content">
+            <h4><a href="blog-details.html">@blog.Title</a></h4>
+            <p>By @blog.Writer  / @blog.CreatedTime?.ToString("d, MMMM yyyy");</p>
+        </div>
+    </div>
+}
