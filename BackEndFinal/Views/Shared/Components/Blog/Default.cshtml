@@ -15,7 +15,7 @@
                         <img src="~/img/blog/@blog.Images.FirstOrDefault(s => s.IsMain==true).imageUrl" alt="blog">
                     </a>
                     <div class="blog-hover">
-                        <a href="blog-details.html"><i class="fa fa-link"></i></a>
+                        <a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id"><i class="fa fa-link"></i></a>
                     </div>
                 </div>
                 <div class="blog-content">
@@ -23,7 +23,7 @@
                         <p>By @blog.Writer / @blog.CreatedTime?.ToString("d, MMMM yyyy") / <i class="fa fa-comments-o"></i> 4</p>
                     </div>
                     <div class="blog-bottom">
-                        <h2><a href="blog-details.html">@blog.Title</a></h2>
+                        <h2><a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id">@blog.Title</a></h2>
                     </div>
                 </div>
             </div>
