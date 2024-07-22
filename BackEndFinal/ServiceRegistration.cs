@@ -1,7 +1,9 @@
 ﻿using BackEndFinal.Data;
+using BackEndFinal.Models;
 using BackEndFinal.Repositories;
 using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication11.Repositories.interfaces;
 
@@ -27,6 +29,19 @@ namespace BackEndFinal
             services.AddScoped<ITeacherContactInfoService, TeacherContactInfoService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISettingService, SettingService>();
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireDigit = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.User.RequireUniqueEmail = true;
+            }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
         }
     }
 }
