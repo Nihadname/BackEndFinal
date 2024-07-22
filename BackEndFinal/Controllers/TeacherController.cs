@@ -1,6 +1,7 @@
 ﻿using BackEndFinal.Models;
 using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
+using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +16,18 @@ namespace BackEndFinal.Controllers
             _teacherService = teacherService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page=1)
         {
-            
-            return View();
+
+            var pageSize = 4;
+            var teachers = _teacherService.GetAllTeacherQuery();
+            var teachersWithCourses = teachers.Include(s => s.courseTeachers).ThenInclude(s => s.Course);
+            var paginatedTeachers = await PaginationVM<Teacher>.Create(teachersWithCourses, page, pageSize);
+            return View(paginatedTeachers);
         }
         public async Task<IActionResult> Detail(int? id)
         {
+
             if (id == null) return BadRequest();
             var query=_teacherService.GetAllTeacherQuery();
             var existedTeacher = await query.AsNoTracking().Include(s => s.TeacherHobbies).ThenInclude(s => s.Hobby).Include(s => s.courseTeachers).ThenInclude(s => s.Course).Include(s => s.TeacherContactInfo)

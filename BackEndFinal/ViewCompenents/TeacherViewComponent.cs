@@ -13,10 +13,11 @@ namespace BackEndFinal.ViewCompenents
         {
             _teacherService = teacherService;
         } 
-        public async Task<IViewComponentResult> InvokeAsync(int take = 4)
+        public async Task<IViewComponentResult> InvokeAsync(int take=4)
         {
             var teachers = _teacherService.GetAllTeacherQuery();
             var teachersWithCourses = await teachers.Include(s => s.courseTeachers).ThenInclude(s => s.Course).Take(take).ToListAsync();
+
 
             return View(Task.FromResult(teachersWithCourses));
         }
