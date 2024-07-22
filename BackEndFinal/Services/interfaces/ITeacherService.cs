@@ -7,7 +7,7 @@ namespace BackEndFinal.Services.interfaces
     {
         IQueryable<Teacher> GetAllTeacherQuery();
         Task<List<Teacher>> GetAllTeacherAsync(int skip, int take, params Expression<Func<Teacher, object>>[] includes);
-        Task<Teacher> GetTeacherByIdAsync(int? id);
+        Task<Teacher> GetTeacherByIdAsync(int? id, params Expression<Func<Teacher, object>>[] includes);
         Task AddTeacherAsync(Teacher Teacher);
         Task UpdateTeacherAsync(Teacher Teacher);
         Task DeleteTeacherAsync(Teacher Teacher);

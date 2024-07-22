@@ -38,9 +38,9 @@ namespace BackEndFinal.Services
 
 
         
-        public Task<Teacher> GetTeacherByIdAsync(int? id)
+        public Task<Teacher> GetTeacherByIdAsync(int? id, params Expression<Func<Teacher, object>>[] includes)
         {
-            return _repository.GetByIdAsync(id);
+            return _repository.GetByIdAsync(id,includes);
         }
 
         public Task UpdateTeacherAsync(Teacher Teacher)

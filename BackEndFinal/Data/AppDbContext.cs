@@ -19,6 +19,8 @@ namespace BackEndFinal.Data
         public DbSet<FooterContent> footerContents { get; set; }
         public DbSet<Blog> blogs { get; set; }
         public DbSet<Category> categories { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
+        public DbSet<TeacherHobby> TeacherHobbies { get; set; }
         public DbSet<Course> courses { get; set; }
         public DbSet<CourseImage> courseImages { get; set; }
         public DbSet<CourseTeacher> coursesTeachers { get; set; }
