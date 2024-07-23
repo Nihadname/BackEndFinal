@@ -61,7 +61,7 @@
                                     <li>
                                         @if (User.Identity.IsAuthenticated)
                                         {
-                                            <p>@User.Identity.Name</p>
+                                            <p>@ViewBag.FullName</p>
                                             <a asp-action="logout" asp-controller="Account">LogOut</a>
                                             <a asp-action="Index" asp-controller="Profile">Profile</a>
                                         }else{

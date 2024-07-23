@@ -15,10 +15,10 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapDefaultControllerRoute();
 app.MapControllerRoute(
            name: "areas",
            pattern: "{area:exists}/{controller=DashBoasrd}/{action=Index}/{id?}"
          );
+app.MapDefaultControllerRoute();
+
 app.Run();

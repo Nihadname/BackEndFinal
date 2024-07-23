@@ -28,14 +28,14 @@ namespace BackEndFinal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
-            if(!ModelState.IsValid) return View(registerVM);
+            if (!ModelState.IsValid) return View(registerVM);
             AppUser appUser = new AppUser();
             appUser.FullName = registerVM.FullName;
             appUser.UserName = registerVM.UserName;
             appUser.Email = registerVM.Email;
             appUser.PhoneNumber = registerVM.PhoneNumber;
 
-           IdentityResult result = await _userManager.CreateAsync(appUser,registerVM.Password);
+            IdentityResult result = await _userManager.CreateAsync(appUser, registerVM.Password);
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -44,31 +44,31 @@ namespace BackEndFinal.Controllers
                 }
                 return View(registerVM);
             }
-            await _userManager.AddToRoleAsync(appUser,nameof(RolesEnum.Member));
-           
+            await _userManager.AddToRoleAsync(appUser, nameof(RolesEnum.Member));
+
             return Content("you are registered");
 
         }
-       public IActionResult Login()
+        public IActionResult Login()
         {
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginVM loginVM,string? ReturnUrl)
+        public async Task<IActionResult> Login(LoginVM loginVM, string? ReturnUrl)
         {
-            if(!ModelState.IsValid) return View(loginVM);
+            if (!ModelState.IsValid) return View(loginVM);
             var User = await _userManager.FindByEmailAsync(loginVM.EmailOrUserName);
             if (User == null)
             {
                 User = await _userManager.FindByNameAsync(loginVM.EmailOrUserName);
-                if(User == null)
+                if (User == null)
                 {
                     ModelState.AddModelError("", "userName or email is wrong");
                     return View(loginVM);
                 }
             }
-     Microsoft.AspNetCore.Identity.SignInResult result= await   _signInManager.PasswordSignInAsync(User,loginVM.Password,loginVM.RememberMe,true);
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(User, loginVM.Password, loginVM.RememberMe, true);
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError("", "Your account is blocked.");
@@ -100,7 +100,7 @@ namespace BackEndFinal.Controllers
         }
         public async Task<IActionResult> AddRole()
         {
-            if(! await _roleManager.RoleExistsAsync("Admin"))
+            if (!await _roleManager.RoleExistsAsync("Admin"))
             {
                 await _roleManager.CreateAsync(new IdentityRole() { Name = "Admin" });
             }
@@ -121,8 +121,8 @@ namespace BackEndFinal.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
-      
+
     }
 }
