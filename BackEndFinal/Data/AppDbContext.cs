@@ -35,9 +35,10 @@ namespace BackEndFinal.Data
         public DbSet<Subscriber> subscribers { get; set; }
         public DbSet<About> abouts { get; set; }
         public DbSet<TeacherContactInfo> teacherContactInfos { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // Ensure this is called first
+
             //modelBuilder.ApplyConfiguration(new SliderConfiguration());
             //modelBuilder.ApplyConfiguration(new SliderContentConfiguration());
             modelBuilder.Entity<Slider>()

@@ -15,7 +15,7 @@ namespace BackEndFinal.Models
         public string degree { get; set; }
         public int experience { get; set; }
         public string faculty { get; set; }
-
+       
         public string Position { get; set; }
         public string ImageUrl { get; set; }
         public int Language {  get; set; }

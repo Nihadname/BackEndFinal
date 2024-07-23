@@ -13,10 +13,12 @@ app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
-
+app.MapControllerRoute(
+           name: "areas",
+           pattern: "{area:exists}/{controller=DashBoasrd}/{action=Index}/{id?}"
+         );
 app.Run();

@@ -1,0 +1,121 @@
+﻿@model BackEndFinal.ViewModels.UserProfileVM
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+    }
+
+    .profile-header {
+        position: relative;
+        text-align: center;
+        color: white;
+        background-color: #007bff;
+        padding: 50px 0;
+        margin-bottom: 30px;
+        border-bottom: 5px solid #0056b3;
+    }
+
+        .profile-header img.cover-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .profile-header .profile-image {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid white;
+            background-color: #fff;
+            margin-top: -60px;
+        }
+
+            .profile-header .profile-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+    .profile-info {
+        text-align: center;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .profile-info h3 {
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .profile-info p {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+
+    .profile-content {
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-activity {
+        border-top: 1px solid #eaeaea;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+
+        .profile-activity h5 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .profile-activity p {
+            font-size: 14px;
+            color: #777;
+        }
+</style>
+
+<div class="container">
+    <div class="profile-header">
+        <div class="profile-image">
+            <img width="100%" src="@(string.IsNullOrEmpty(Model.imageUrl) ? "https://via.placeholder.com/120" : Url.Content($"~/img/{Model.imageUrl}"))" alt="Profile Image">
+        </div>
+    </div>
+    <div class="profile-info">
+        <h3>@Model.FullName</h3>
+        <p>@Model.UserName</p>
+        <p>@Model.Email</p>
+    </div>
+    <div class="profile-content">
+        <h4>Upload New Profile Picture</h4>
+        <form asp-action="AddImage" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="photo">Choose a profile picture:</label>
+                <input asp-for="photo" class="form-control" />
+                <span asp-validation-for="photo" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
