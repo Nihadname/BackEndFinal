@@ -1,5 +1,6 @@
 ﻿using BackEndFinal.Models;
 using BackEndFinal.Services.interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WebApplication11.Repositories.interfaces;
@@ -19,7 +20,7 @@ namespace BackEndFinal.Services
         {
             if(Blog is null)
             {
-
+           
             throw new ArgumentNullException(nameof(Blog)); 
             }
            return _blogRepository.AddAsync(Blog);   

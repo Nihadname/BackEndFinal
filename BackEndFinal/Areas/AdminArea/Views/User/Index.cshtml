@@ -31,6 +31,14 @@
                                 <td>@item.FullName</td>
                                 <td>@item.UserName</td>
                                 <td>@item.Email</td>
+                                @if (item.IsBlocked)
+                                {
+                                    <td class="text-danger">Blocked</td>
+                                }else{
+                                    <td class="text-success">Active</td>
+
+                                }
+
                                 <td>
                                     <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info" style="    padding: 10px;">Details</a>
                                     <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary" style="    padding: 10px;">Update</a>

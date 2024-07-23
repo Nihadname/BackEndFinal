@@ -48,6 +48,11 @@
                             }
                         </li>
                         <li><span>faculty: </span>@Model.faculty</li>
+                        <li><span>Courses:</span> @foreach(var item in Model.courseTeachers)
+                            {
+                                @item.Course.Title
+                            }
+                        </li>
                     </ul>
                 </div>
             </div>
