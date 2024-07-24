@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Blog>
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <button type="button" class="btn btn-success mb-3">
+            <a class="text-black text-decoration-none" asp-controller="Account" asp-action="Register"> Create</a>
+        </button>
+        <div class="card-body">
+            <h4 class="card-title">Users Table</h4>
+            <p class="card-description">
+                Add class <code>.table</code>
+            </p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Content</th>
+                            <th>Writer</th>
+                            <th>settings</th>
+                        </tr>
+                        <form asp-action="index">
+                            <input type="text" name="searchText" value="" />
+                            <button type="submit">search</button>
+                        </form>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <img width="100%" src="@(item.Images != null ? (item.Images.FirstOrDefault(s => s.IsMain==true)?.imageUrl ?? "https://via.placeholder.com/120") : "https://via.placeholder.com/120")" alt="Profile Image">
+                                </td>
+                                <td>@item.Title</td>
+                                <td>@item.Content.Substring(0,50)...</td>
+                                <td>@item.Writer</td>
+                                <td>
+                                    <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info" style="padding: 10px;">Details</a>
+                                    <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary" style="padding: 10px;">Update</a>
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" id="delete-form-@item.Id" style="display:none;">
+                                        <input name="__RequestVerificationToken" type="hidden" />
+                                    </form>
+                                    <button type="button" class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(roleId) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+        });
+
+        swalWithBootstrapButtons.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form to delete the role
+                document.getElementById('delete-form-' + roleId).submit();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your role is safe :)",
+                    icon: "error"
+                });
+            }
+        });
+    }
+</script>
