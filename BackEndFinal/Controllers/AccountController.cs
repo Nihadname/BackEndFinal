@@ -1,9 +1,11 @@
 ﻿using BackEndFinal.Helpers;
 using BackEndFinal.Models;
 using BackEndFinal.Services;
+using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Net;
 using System.Net.Mail;
@@ -15,12 +17,14 @@ namespace BackEndFinal.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailService _emailService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _emailService = emailService;
         }
 
         public IActionResult Register()
@@ -32,11 +36,14 @@ namespace BackEndFinal.Controllers
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
             if (!ModelState.IsValid) return View(registerVM);
-            AppUser appUser = new AppUser();
-            appUser.FullName = registerVM.FullName;
-            appUser.UserName = registerVM.UserName;
-            appUser.Email = registerVM.Email;
-            appUser.PhoneNumber = registerVM.PhoneNumber;
+
+            AppUser appUser = new AppUser
+            {
+                FullName = registerVM.FullName,
+                UserName = registerVM.UserName,
+                Email = registerVM.Email,
+                PhoneNumber = registerVM.PhoneNumber
+            };
 
             IdentityResult result = await _userManager.CreateAsync(appUser, registerVM.Password);
             if (!result.Succeeded)
@@ -47,32 +54,32 @@ namespace BackEndFinal.Controllers
                 }
                 return View(registerVM);
             }
+
             await _userManager.AddToRoleAsync(appUser, nameof(RolesEnum.Member));
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
             string link = Url.Action(nameof(VerifyEmail), "Account", new { email = appUser.Email, token = token }, Request.Scheme, Request.Host.ToString());
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From=new MailAddress("nihadmi@code.edu.az", "Email Confirmation for Website");
-            mailMessage.To.Add(new MailAddress(appUser.Email));
-            mailMessage.Subject = "verify Email";
-            mailMessage.IsBodyHtml = true;
-            string body = string.Empty;
-            
-            using(StreamReader  sr = new StreamReader("wwwroot/EmailPage/emailConfirm.html")) { 
+
+            string body;
+            using (StreamReader sr = new StreamReader("wwwroot/EmailPage/emailConfirm.html"))
+            {
                 body = sr.ReadToEnd();
             }
             body = body.Replace("{{link}}", link);
             body = body.Replace("{{UserName}}", appUser.UserName);
-            mailMessage.Body = body;
 
-            SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Host = "smtp.gmail.com";
-            smtpClient.Port = 587;
-            smtpClient.EnableSsl = true;
-            smtpClient.Credentials = new NetworkCredential("nihadmi@code.edu.az", "ilyo ibry uphi gnfe\r\n");
-            smtpClient.Send(mailMessage);
+            _emailService.SendEmail(
+                from: "nihadmi@code.edu.az",
+                to: appUser.Email,
+                subject: "verify Email",
+                body: body,
+                smtpHost: "smtp.gmail.com",
+                smtpPort: 587,
+                enableSsl: true,
+                smtpUser: "nihadmi@code.edu.az",
+                smtpPass: "ilyo ibry uphi gnfe\r\n"
+            );
 
             return Content("You are registered");
-
         }
         public async Task<IActionResult> VerifyEmail(string email,string token)
         {
@@ -166,6 +173,60 @@ namespace BackEndFinal.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+            AppUser appUser = await _userManager.FindByEmailAsync(email);
+            if (appUser == null)
+            {
+                ModelState.AddModelError("Error1", "bele bir email movcud deyil");
+                return View();
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+            string url = Url.Action(nameof(ResetPassword), "Account", new { email = appUser.Email, token = token }, Request.Scheme, Request.Host.ToString());
+
+            string body;
+            using (StreamReader sr = new StreamReader("wwwroot/EmailPage/ForgetPassword.html"))
+            {
+                body = sr.ReadToEnd();
+            }
+            body = body.Replace("{{link}}", url);
+            body = body.Replace("{{UserName}}", appUser.UserName);
+
+            _emailService.SendEmail(
+                from: "nihadmi@code.edu.az",
+                to: appUser.Email,
+                subject: "forget Password",
+                body: body,
+                smtpHost: "smtp.gmail.com",
+                smtpPort: 587,
+                enableSsl: true,
+                smtpUser: "nihadmi@code.edu.az",
+                smtpPass: "ilyo ibry uphi gnfe\r\n"
+            );
+
+            return RedirectToAction("Index", "Home");
+        }
+        public  IActionResult ResetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string email,ResetPasswordVM resetPasswordVM, string token)
+        {
+            AppUser appUser= await _userManager.FindByEmailAsync(email);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            await _userManager.ResetPasswordAsync(appUser, token, resetPasswordVM.Password);
+            return RedirectToAction("Login ","Account");
         }
 
     }

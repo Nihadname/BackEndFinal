@@ -24,6 +24,7 @@
                 <td>@role.Name</td>
                 <td>
                     <a href="@Url.Action("Detail", new { id = role.Id })" class="btn btn-info">Details</a>
+                    <a asp-action="Update" asp-route-id="@role.Id" class="btn btn-primary">Update</a>
                     <form asp-action="Delete" asp-route-id="@role.Id" method="post" id="delete-form-@role.Id" style="display:none;">
                         <input name="__RequestVerificationToken" type="hidden"  />
                     </form>

@@ -29,6 +29,7 @@ namespace BackEndFinal
             services.AddScoped<ITeacherContactInfoService, TeacherContactInfoService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISettingService, SettingService>();
+            services.AddScoped<IEmailService,  EmailService>();
            
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {

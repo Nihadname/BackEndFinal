@@ -87,5 +87,33 @@ await _userManager.RemoveFromRolesAsync(user, userRoles);
             return RedirectToAction("Index", "User");
 
         }
+        public async Task<IActionResult> Update(string id)
+        {
+            if(id is null) return BadRequest();
+            var existedRole =await _roleManager.FindByIdAsync(id);
+            if(existedRole == null) return NotFound();
+          return  View(existedRole);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(string id,string NewRole)
+        {
+            if (id is null) return BadRequest();
+            var existedRole=await _roleManager.FindByIdAsync(id);
+            if (existedRole == null) return NotFound();
+            existedRole.Name = NewRole;
+          IdentityResult result=  await _roleManager.UpdateAsync(existedRole);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("ErrorUpdate", error.Description);
+            }
+            return View();
+
+        }
+
     }
 }
