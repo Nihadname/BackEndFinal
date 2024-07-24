@@ -1,4 +1,5 @@
 ﻿using BackEndFinal.Models;
+using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +65,50 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Update(string id)
+        {
+            if (id == null) return BadRequest();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var model = new UpdateUserViewModel
+            {
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber=user.PhoneNumber
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(string id,UpdateUserViewModel userViewModel)
+        {
+            if (id == null) return BadRequest();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            if (!ModelState.IsValid) return View(userViewModel);
+            user.UserName = userViewModel.UserName;
+            user.Email = userViewModel.Email;
+            user.FullName = userViewModel.FullName;
+            user.PhoneNumber = userViewModel.PhoneNumber;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["SuccessUpdateUser"] = "User updated successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return RedirectToAction("Index");
+
+        }
+
 
     }
 }

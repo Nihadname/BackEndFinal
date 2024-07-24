@@ -1,0 +1,57 @@
+﻿@model UpdateUserViewModel
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Update User</h4>
+                <p class="card-description">Basic form layout</p>
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="UserName"></label>
+                        <input asp-for="UserName" class="form-control" placeholder="Username" required>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FullName"></label>
+                        <input asp-for="FullName" class="form-control" placeholder="FullName" required>
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber" required>
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" placeholder="Email" required>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                   
+
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    <a asp-action="Index" class="btn btn-light">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        console.log('Document ready');
+        var SuccessUpdateUser = '@TempData["SuccessUpdateUser"]';
+        
+        if (successMessage) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage
+            });
+        }
+       
+    });
+</script>
