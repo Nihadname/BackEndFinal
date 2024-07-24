@@ -4,6 +4,9 @@ using BackEndFinal.Services;
 using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Net;
+using System.Net.Mail;
 
 namespace BackEndFinal.Controllers
 {
@@ -45,9 +48,40 @@ namespace BackEndFinal.Controllers
                 return View(registerVM);
             }
             await _userManager.AddToRoleAsync(appUser, nameof(RolesEnum.Member));
+            string token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+            string link = Url.Action(nameof(VerifyEmail), "Account", new { email = appUser.Email, token = token }, Request.Scheme, Request.Host.ToString());
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From=new MailAddress("nihadmi@code.edu.az", "Email Confirmation for Website");
+            mailMessage.To.Add(new MailAddress(appUser.Email));
+            mailMessage.Subject = "verify Email";
+            mailMessage.IsBodyHtml = true;
+            string body = string.Empty;
+            
+            using(StreamReader  sr = new StreamReader("wwwroot/EmailPage/emailConfirm.html")) { 
+                body = sr.ReadToEnd();
+            }
+            body = body.Replace("{{link}}", link);
+            body = body.Replace("{{UserName}}", appUser.UserName);
+            mailMessage.Body = body;
 
-            return Content("you are registered");
+            SmtpClient smtpClient = new SmtpClient();
+            smtpClient.Host = "smtp.gmail.com";
+            smtpClient.Port = 587;
+            smtpClient.EnableSsl = true;
+            smtpClient.Credentials = new NetworkCredential("nihadmi@code.edu.az", "ilyo ibry uphi gnfe\r\n");
+            smtpClient.Send(mailMessage);
 
+            return Content("You are registered");
+
+        }
+        public async Task<IActionResult> VerifyEmail(string email,string token)
+        {
+            AppUser appUser = await _userManager.FindByEmailAsync(email);
+            if (appUser is null) return NotFound();
+            await _userManager.ConfirmEmailAsync(appUser, token);
+            await _signInManager.SignInAsync(appUser,true);
+
+            return RedirectToAction("Index","Home");
         }
         public IActionResult Login()
         {
@@ -72,6 +106,11 @@ namespace BackEndFinal.Controllers
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError("", "Your account is blocked.");
+                return View(loginVM);
+            }
+            if (!User.EmailConfirmed)
+            {
+                ModelState.AddModelError("", "You need to verify is account");
                 return View(loginVM);
             }
             if (User.IsBlocked)

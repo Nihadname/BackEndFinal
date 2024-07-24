@@ -83,31 +83,31 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(string id,UpdateUserViewModel userViewModel)
-        {
-            if (id == null) return BadRequest();
+[HttpPost]
+public async Task<IActionResult> Update(string id, UpdateUserViewModel userViewModel)
+{
+    if (id == null) return BadRequest();
 
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
-            if (!ModelState.IsValid) return View(userViewModel);
-            user.UserName = userViewModel.UserName;
-            user.Email = userViewModel.Email;
-            user.FullName = userViewModel.FullName;
-            user.PhoneNumber = userViewModel.PhoneNumber;
-            IdentityResult result = await _userManager.UpdateAsync(user);
+    var user = await _userManager.FindByIdAsync(id);
+    if (user == null) return NotFound();
+    if (!ModelState.IsValid) return View(userViewModel);
 
-            if (result.Succeeded)
-            {
-                TempData["SuccessUpdateUser"] = "User updated successfully!";
-                return RedirectToAction(nameof(Index));
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return RedirectToAction("Index");
+    user.UserName = userViewModel.UserName;
+    user.Email = userViewModel.Email;
+    user.FullName = userViewModel.FullName;
+    user.PhoneNumber = userViewModel.PhoneNumber;
+    IdentityResult result = await _userManager.UpdateAsync(user);
 
-        }
+    if (result.Succeeded)
+    {
+        return RedirectToAction(nameof(Index));
+    }
+    foreach (var error in result.Errors)
+    {
+        ModelState.AddModelError(string.Empty, error.Description);
+    }
+    return View(userViewModel);
+}
 
 
     }
