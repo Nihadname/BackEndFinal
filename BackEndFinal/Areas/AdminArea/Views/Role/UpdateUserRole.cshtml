@@ -1,0 +1,19 @@
+﻿@model RoleUpdateVM
+
+<h1>@Model.UserName</h1>
+<form  method="post">
+    @foreach(var role in Model.IdentityRoles)
+    {
+        @if (Model.roles.Contains(role.Name))
+        {
+            <input name="NewRoles" type="checkbox" value="@role.Name" checked /> @role.Name <br /> <br />
+    }
+        else
+        {
+            <input name="NewRoles" type="checkbox" value="@role.Name" /> @role.Name <br /> <br />
+
+        }
+    }
+    <button type="submit" >Update</button>
+
+</form>

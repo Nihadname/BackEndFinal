@@ -1,0 +1,22 @@
+﻿@model AppUser
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">@Model.FullName</h4>
+            <h4 class="card-title">@Model.UserName</h4>
+            <h4 class="card-title">@Model.Email</h4>
+            <h4 class="card-title">@Model.PhoneNumber</h4>
+
+
+
+            <p class="card-description">
+                <h1>Roles</h1>
+                @foreach (var role in ViewBag.UserRoles)
+                {
+                    <h5>@role</h5>
+                }
+            </p>
+           
+        </div>
+    </div>
+</div>

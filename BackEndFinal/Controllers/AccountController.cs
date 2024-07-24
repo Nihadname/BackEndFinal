@@ -74,6 +74,11 @@ namespace BackEndFinal.Controllers
                 ModelState.AddModelError("", "Your account is blocked.");
                 return View(loginVM);
             }
+            if (User.IsBlocked)
+            {
+                ModelState.AddModelError("", "Your account is blocked.");
+                return View(loginVM);
+            }
 
             if (!result.Succeeded)
             {

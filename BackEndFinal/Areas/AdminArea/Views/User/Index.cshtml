@@ -28,6 +28,9 @@
                         @foreach(var item in Model)
                         {
                             <tr>
+                                <td>
+                                    <img width="100%" src="@(string.IsNullOrEmpty(item.imageUrl) ? "https://via.placeholder.com/120" : Url.Content($"~/img/{item.imageUrl}"))" alt="Profile Image">
+                                </td>
                                 <td>@item.FullName</td>
                                 <td>@item.UserName</td>
                                 <td>@item.Email</td>
@@ -40,9 +43,23 @@
                                 }
 
                                 <td>
+                                    @if (User.Identity.Name != item.UserName)
+                                    {
+                                        <a asp-action="ChangeStatus" asp-route-id="@item.Id" class="btn btn-info" style="    padding: 10px;">ChangeStatus</a>
+
+                                    }
+
                                     <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info" style="    padding: 10px;">Details</a>
                                     <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary" style="    padding: 10px;">Update</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" style="    padding: 10px;">Delete</a>
+                                    @if (User.Identity.Name != item.UserName)
+                                    {
+                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" id="delete-form-@item.Id" style="display:none;">
+                                            <input name="__RequestVerificationToken" type="hidden" />
+                                        </form>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</button>
+                                    }
+                                    <a asp-action="UpdateUserRole" asp-controller="Role" asp-route-id="@item.Id" class="btn btn-danger" style="    padding: 10px;">UpdateUserRole</a>
+
                                 </td>
                             </tr>
                             
@@ -55,3 +72,36 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(roleId) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+        });
+
+        swalWithBootstrapButtons.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form to delete the role
+                document.getElementById('delete-form-' + roleId).submit();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your role is safe :)",
+                    icon: "error"
+                });
+            }
+        });
+    }
+</script>
