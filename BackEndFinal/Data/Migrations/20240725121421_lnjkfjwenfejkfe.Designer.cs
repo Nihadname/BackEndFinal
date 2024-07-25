@@ -4,6 +4,7 @@ using BackEndFinal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndFinal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240725121421_lnjkfjwenfejkfe")]
+    partial class lnjkfjwenfejkfe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +50,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("abouts", (string)null);
+                    b.ToTable("abouts");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.AppUser", b =>
@@ -161,7 +164,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("blogs", (string)null);
+                    b.ToTable("blogs");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.BlogImage", b =>
@@ -189,7 +192,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("BlogId");
 
-                    b.ToTable("blogImages", (string)null);
+                    b.ToTable("blogImages");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Category", b =>
@@ -213,7 +216,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories", (string)null);
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Contact", b =>
@@ -248,7 +251,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Contact", (string)null);
+                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Course", b =>
@@ -320,7 +323,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("courses", (string)null);
+                    b.ToTable("courses");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.CourseImage", b =>
@@ -345,7 +348,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("courseImages", (string)null);
+                    b.ToTable("courseImages");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.CourseTeacher", b =>
@@ -371,7 +374,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("coursesTeachers", (string)null);
+                    b.ToTable("coursesTeachers");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Event", b =>
@@ -415,7 +418,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("events", (string)null);
+                    b.ToTable("events");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.EventImage", b =>
@@ -443,7 +446,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("eventImages", (string)null);
+                    b.ToTable("eventImages");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Footer", b =>
@@ -464,7 +467,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("footers", (string)null);
+                    b.ToTable("footers");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.FooterContent", b =>
@@ -490,7 +493,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("FooterId");
 
-                    b.ToTable("footerContents", (string)null);
+                    b.ToTable("footerContents");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Hobby", b =>
@@ -517,7 +520,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Hobbies", (string)null);
+                    b.ToTable("Hobbies");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.OfferedAdvantages", b =>
@@ -541,7 +544,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OfferedAdvantages", (string)null);
+                    b.ToTable("OfferedAdvantages");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Setting", b =>
@@ -569,7 +572,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("Key")
                         .IsUnique();
 
-                    b.ToTable("settings", (string)null);
+                    b.ToTable("settings");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Slider", b =>
@@ -591,7 +594,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("sliders", (string)null);
+                    b.ToTable("sliders");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.SliderContent", b =>
@@ -623,7 +626,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("SliderId")
                         .IsUnique();
 
-                    b.ToTable("contents", (string)null);
+                    b.ToTable("contents");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Speaker", b =>
@@ -655,7 +658,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Speaker", (string)null);
+                    b.ToTable("Speaker");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Subscriber", b =>
@@ -680,7 +683,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("EmailAddress")
                         .IsUnique();
 
-                    b.ToTable("subscribers", (string)null);
+                    b.ToTable("subscribers");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Teacher", b =>
@@ -741,7 +744,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("teachers", (string)null);
+                    b.ToTable("teachers");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.TeacherContactInfo", b =>
@@ -787,7 +790,7 @@ namespace BackEndFinal.Data.Migrations
                     b.HasIndex("TeacherId")
                         .IsUnique();
 
-                    b.ToTable("teacherContactInfos", (string)null);
+                    b.ToTable("teacherContactInfos");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.TeacherHobby", b =>
@@ -813,7 +816,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherHobbies", (string)null);
+                    b.ToTable("TeacherHobbies");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.TestimonialArea", b =>
@@ -851,7 +854,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("testimonialAreas", (string)null);
+                    b.ToTable("testimonialAreas");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.WhyChoose", b =>
@@ -879,7 +882,7 @@ namespace BackEndFinal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("whyChooses", (string)null);
+                    b.ToTable("whyChooses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
