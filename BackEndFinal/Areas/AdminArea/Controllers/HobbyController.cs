@@ -1,5 +1,7 @@
 ﻿using BackEndFinal.Models;
+using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
+using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +19,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
 
         public async Task<IActionResult> Index(string searchText)
         {
-            var hobbies =  _hobbyService.GetAllHobbyQuery();
+            var hobbies = _hobbyService.GetAllHobbyQuery();
             if (!string.IsNullOrEmpty(searchText))
             {
                 hobbies = hobbies.Where(s => s.Name.ToLower().Contains(searchText.ToLower()) ||
@@ -29,10 +31,10 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Detail(int? id)
         {
             if (id is null) return BadRequest();
-            var existedHobby =await _hobbyService.GetAllHobbyQuery().Include(s=>s.TeacherHobbies)
-                .ThenInclude(s=>s.Teacher)
+            var existedHobby = await _hobbyService.GetAllHobbyQuery().Include(s => s.TeacherHobbies)
+                .ThenInclude(s => s.Teacher)
                 .FirstOrDefaultAsync(h => h.Id == id);
-            if(existedHobby == null) return NotFound();
+            if (existedHobby == null) return NotFound();
             return View(existedHobby);
         }
         public IActionResult Create()
@@ -80,9 +82,9 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         }
         public async Task<IActionResult> Delete(int? id)
         {
-            if( id == null ) return BadRequest();
-            var existedHobby=await _hobbyService.GetHobbyByIdAsync(id);
-            if( existedHobby == null ) return NotFound();
+            if (id == null) return BadRequest();
+            var existedHobby = await _hobbyService.GetHobbyByIdAsync(id);
+            if (existedHobby == null) return NotFound();
             try
             {
                 await _hobbyService.DeleteHobbyAsync(existedHobby);
@@ -94,7 +96,42 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 return View();
             }
         }
-         
+
+        public async Task<IActionResult> Update(int? id)
+        {
+            if (id == null) return BadRequest();
+            var existedHobby = await _hobbyService.GetHobbyByIdAsync(id);
+            if (existedHobby == null) return NotFound();
+            return View(new HobbyUpdateVM() { Description = existedHobby.Description, Name = existedHobby.Name });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(int? id, HobbyUpdateVM hobbyUpdateVM)
+        {
+            if(id == null) return BadRequest();
+            var existedHobby = await _hobbyService.GetHobbyByIdAsync(id);
+            if (existedHobby == null) return NotFound();
+            if (!ModelState.IsValid) return View(hobbyUpdateVM);
+            var existingHobby = await _hobbyService.GetAllHobbyQuery().AnyAsync(h => h.Name == hobbyUpdateVM.Name);
+            if (existingHobby)
+            {
+                ModelState.AddModelError(string.Empty, "A hobby with the same name already exists.");
+                return View();
+            }
+
+            existedHobby.Name = hobbyUpdateVM.Name;
+            existedHobby.Description = hobbyUpdateVM.Description;
+            try
+            {
+                await _hobbyService.UpdateHobbyAsync(existedHobby);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the Hobby: " + ex.Message);
+                return View();
+
+            }
+        }
 
     }
 }

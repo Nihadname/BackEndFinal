@@ -18,6 +18,10 @@
         <button type="button" class="btn btn-success mb-3">
             <a class="text-black text-decoration-none" asp-action="create"> Create</a>
         </button>
+        <form asp-action="index">
+            <input type="text" name="searchText" value="" />
+            <button type="submit">search</button>
+        </form>
         @foreach (var role in Model)
         {
             <tr>
