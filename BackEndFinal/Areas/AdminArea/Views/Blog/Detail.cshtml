@@ -1,0 +1,36 @@
+﻿@model Blog
+<div class="Container">
+
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                @foreach (var item in Model.Images)
+                {
+                    if (item.IsMain==true)
+                    {
+                        <img src="~/img/@item.imageUrl" width="300" height="80" />
+
+                        <br />
+
+                        <br />
+                        <p>Main Photo</p>
+                    }
+                    else
+                    {
+                        <img src="~/img/@item.imageUrl" width="100" height="50" />
+                        <a class="text-decoration-none text-black btn btn-primary"
+                           asp-action="SetMainPhoto" asp-route-id="@item.Id">Set Main</a>
+
+                        <br />
+
+                        <br />
+                    }
+                }
+                <h4>@Model.Title</h4>
+                <p>@Model.Content</p>
+                <button class="btn btn-github" asp-action="Index">Go back</button>
+            </div>
+        </div>
+    </div>
+</div>
+

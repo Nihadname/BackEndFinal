@@ -29,13 +29,14 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            var mainImage = item.Images?.FirstOrDefault(s => s.IsMain == true)?.imageUrl ?? "default-image-path.jpg";
                             <tr>
                                 <td>
-                                    <img width="100%" src="@(item.Images != null ? (item.Images.FirstOrDefault(s => s.IsMain == true)?.imageUrl ?? "https://via.placeholder.com/120") : "https://via.placeholder.com/120")" alt="Profile Image">
+                                    <img width="100%" src="~/img/@mainImage" alt="Profile Image">
                                 </td>
                                 <td>@item.Title</td>
                                 <td>@(item.Content.Length > 30 ? item.Content.Substring(0, 30) + "..." : item.Content)</td>
-                                <td>@item.Category.Name</td>
+                                <td>@item.Category?.Name</td>
                                 <td>@item.Writer</td>
                                 <td>
                                     <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info" style="padding: 10px;">Details</a>

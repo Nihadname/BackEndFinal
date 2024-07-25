@@ -43,8 +43,8 @@ namespace BackEndFinal.Controllers
 
                 // Send email
                 emailService.SendEmail(
-                                from: "nihadmi@code.edu.az",
-                                to: contact.Email,
+                                from: contact.Email,
+                                to: "nihadmi@code.edu.az",
                                 subject: "forget Password",
                  body :$"Name: {contact.Name}<br>Email: {contact.Email}<br>Subject: {contact.Subject}<br>Message: {contact.Message}",
             smtpHost: "smtp.gmail.com",
