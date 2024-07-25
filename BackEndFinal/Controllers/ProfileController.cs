@@ -44,16 +44,15 @@ namespace BackEndFinal.Controllers
             {
                 if (!newProfileImage.CheckContentType())
                 {
-                    ModelState.AddModelError("Photo", "Only image files are allowed.");
+                    ModelState.AddModelError("photo", "Only image files are allowed.");
                     return RedirectToAction(nameof(Index));
                 }
-                if (!newProfileImage.CheckSize(500))
+                if (!newProfileImage.CheckSize(10000))
                 {
-                    ModelState.AddModelError("Photo", "The image size is too large. Maximum allowed size is 500KB.");
+                    ModelState.AddModelError("photo", "The image size is too large. Maximum allowed size is 500KB.");
                     return RedirectToAction(nameof(Index));
                 }
 
-                // Delete the old image file if it exists
                 if (!string.IsNullOrEmpty(existingUser.imageUrl))
                 {
                     existingUser.imageUrl.DeleteFile();

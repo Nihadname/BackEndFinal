@@ -11,5 +11,9 @@ namespace BackEndFinal.Models
         public List<BlogImage> Images { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        public Blog()
+        {
+            Images = new List<BlogImage>();
+        }
     }
 }
