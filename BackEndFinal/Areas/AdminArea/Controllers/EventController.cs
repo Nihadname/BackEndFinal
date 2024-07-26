@@ -77,8 +77,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 Description = eventCreateVM.Description,
                 Location = eventCreateVM.Location,
                 CategoryId = eventCreateVM.CategoryId,
-                StartTime = startTime,
-                EndTime = endTime,
+                StartTime = eventCreateVM.StartTime,
+                EndTime = eventCreateVM.EndTime,
                 HeldTime = eventCreateVM.HeldTime
             };
 
@@ -98,7 +98,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
 
                 EventImage newImage = new EventImage
                 {
-                    Name = await newProfileImage.SaveFile(),
+                    Name = await newProfileImage.SaveFile("event"),
                     EventId = newEvent.Id,
                     IsMain = files[0] == newProfileImage
                 };
@@ -110,7 +110,59 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             await eventService.AddEventAsync(newEvent);
             return RedirectToAction("Index");
         }
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null) return BadRequest();
+            var existedBlog = await eventService.GetEventByIdAsync(id, s => s.Images, s => s.Category);
+            if (existedBlog == null) return NotFound();
+            return View(existedBlog);
+        }
 
+         public async Task<IActionResult> SetMainPhoto(int? id)
+        {
+            if (id == null) return BadRequest();
+            var existedPhoto = await appDbContext.eventImages.FirstOrDefaultAsync(x => x.Id == id);
+            if (existedPhoto == null) return NotFound();
+
+            var mainImage = await appDbContext.eventImages
+                .FirstOrDefaultAsync(y => y.IsMain == true && y.EventId == existedPhoto.EventId);
+            if (mainImage != null) mainImage.IsMain = false;
+
+            existedPhoto.IsMain = true;
+            await appDbContext.SaveChangesAsync();
+            return RedirectToAction("Detail", new { id = existedPhoto.EventId });
+        }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return BadRequest();
+            var existedEvent = await appDbContext.events.FirstOrDefaultAsync(x => x.Id == id);
+            if (existedEvent == null) return NotFound();
+            foreach (var image in existedEvent.Images)
+            {
+                image.Name.DeleteFile();
+
+            }
+            appDbContext.events.Remove(existedEvent);
+            await appDbContext.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Update(int? id)
+        {
+            ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+            if (id == null) return BadRequest();
+            var existedEvent = await appDbContext.events.FirstOrDefaultAsync(x => x.Id == id);
+            if (existedEvent == null) return NotFound();
+            return View(new EventUpdateVM
+            {
+                Title = existedEvent.Title,
+                Description = existedEvent.Description,
+                Location = existedEvent.Location,
+                CategoryId = existedEvent.CategoryId,
+                StartTime = existedEvent.StartTime,
+                EndTime = existedEvent.EndTime,
+                HeldTime = existedEvent.HeldTime
+            });
+        }
 
     }
 }

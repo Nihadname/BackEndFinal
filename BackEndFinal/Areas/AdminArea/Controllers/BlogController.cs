@@ -73,7 +73,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                         return View(blogCreateVM);
                     }
                     BlogImage newImage = new BlogImage();
-                newImage.imageUrl = await newProfileImage.SaveFile();
+                newImage.imageUrl = await newProfileImage.SaveFile("blog");
                 newImage.BlogId = Newblog.Id;
                 if (files[0] == newProfileImage)
                 {
@@ -158,7 +158,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                     }
                    
 
-                    blogImage.imageUrl = await file.SaveFile();
+                    blogImage.imageUrl = await file.SaveFile("blog");
                     blogImage.BlogId = existedBlog.Id;
                     if (files[0] == file)
                     {

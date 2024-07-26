@@ -10,12 +10,12 @@
                     {
                         if (img.IsMain == true)
                         {
-                            <img src="~/img/@img.imageUrl" width="300" height="150" />
+                            <img src="~/img/blog/@img.imageUrl" width="300" height="150" />
                             <span>Is Main</span> <br /> <br />
                         }
                         else
                         {
-                            <img src="~/img/@img.imageUrl" width="200" height="100" />
+                            <img src="~/img/blog/@img.imageUrl" width="200" height="100" />
                             <a class="btn btn-success" asp-action="DeleteImage" asp-route-id="@img.Id">Delete Image</a>
                             <br /> <br />
                         }

@@ -32,7 +32,7 @@
                             var mainImage = item.Images?.FirstOrDefault(s => s.IsMain == true)?.imageUrl ?? "default-image-path.jpg";
                             <tr>
                                 <td>
-                                    <img width="100%" src="~/img/@mainImage" alt="Profile Image">
+                                    <img width="100%" src="~/img/blog/@mainImage" alt="Profile Image">
                                 </td>
                                 <td>@item.Title</td>
                                 <td>@(item.Content.Length > 30 ? item.Content.Substring(0, 30) + "..." : item.Content)</td>

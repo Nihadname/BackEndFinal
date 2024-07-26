@@ -10,10 +10,10 @@
         {
             return file.Length <= size * 1024;
         }
-        public static async Task<string> SaveFile(this IFormFile file)
+        public static async Task<string> SaveFile(this IFormFile file,string FolderName=null)
         {
             string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot",  "img", fileName);
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", FolderName,  "img", fileName);
 
             using (FileStream fileStream = new FileStream(path, FileMode.Create))
             {
