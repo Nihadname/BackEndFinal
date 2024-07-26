@@ -150,7 +150,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
             if (id == null) return BadRequest();
-            var existedEvent = await appDbContext.events.FirstOrDefaultAsync(x => x.Id == id);
+            var existedEvent = await appDbContext.events.Include(s=>s.Images).Include(s=>s.Category).FirstOrDefaultAsync(x => x.Id == id);
             if (existedEvent == null) return NotFound();
             return View(new EventUpdateVM
             {
@@ -160,8 +160,78 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 CategoryId = existedEvent.CategoryId,
                 StartTime = existedEvent.StartTime,
                 EndTime = existedEvent.EndTime,
-                HeldTime = existedEvent.HeldTime
+                HeldTime = existedEvent.HeldTime,
+                Images= existedEvent.Images,    
             });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(int? id, EventUpdateVM eventUpdateVM)
+        {
+            if (id == null) return BadRequest();
+            var existedEvent = await appDbContext.events.FirstOrDefaultAsync(x => x.Id == id);
+            if (existedEvent == null) return NotFound();
+            if (!ModelState.IsValid)
+            {
+                eventUpdateVM.Images = existedEvent.Images;
+                return View(eventUpdateVM);
+            }
+            EventImage eventImage = new();
+
+            List<EventImage> list = new();
+            var files = eventUpdateVM.Photos;
+            eventUpdateVM.Images = existedEvent.Images;
+            if (files is not null)
+            {
+                if (files.Length > 4)
+                {
+                    eventUpdateVM.Images = existedEvent.Images;
+
+                    ModelState.AddModelError("Photos", "Minimum 4 Photos!");
+                    return View(eventUpdateVM);
+                }
+                foreach (var file in files)
+                {
+                    if (!file.CheckContentType())
+                    {
+                        ModelState.AddModelError("Photos", "Choose right type!");
+                        return View(eventUpdateVM);
+                    }
+
+
+                    eventImage.Name = await file.SaveFile("blog");
+                    eventImage.EventId = existedEvent.Id;
+                    if (files[0] == file)
+                    {
+                        eventImage.IsMain = true;
+                    }
+                    list.Add(eventImage);
+                }
+                list.FirstOrDefault().IsMain = true;
+                existedEvent.Images = list;
+                
+            }
+            existedEvent.Title = eventUpdateVM.Title;
+            existedEvent.Description = eventUpdateVM.Description;
+            existedEvent.Location = eventUpdateVM.Location;
+            existedEvent.CategoryId = eventUpdateVM.CategoryId;
+            existedEvent.EndTime = eventUpdateVM.EndTime;
+            existedEvent.StartTime = eventUpdateVM.StartTime;
+            existedEvent.HeldTime = eventUpdateVM.HeldTime;
+            appDbContext.events.Update(existedEvent);
+            await appDbContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+
+        }
+        public async Task<IActionResult> DeleteImage(int? id)
+        {
+            if (id == null) return BadRequest();
+            var existedPhoto = await appDbContext.eventImages.FirstOrDefaultAsync(x => x.Id == id);
+            if (existedPhoto == null) return NotFound();
+            existedPhoto.Name.DeleteFile();
+            appDbContext.eventImages.Remove(existedPhoto);
+            await appDbContext.SaveChangesAsync();
+            return RedirectToAction("Update", new { id = existedPhoto.EventId });
         }
 
     }
