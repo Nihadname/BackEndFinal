@@ -160,13 +160,11 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
 
                     blogImage.imageUrl = await file.SaveFile("blog");
                     blogImage.BlogId = existedBlog.Id;
-                    if (files[0] == file)
-                    {
-                        blogImage.IsMain = true;
-                    }
+                    
+                        blogImage.IsMain = false;
+                    
                     list.Add(blogImage);
                 }
-                list.FirstOrDefault().IsMain = true;
                 existedBlog.Images = list;
             }
             existedBlog.Title= blogUpdateVM.Title;
@@ -198,7 +196,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             if (id == null) return BadRequest();
             var existedPhoto = await appDbContext.blogImages.FirstOrDefaultAsync(x => x.Id == id);
             if (existedPhoto == null) return NotFound();
-            existedPhoto.imageUrl.DeleteFile();
+            existedPhoto.imageUrl.DeleteFile("blog");
             appDbContext.blogImages.Remove(existedPhoto);
             await appDbContext.SaveChangesAsync();
             return RedirectToAction("Update", new { id = existedPhoto.BlogId });
@@ -210,7 +208,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             if (existedPhoto == null) return NotFound();
             foreach (var image in existedPhoto.Images)
             {
-                image.imageUrl.DeleteFile();
+                image.imageUrl.DeleteFile("blog");
 
             }
             appDbContext.blogs.Remove(existedPhoto);

@@ -139,7 +139,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             if (existedEvent == null) return NotFound();
             foreach (var image in existedEvent.Images)
             {
-                image.Name.DeleteFile();
+                image.Name.DeleteFile("event");
 
             }
             appDbContext.events.Remove(existedEvent);
@@ -198,15 +198,15 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                     }
 
 
-                    eventImage.Name = await file.SaveFile("blog");
+                    eventImage.Name = await file.SaveFile("event");
                     eventImage.EventId = existedEvent.Id;
-                    if (files[0] == file)
-                    {
-                        eventImage.IsMain = true;
-                    }
+                 
+                  
+                        eventImage.IsMain = false;
+                   
                     list.Add(eventImage);
                 }
-                list.FirstOrDefault().IsMain = true;
+              
                 existedEvent.Images = list;
                 
             }
@@ -228,10 +228,20 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             if (id == null) return BadRequest();
             var existedPhoto = await appDbContext.eventImages.FirstOrDefaultAsync(x => x.Id == id);
             if (existedPhoto == null) return NotFound();
-            existedPhoto.Name.DeleteFile();
-            appDbContext.eventImages.Remove(existedPhoto);
-            await appDbContext.SaveChangesAsync();
+            try
+            {
+                existedPhoto.Name.DeleteFile("event");
+                appDbContext.eventImages.Remove(existedPhoto);
+                await appDbContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
             return RedirectToAction("Update", new { id = existedPhoto.EventId });
+
         }
 
     }
