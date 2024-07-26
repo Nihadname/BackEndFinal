@@ -36,16 +36,7 @@
                         <li><span>experience: </span>@Model.experience years experience</li>
                         <li>
                             <span>hobbies: </span>
-                            @if (Model.TeacherHobbies != null && Model.TeacherHobbies.Any())
-                            {
-                                foreach (var item in Model.TeacherHobbies)
-                                {
-                                    if (item.Hobby != null)
-                                    {
-                                        @item.Hobby.Name
-                                    }
-                                }
-                            }
+                           
                         </li>
                         <li><span>faculty: </span>@Model.faculty</li>
                         <li><span>Courses:</span> @foreach(var item in Model.courseTeachers)

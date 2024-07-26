@@ -6,7 +6,6 @@ namespace BackEndFinal.Models
     {
         public Teacher()
         {
-            TeacherHobbies = new List<TeacherHobby>();
             courseTeachers = new List<CourseTeacher>();
         }
 
@@ -15,7 +14,7 @@ namespace BackEndFinal.Models
         public string degree { get; set; }
         public int experience { get; set; }
         public string faculty { get; set; }
-       
+       public string Hobbies { get; set; }
         public string Position { get; set; }
         public string ImageUrl { get; set; }
         public int Language {  get; set; }
@@ -27,7 +26,6 @@ namespace BackEndFinal.Models
 
         public TeacherContactInfo TeacherContactInfo { get; set; }
         public List<CourseTeacher> courseTeachers { get; set; }
-        public List<TeacherHobby> TeacherHobbies { get; set; } 
-
+        
     }
 }

@@ -30,7 +30,7 @@ namespace BackEndFinal.Controllers
 
             if (id == null) return BadRequest();
             var query=_teacherService.GetAllTeacherQuery();
-            var existedTeacher = await query.AsNoTracking().Include(s => s.TeacherHobbies).ThenInclude(s => s.Hobby).Include(s => s.courseTeachers).ThenInclude(s => s.Course).Include(s => s.TeacherContactInfo)
+            var existedTeacher = await query.AsNoTracking().Include(s => s.courseTeachers).ThenInclude(s => s.Course).Include(s => s.TeacherContactInfo)
                 .FirstOrDefaultAsync(s=>s.Id == id);
             if(existedTeacher == null) return NotFound();
             return View(existedTeacher);

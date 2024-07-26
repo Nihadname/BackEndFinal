@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hobby>
+﻿@model List<Teacher>
 <div class="col-lg-12 grid-margin stretch-card">
 
     <div class="card">
@@ -14,8 +14,12 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>HobbyName</th>
-                          
+                            <th>FullName</th>
+                            <th>Description</th>
+                            <th>degree</th>
+                            <th>experience</th>
+                            <th>faculty</th>
+                            <th>settings</th>
                         </tr>
                         <form asp-action="index">
                             <input type="text" name="searchText" value="" />
@@ -26,18 +30,27 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.Name</td>
                                 <td>
-                                  
+                                    <img width="100%" src="~/img/teacher/@item.ImageUrl" alt="Profile Image">
+                                </td>
+                                <td>@item.Name</td>
+                                <td>@(item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</td>
+                                <td>@item.degree</td>
+                                <td>@item.experience</td>
+                                <td>@item.faculty</td>
+                                <td>
+                                   
 
                                     <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info" style="    padding: 10px;">Details</a>
                                     <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary" style="    padding: 10px;">Update</a>
-                                
+                               
                                     
                                         <form asp-action="Delete" asp-route-id="@item.Id" method="post" id="delete-form-@item.Id" style="display:none;">
                                             <input name="__RequestVerificationToken" type="hidden" />
                                         </form>
                                         <button type="button" class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</button>
+                                    
+
                                 </td>
                             </tr>
 
@@ -76,10 +89,11 @@
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 swalWithBootstrapButtons.fire({
                     title: "Cancelled",
-                    text: "Your Hobby is safe :)",
+                    text: "Your role is safe :)",
                     icon: "error"
                 });
             }
         });
     }
+
 </script>
