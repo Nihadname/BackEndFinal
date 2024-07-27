@@ -1,4 +1,9 @@
 ﻿@model CourseUpdateVM
+@{
+    var categories = ViewBag.Categories;
+    var teachers = ViewBag.Teachers;
+    var tags = ViewBag.Tags;
+}
 <div class="container">
     <div class="row">
         <div class="card">
@@ -100,10 +105,19 @@
                     </div>
                     <div class="form-group">
 
-                        <select asp-for="CategoryId" asp-items="@ViewBag.Categories">
+                        <select asp-for="CategoryId" asp-items="@categories">
                         </select>
                     </div>
-
+                    <div class="form-group">
+                        <label asp-for="TeacherIds">Teachers</label>
+                        <select asp-for="TeacherIds" class="form-control" asp-items="teachers" multiple></select>
+                        <span class="text-danger" asp-validation-for="TeacherIds"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TagIds">Tags</label>
+                        <select asp-for="TagIds" class="form-control" asp-items="tags" multiple></select>
+                        <span class="text-danger" asp-validation-for="TagIds"></span>
+                    </div>
                     <button type="submit" class="btn btn-primary me-2">Submit</button>
                 </form>
             </div>

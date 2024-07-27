@@ -1,18 +1,20 @@
 ﻿@model CourseCreateVM
 @{
     var categories = ViewBag.Categories;
+    var teachers = ViewBag.Teachers;
+    var tags = ViewBag.Tags;
 }
 
 <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Update Category</h4>
-            <p class="card-description">Update category details</p>
+            <h4 class="card-title">Create Course</h4>
+            <p class="card-description">Create a new course</p>
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
             <form method="post" class="forms-sample" enctype="multipart/form-data">
                 <div class="form-group">
                     <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" placeholder="Name">
+                    <input asp-for="Title" class="form-control" placeholder="Title">
                     <span class="text-danger" asp-validation-for="Title"></span>
                 </div>
                 <div class="form-group">
@@ -25,10 +27,9 @@
                     <input asp-for="Duration" class="form-control" placeholder="Duration">
                     <span class="text-danger" asp-validation-for="Duration"></span>
                 </div>
-               
                 <div class="form-group">
                     <label asp-for="Starts"></label>
-                    <input asp-for="Starts" class="form-control" placeholder="Starts">
+                    <input asp-for="Starts" type="date" class="form-control" placeholder="Starts">
                     <span class="text-danger" asp-validation-for="Starts"></span>
                 </div>
                 <div class="form-group">
@@ -36,7 +37,6 @@
                     <input asp-for="ClassDuration" class="form-control" placeholder="ClassDuration">
                     <span class="text-danger" asp-validation-for="ClassDuration"></span>
                 </div>
-               
                 <div class="form-group">
                     <label asp-for="SkillLevel"></label>
                     <input asp-for="SkillLevel" class="form-control" placeholder="SkillLevel">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Photos"></label>
-                    <input asp-for="Photos" class="form-control" placeholder="Photos">
+                    <input asp-for="Photos" type="file" multiple class="form-control" placeholder="Photos">
                     <span class="text-danger" asp-validation-for="Photos"></span>
                 </div>
                 <div class="form-group">
@@ -83,13 +83,28 @@
                     <span class="text-danger" asp-validation-for="Price"></span>
                 </div>
                 <div class="form-group">
-
-                    <select asp-for="CategoryId" asp-items="categories">
-                    </select>
+                    <label asp-for="CategoryId">Category</label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="categories"></select>
+                    <span class="text-danger" asp-validation-for="CategoryId"></span>
                 </div>
-
+                <div class="form-group">
+                    <label asp-for="TeacherIds">Teachers</label>
+                    <select asp-for="TeacherIds" class="form-control" asp-items="teachers" multiple></select>
+                    <span class="text-danger" asp-validation-for="TeacherIds"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TagIds">Tags</label>
+                    <select asp-for="TagIds" class="form-control" asp-items="tags" multiple></select>
+                    <span class="text-danger" asp-validation-for="TagIds"></span>
+                </div>
                 <button type="submit" class="btn btn-primary me-2">Submit</button>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

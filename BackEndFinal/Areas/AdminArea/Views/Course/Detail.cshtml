@@ -29,6 +29,15 @@
                 }
                 <h4>@Model.Title</h4>
                 <p>@Model.Description</p>
+                @foreach(var item in Model.courseTeachers)
+                {
+
+                    <li>@item.Teacher.Name</li>
+                }
+                @foreach (var item in Model.courseTags)
+                {
+                    <li>@item.Tag.Name</li>
+                }
                 <a class="btn btn-github" asp-action="index">go back</a>
             </div>
         </div>

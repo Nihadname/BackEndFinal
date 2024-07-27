@@ -41,7 +41,10 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Detail(int? id)
         {
             if(id == null) return BadRequest();
-            var existedTeacher=await courseService.GetCourseByIdAsync(id,s=>s.courseImages);
+            
+            var existedTeacher=await courseService.GetAllCourseQuery().Include(s=>s.courseImages).Include(s=>s.courseTeachers)
+                .ThenInclude(s=>s.Teacher).Include(s=>s.courseTags).ThenInclude(s=>s.Tag)
+                .FirstOrDefaultAsync(s=>s.Id==id);
             if(existedTeacher == null) return BadRequest();
             return View(existedTeacher);
         }
@@ -49,6 +52,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0,0), "Id", "Name");
             //ViewBag.Teachers=new SelectList(await teacherService.GetAllTeacherAsync(0,0), "Id", "Name");
+            ViewBag.Teachers = new SelectList(await teacherService.GetAllTeacherAsync(0, 0), "Id", "Name");
+            ViewBag.Tags = new SelectList(await appDbContext.tags.AsNoTracking().ToListAsync(), "Id", "Name");
             return View();
         }
         [HttpPost]
@@ -56,7 +61,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Create(CourseCreateVM courseCreateVM)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
-
+            ViewBag.Teachers = new SelectList(await teacherService.GetAllTeacherAsync(0, 0), "Id", "Name");
+            ViewBag.Tags = new SelectList(await appDbContext.tags.AsNoTracking().ToListAsync(), "Id", "Name");
             if (!ModelState.IsValid)
             {
                 return View(courseCreateVM);
@@ -114,7 +120,14 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             newCourse.Price = courseCreateVM.Price;
             newCourse.Students = courseCreateVM.Students;
             newCourse.Duration = courseCreateVM.Duration;
-
+            newCourse.courseTeachers = courseCreateVM.TeacherIds.Select(tid => new CourseTeacher
+            {
+                TeacherId = tid
+            }).ToList();
+            newCourse.courseTags = courseCreateVM.TagIds.Select(tid => new CourseTag
+            {
+                TagId = tid
+            }).ToList();
             await courseService.AddCourseAsync(newCourse);
 
             return RedirectToAction("Index");
@@ -160,6 +173,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Update(int? id)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+            ViewBag.Teachers = new SelectList(await teacherService.GetAllTeacherAsync(0, 0), "Id", "Name");
+            ViewBag.Tags = new SelectList(await appDbContext.tags.AsNoTracking().ToListAsync(), "Id", "Name");
             if (id == null) return BadRequest();
             var existedBlog = await courseService.GetCourseByIdAsync(id, s => s.courseImages, s => s.Category);
             if (existedBlog == null) return NotFound();
@@ -187,7 +202,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Update(int? id, CourseUpdateVM vm)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
-
+            ViewBag.Teachers = new SelectList(await teacherService.GetAllTeacherAsync(0, 0), "Id", "Name");
+            ViewBag.Tags = new SelectList(await appDbContext.tags.AsNoTracking().ToListAsync(), "Id", "Name");
             if (id == null) return BadRequest();
             var existedCourse = await courseService.GetCourseByIdAsync(id, s => s.courseImages);
             if (existedCourse == null) return NotFound();
@@ -242,6 +258,17 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             existedCourse.Price = vm.Price;
             existedCourse.Students = vm.Students;
             existedCourse.Duration = vm.Duration;
+            existedCourse.courseTeachers = vm.TeacherIds.Select(tid => new CourseTeacher
+            {
+                CourseId = existedCourse.Id,
+                TeacherId = tid
+            }).ToList();
+
+            existedCourse.courseTags = vm.TagIds.Select(tid => new CourseTag
+            {
+                CourseId = existedCourse.Id,
+                TagId = tid
+            }).ToList();
             await courseService.UpdateCourseAsync(existedCourse);
             return RedirectToAction("Index");   
         }

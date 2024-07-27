@@ -21,6 +21,7 @@ namespace BackEndFinal.ViewModels
         public string? HowToApply { get; set; }
         public string? CERTIFICATION { get; set; }
         public int Price { get; set; }
-
+        public List<int> TeacherIds { get; set; }
+        public List<int> TagIds { get; set; }
     }
 }
