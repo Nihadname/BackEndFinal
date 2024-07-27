@@ -15,15 +15,19 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
     public class CourseController : Controller
     {
         private readonly ICourseService courseService;
+        private readonly ISubscriberService subscriberService; 
         private readonly ITeacherService teacherService;
         private readonly ICategoryService categoryService;
+        private readonly IEmailService emailService;
         private readonly AppDbContext appDbContext;
-        public CourseController(ICourseService courseService, ICategoryService categoryService, AppDbContext appDbContext, ITeacherService teacherService)
+        public CourseController(ICourseService courseService, ICategoryService categoryService, AppDbContext appDbContext, ITeacherService teacherService, IEmailService emailService, ISubscriberService subscriberService)
         {
             this.courseService = courseService;
             this.categoryService = categoryService;
             this.appDbContext = appDbContext;
             this.teacherService = teacherService;
+            this.emailService = emailService;
+            this.subscriberService = subscriberService;
         }
 
         public async Task<IActionResult> Index(string searchText)
@@ -36,6 +40,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                                          s.Description.ToLower().Contains(searchText.ToLower()));
             }
             var usersForActualForm =await courses.Include(s=>s.Category).ToListAsync();
+          
             return View(usersForActualForm);
         }
         public async Task<IActionResult> Detail(int? id)
@@ -129,6 +134,20 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 TagId = tid
             }).ToList();
             await courseService.AddCourseAsync(newCourse);
+            var allSubs = await subscriberService.GetAlSubscriberAsync(0, 0);
+            var emailRecipients = allSubs.Select(sub => sub.EmailAddress).ToList();
+
+            await emailService.SendEmailAsyncToManyPeople(
+               from: "nihadmi@code.edu.az",
+               recipients: emailRecipients,
+               subject: "Verify Email",
+               body: $"http://localhost:5016/Course/Detail/{newCourse.Id}",
+               smtpHost: "smtp.gmail.com",
+               smtpPort: 587,
+               enableSsl: true,
+               smtpUser: "nihadmi@code.edu.az",
+               smtpPass: "ilyo ibry uphi gnfe"
+            );
 
             return RedirectToAction("Index");
         }
