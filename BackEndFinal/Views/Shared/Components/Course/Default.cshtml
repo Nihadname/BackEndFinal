@@ -1,31 +1,32 @@
 ﻿@model List<Course>
-
-
 @foreach (var item in Model)
 {
     <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="single-course mb-70">
             <div class="course-img">
                 <a asp-action="Detail" asp-controller="Course" asp-route-id="@item.Id">
-                    <img src="~/img/course/@item.courseImages.FirstOrDefault().Name" alt="course">
+                    @{
+                        var courseImage = item?.courseImages?.FirstOrDefault();
+                        var courseImageUrl = courseImage != null ? courseImage.Name : "default-course.jpg";
+                    }
+                    <img src="~/img/course/@courseImageUrl" alt="course">
                     <div class="course-hover">
                         <i class="fa fa-link"></i>
                     </div>
                 </a>
             </div>
             <div class="course-content">
-                <h3><a href="course-details.html">@item.Title</a></h3>
-                <p>@(item.Description.Length >= 50 ? item.Description.Substring(0, 50) : item.Description)...</p>
+                <h3><a href="course-details.html">@item?.Title</a></h3>
+                <p>@(item?.Description?.Length >= 50 ? item.Description.Substring(0, 50) : item?.Description)...</p>
                 <a class="default-btn" href="course-details.html">read more</a>
                 @if (User.Identity.IsAuthenticated)
                 {
                     <form asp-action="RequestCourse" asp-controller="CourseRequest" method="post" style="display:inline;">
-                        <input type="hidden" name="courseName" value="@item.Title" />
+                        <input type="hidden" name="courseName" value="@item?.Title" />
                         <button type="submit" class="default-btn">Request to Buy</button>
                     </form>
                 }
             </div>
         </div>
     </div>
-
 }

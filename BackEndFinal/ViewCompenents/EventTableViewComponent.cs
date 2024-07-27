@@ -15,7 +15,7 @@ namespace BackEndFinal.ViewCompenents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var events =await _eventService.GetAllEventAsync(0, 8);
+            var events =await _eventService.GetAllEventAsync(0, 8,s=>s.Images,s=>s.Speakers,s=>s.Category);
             return View(Task.FromResult(events));
         }
     }

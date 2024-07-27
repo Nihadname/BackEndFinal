@@ -130,42 +130,44 @@ $(".notice-left").niceScroll({
 
 })(jQuery);
 
+
 $(document).ready(function () {
-    //load more
-    let skip = 3;
-    let skip2 = 3;
-    $(document).ready(function () {
-        let skip = 3;
-        let skip2 = 3;
+    let skipCourse = 3;
+    let skipEvent = 3;
 
-        function loadMoreData(url, skipCount, listSelector, buttonSelector, countSelector) {
-            $.ajax({
-                url: `${url}?skip=${skipCount}`,
-                method: "get",
-                success: function (datas) {
-                    console.log(datas);
-                    $(listSelector).append(datas);
-                    skipCount += 3;
-                    const itemCount = $(countSelector).val();
-                    console.log(skipCount);
-                    if (skipCount >= itemCount) {
-                        $(buttonSelector).remove();
-                    }
-                },
-                error: function (error) {
-                    console.log(error);
+    function loadMoreData(url, skipCount, listSelector, buttonSelector, countSelector, callback) {
+        $.ajax({
+            url: `${url}?skip=${skipCount}`,
+            method: "get",
+            success: function (data) {
+                $(listSelector).append(data);
+                callback();
+                const itemCount = parseInt($(countSelector).val(), 10);
+                if (skipCount + 3 >= itemCount) {
+                    $(buttonSelector).remove();
                 }
-            });
-        }
-
-        $(document).on("click", "#loadmore", function () {
-            loadMoreData("/Event/Loadmore", skip, "#EventList", "#loadmore", "#EventCount");
+            },
+            error: function (error) {
+                console.log(error);
+            }
         });
+    }
 
-        $(document).on("click", "#loadmore2", function () {
-            loadMoreData("/Course/Loadmore", skip2, "#CourseList", "#loadmore2", "#CourseCount");
+    function incrementSkip(variable, increment) {
+        return variable + increment;
+    }
+
+    $(document).on("click", "#loadmore2", function () {
+        loadMoreData("/Course/Loadmore", skipCourse, "#CourseList", "#loadmore2", "#CourseCount", function () {
+            skipCourse = incrementSkip(skipCourse, 3);
         });
     });
 
-
+    $(document).on("click", "#loadmore", function () {
+        loadMoreData("/Event/Loadmore", skipEvent, "#EventList", "#loadmore", "#EventCount", function () {
+            skipEvent = incrementSkip(skipEvent, 3);
+        });
+    });
 });
+
+

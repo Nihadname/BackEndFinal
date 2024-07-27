@@ -36,7 +36,8 @@ namespace BackEndFinal.Controllers
         public async Task<IActionResult> Detail(int? id)
         {
             if (id is null) return BadRequest();
-            var existedCourse=await courseService.GetCourseByIdAsync(id,s=>s.courseImages);
+            var existedCourse=await courseService.GetAllCourseQuery().Include(s=>s.courseImages).Include(s=>s.courseTags).ThenInclude(s=>s.Tag)
+                .FirstOrDefaultAsync(s=>s.Id==id);
             var blogs =await _blogService.GetAllBlogAsync(0, 3, s => s.Images);
             if(existedCourse is null)  return NotFound();
             CourseDetailVM courseDetailVM = new CourseDetailVM();
