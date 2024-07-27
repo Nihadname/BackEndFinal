@@ -131,6 +131,7 @@
                     <td>@request.CourseName</td>
                     <td>@(request.IsApproved ? "Approved" : "Pending")</td>
                     <td>@(request.AppointmentTime.HasValue ? request.AppointmentTime.Value.ToString("g") : "Not Set")</td>
+                    
                 </tr>
             }
         </tbody>

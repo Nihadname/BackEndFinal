@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CourseRequest>
+<div class="col-lg-12 grid-margin stretch-card">
+
+    <div class="card">
+        <button type="button" class="btn btn-success mb-3">
+            <a class="text-black text-decoration-none" asp-controller="Account" asp-action="Register"> Create</a>
+        </button>
+        <div class="card-body">
+            <h4 class="card-title">Users Table</h4>
+            <p class="card-description">
+                Add class <code>.table</code>
+            </p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CoursName</th>
+                            <th>Status</th>
+                            <th>AppointmentTime</th>
+                            <th>settings</th>
+                        </tr>
+                       
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>@request.CourseName</td>
+                                <td>@(request.IsApproved ? "Approved" : "Pending")</td>
+                                <td>@(request.AppointmentTime.HasValue ? request.AppointmentTime.Value.ToString("g") : "Not Set")</td>
+                                <td>
+                                    <a asp-action="ApproveRequest" asp-route-requestId="@request.Id" class="btn btn-outline-success">ApproveRequest</a>
+                                    <a asp-action="SetAppointmentTime" asp-route-Id="@request.Id" class="btn btn-outline-primary">Set Appointment Time</a>
+
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

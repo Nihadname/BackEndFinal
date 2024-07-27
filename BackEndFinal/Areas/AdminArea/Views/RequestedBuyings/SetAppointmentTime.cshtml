@@ -1,0 +1,20 @@
+﻿@model CourseRequest
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Set Appointment Time</h4>
+            <p class="card-description">
+                Set the appointment time for the course request
+            </p>
+            <form asp-action="SetAppointmentTime" method="post" class="forms-sample">
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="AppointmentTime">Appointment Time</label>
+                    <input asp-for="AppointmentTime" class="form-control" placeholder="Appointment Time" required />
+                </div>
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
