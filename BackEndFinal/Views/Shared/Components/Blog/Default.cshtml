@@ -12,7 +12,10 @@
             <div class="single-blog">
                 <div class="blog-img">
                     <a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id">
-                        <img src="~/img/blog/@blog.Images.FirstOrDefault(s => s.IsMain==true).imageUrl" alt="blog">
+                        @{
+                            var mainImage = blog.Images?.FirstOrDefault(s => s.IsMain == true);
+                        }
+                        <img src="~/img/blog/@(mainImage != null ? mainImage.imageUrl : "default.jpg")" alt="blog">
                     </a>
                     <div class="blog-hover">
                         <a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id"><i class="fa fa-link"></i></a>
