@@ -53,6 +53,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             var files = blogCreateVM.Photos;
             if (files.Length == 0)
             {
+                ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+
                 ModelState.AddModelError("Photos", "Oimages can not bu null");
                 return View(blogCreateVM);
             }
@@ -64,12 +66,16 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 
                     if (!newProfileImage.CheckContentType())
                     {
-                        ModelState.AddModelError("Photos", "Only image files are allowed.");
+                    ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+
+                    ModelState.AddModelError("Photos", "Only image files are allowed.");
                         return View(blogCreateVM);
                     }
                     if (!newProfileImage.CheckSize(10000))
                     {
-                        ModelState.AddModelError("Photos", "The image size is too large. Maximum allowed size is 500KB.");
+                    ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+
+                    ModelState.AddModelError("Photos", "The image size is too large. Maximum allowed size is 500KB.");
                         return View(blogCreateVM);
                     }
                     BlogImage newImage = new BlogImage();
@@ -93,6 +99,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                     //}
 
             }
+            ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+
             Newblog.Images = images;
             Newblog.CategoryId = blogCreateVM.CategoryId;
             Newblog.Title = blogCreateVM.Title;

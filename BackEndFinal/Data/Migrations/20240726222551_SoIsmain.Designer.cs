@@ -4,6 +4,7 @@ using BackEndFinal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEndFinal.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240726222551_SoIsmain")]
+    partial class SoIsmain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,32 +354,6 @@ namespace BackEndFinal.Data.Migrations
                     b.ToTable("courseImages");
                 });
 
-            modelBuilder.Entity("BackEndFinal.Models.CourseTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("courseTags");
-                });
-
             modelBuilder.Entity("BackEndFinal.Models.CourseTeacher", b =>
                 {
                     b.Property<int>("Id")
@@ -683,26 +660,6 @@ namespace BackEndFinal.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("subscribers");
-                });
-
-            modelBuilder.Entity("BackEndFinal.Models.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("tags");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Teacher", b =>
@@ -1059,25 +1016,6 @@ namespace BackEndFinal.Data.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("BackEndFinal.Models.CourseTag", b =>
-                {
-                    b.HasOne("BackEndFinal.Models.Course", "Course")
-                        .WithMany("courseTags")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEndFinal.Models.Tag", "Tag")
-                        .WithMany("courseTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("BackEndFinal.Models.CourseTeacher", b =>
                 {
                     b.HasOne("BackEndFinal.Models.Course", "Course")
@@ -1232,8 +1170,6 @@ namespace BackEndFinal.Data.Migrations
                 {
                     b.Navigation("courseImages");
 
-                    b.Navigation("courseTags");
-
                     b.Navigation("courseTeachers");
                 });
 
@@ -1253,11 +1189,6 @@ namespace BackEndFinal.Data.Migrations
                 {
                     b.Navigation("SliderContent")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BackEndFinal.Models.Tag", b =>
-                {
-                    b.Navigation("courseTags");
                 });
 
             modelBuilder.Entity("BackEndFinal.Models.Teacher", b =>
