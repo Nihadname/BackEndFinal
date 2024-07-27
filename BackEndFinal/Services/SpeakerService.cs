@@ -33,7 +33,7 @@ namespace BackEndFinal.Services
 
         public async Task<List<Speaker>> GetAlSpeakerAsync(int skip, int take, params Expression<Func<Speaker, object>>[] includes)
         {
-            return await _speakerRepository.GetAllQuery(skip,,take, includes);
+            return await _speakerRepository.GetAllAsync(skip,take, includes);
         }
 
         public async Task<Speaker> GetSpeakerByIdAsync(int? id, params Expression<Func<Speaker, object>>[] includes)
