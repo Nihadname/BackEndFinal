@@ -114,6 +114,29 @@
         </form>
     </div>
 </div>
+<div class="profile-activity">
+    <h5>Your Course Requests</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Status</th>
+                <th>Appointment Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model.CourseRequests)
+            {
+                <tr>
+                    <td>@request.CourseName</td>
+                    <td>@(request.IsApproved ? "Approved" : "Pending")</td>
+                    <td>@(request.AppointmentTime.HasValue ? request.AppointmentTime.Value.ToString("g") : "Not Set")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>
 
 @section Scripts {
     @{

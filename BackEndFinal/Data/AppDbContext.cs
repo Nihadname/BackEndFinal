@@ -36,6 +36,8 @@ namespace BackEndFinal.Data
         public DbSet<TeacherContactInfo> teacherContactInfos { get; set; }
         public DbSet<Tag> tags { get; set; }
         public DbSet<CourseTag> courseTags { get; set; }
+        public DbSet<CourseRequest> CourseRequests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Ensure this is called first

@@ -1,30 +1,38 @@
-﻿using BackEndFinal.Extensions;
+﻿using BackEndFinal.Data;
+using BackEndFinal.Extensions;
 using BackEndFinal.Models;
 using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEndFinal.Controllers
 {
     public class ProfileController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-
-        public ProfileController(UserManager<AppUser> userManager)
+        private readonly AppDbContext appDbContext;
+        public ProfileController(UserManager<AppUser> userManager, AppDbContext appDbContext)
         {
             _userManager = userManager;
+            this.appDbContext = appDbContext;
         }
 
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser is null) return NotFound();
+            var courseRequests = await appDbContext.CourseRequests
+               .Where(cr => cr.UserName == currentUser.UserName)
+               .ToListAsync();
             var userProfileVM = new UserProfileVM
             {
                 FullName = currentUser.FullName,
                 UserName = currentUser.UserName,
                 Email = currentUser.Email,
-                imageUrl = currentUser.imageUrl
+                imageUrl = currentUser.imageUrl,
+                                CourseRequests = courseRequests 
+
             };
 
             return View(userProfileVM);
