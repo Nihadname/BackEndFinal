@@ -30,6 +30,7 @@ namespace BackEndFinal
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<IEmailService,  EmailService>();
+            services.AddScoped<ISpeakerService,SpeakerService>();
            
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {

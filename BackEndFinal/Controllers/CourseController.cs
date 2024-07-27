@@ -1,10 +1,14 @@
-﻿using BackEndFinal.Models;
+﻿using BackEndFinal.Data;
+using BackEndFinal.Models;
 using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using System.Security.Claims;
 using WebApplication11.Repositories.interfaces;
 
 namespace BackEndFinal.Controllers
@@ -13,12 +17,16 @@ namespace BackEndFinal.Controllers
     {
         private readonly ICourseService courseService;
         private readonly ICategoryService _categoryService;
+        private readonly UserManager<AppUser> userManager;
+        private readonly AppDbContext appDbContext;
         private IBlogService _blogService;
-        public CourseController(ICourseService courseService, ICategoryService categoryService, IBlogService blogService)
+        public CourseController(ICourseService courseService, ICategoryService categoryService, IBlogService blogService, AppDbContext appDbContext, UserManager<AppUser> userManager)
         {
             this.courseService = courseService;
             _categoryService = categoryService;
             _blogService = blogService;
+            this.appDbContext = appDbContext;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index(string keyword = "")
@@ -36,16 +44,27 @@ namespace BackEndFinal.Controllers
         public async Task<IActionResult> Detail(int? id)
         {
             if (id is null) return BadRequest();
-            var existedCourse=await courseService.GetAllCourseQuery().Include(s=>s.courseImages).Include(s=>s.courseTags).ThenInclude(s=>s.Tag)
-                .FirstOrDefaultAsync(s=>s.Id==id);
-            var blogs =await _blogService.GetAllBlogAsync(0, 3, s => s.Images);
-            if(existedCourse is null)  return NotFound();
-            CourseDetailVM courseDetailVM = new CourseDetailVM();
-            courseDetailVM.course = existedCourse;
-            courseDetailVM.blogs = blogs;
+
+            var existedCourse = await courseService.GetAllCourseQuery()
+                .Include(s => s.courseImages)
+                .Include(s => s.courseTags).ThenInclude(s => s.Tag)
+                .Include(s => s.Comments).ThenInclude(s => s.AppUser)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            var blogs = await _blogService.GetAllBlogAsync(0, 3, s => s.Images);
+
+            if (existedCourse is null) return NotFound();
+
+            var courseDetailVM = new CourseDetailVM
+            {
+                Course = existedCourse,
+                Blogs = blogs,
+            };
 
             return View(courseDetailVM);
         }
+
+
         public async Task<IActionResult> CoursesInCategory(int? id, int page=1)
         {
             if (id is null) return BadRequest();
@@ -66,6 +85,7 @@ namespace BackEndFinal.Controllers
             };
             return View(CourseInCategoryVM);
         }
+     
 
 
     }

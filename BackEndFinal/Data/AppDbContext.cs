@@ -37,6 +37,7 @@ namespace BackEndFinal.Data
         public DbSet<Tag> tags { get; set; }
         public DbSet<CourseTag> courseTags { get; set; }
         public DbSet<CourseRequest> CourseRequests { get; set; }
+        public DbSet<Comment> comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

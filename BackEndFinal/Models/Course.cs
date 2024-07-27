@@ -17,6 +17,8 @@ namespace BackEndFinal.Models
         public List<CourseTag> courseTags { get; set; }
         public DateTime Starts { get; set; }
         public string Duration { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+
         public string ClassDuration { get; set; }
         public string SkillLevel { get; set; }
         public string Language { get; set; }

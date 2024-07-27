@@ -7,6 +7,8 @@ namespace BackEndFinal.Models
         public string FullName { get; set; }
         public string? imageUrl { get; set; }
         public bool IsBlocked { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+
 
     }
 }
