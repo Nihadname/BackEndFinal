@@ -55,7 +55,7 @@ namespace BackEndFinal.Controllers
                     ModelState.AddModelError("photo", "Only image files are allowed.");
                     return RedirectToAction(nameof(Index));
                 }
-                if (!newProfileImage.CheckSize(10000))
+                if (!newProfileImage.CheckSize(100000000))
                 {
                     ModelState.AddModelError("photo", "The image size is too large. Maximum allowed size is 500KB.");
                     return RedirectToAction(nameof(Index));
