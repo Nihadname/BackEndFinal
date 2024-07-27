@@ -41,6 +41,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+            ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name");
+
             return View();
         }
         [HttpPost]
@@ -48,7 +50,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Create(EventCreateVM eventCreateVM)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
-            if (!ModelState.IsValid) return View(eventCreateVM);
+            ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name"); if (!ModelState.IsValid) return View(eventCreateVM);
 
             // Validate StartTime format
             if (!TimeSpan.TryParseExact(eventCreateVM.StartTime.ToString(@"hh\:mm"), @"hh\:mm", CultureInfo.InvariantCulture, out var startTime))
@@ -79,9 +81,18 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 CategoryId = eventCreateVM.CategoryId,
                 StartTime = eventCreateVM.StartTime,
                 EndTime = eventCreateVM.EndTime,
-                HeldTime = eventCreateVM.HeldTime
-            };
+                HeldTime = eventCreateVM.HeldTime,
+                Speakers = new List<Speaker>()
 
+            };
+            foreach (var speakerId in eventCreateVM.SelectedSpeakerIds)
+            {
+                var speaker = await appDbContext.speakers.FindAsync(speakerId);
+                if (speaker != null)
+                {
+                    newEvent.Speakers.Add(speaker);
+                }
+            }
             List<EventImage> images = new List<EventImage>();
             foreach (var newProfileImage in files)
             {
@@ -149,7 +160,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Update(int? id)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
-            if (id == null) return BadRequest();
+            ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name"); if (!ModelState.IsValid) return View(eventCreateVM); if (id == null) return BadRequest();
             var existedEvent = await appDbContext.events.Include(s=>s.Images).Include(s=>s.Category).FirstOrDefaultAsync(x => x.Id == id);
             if (existedEvent == null) return NotFound();
             return View(new EventUpdateVM
@@ -161,7 +172,9 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 StartTime = existedEvent.StartTime,
                 EndTime = existedEvent.EndTime,
                 HeldTime = existedEvent.HeldTime,
-                Images= existedEvent.Images,    
+                Images= existedEvent.Images,
+                SelectedSpeakerIds = existedEvent.Speakers.Select(s => s.Id).ToList()
+
             });
         }
         [HttpPost]
@@ -172,6 +185,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             if (existedEvent == null) return NotFound();
             if (!ModelState.IsValid)
             {
+                ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+                ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name"); if (!ModelState.IsValid) return View(eventCreateVM);
                 eventUpdateVM.Images = existedEvent.Images;
                 return View(eventUpdateVM);
             }
@@ -184,10 +199,21 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             {
                 if (files.Length > 4)
                 {
+                    ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
+                    ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name"); if (!ModelState.IsValid) return View(eventCreateVM);
                     eventUpdateVM.Images = existedEvent.Images;
 
                     ModelState.AddModelError("Photos", "Minimum 4 Photos!");
                     return View(eventUpdateVM);
+                }
+                existedEvent.Speakers.Clear();
+                foreach (var speakerId in eventUpdateVM.SelectedSpeakerIds)
+                {
+                    var speaker = await appDbContext.speakers.FindAsync(speakerId);
+                    if (speaker != null)
+                    {
+                        existedEvent.Speakers.Add(speaker);
+                    }
                 }
                 foreach (var file in files)
                 {

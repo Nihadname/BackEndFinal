@@ -10,5 +10,7 @@
         public DateTime HeldTime { get; set; }
         public int CategoryId { get; set; }
         public IFormFile[] Photos { get; set; }
+        public List<int> SelectedSpeakerIds { get; set; }
+
     }
 }

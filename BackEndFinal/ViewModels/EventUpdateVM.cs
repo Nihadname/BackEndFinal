@@ -13,5 +13,7 @@ namespace BackEndFinal.ViewModels
         public int CategoryId { get; set; }
         public List<EventImage>? Images { get; set; }
         public IFormFile[]? Photos { get; set; }
+        public List<int> SelectedSpeakerIds { get; set; }
+
     }
 }
