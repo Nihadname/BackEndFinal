@@ -160,7 +160,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Update(int? id)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
-            ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name"); if (!ModelState.IsValid) return View(eventCreateVM); if (id == null) return BadRequest();
+            ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name");
             var existedEvent = await appDbContext.events.Include(s=>s.Images).Include(s=>s.Category).FirstOrDefaultAsync(x => x.Id == id);
             if (existedEvent == null) return NotFound();
             return View(new EventUpdateVM
@@ -186,7 +186,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
-                ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name"); if (!ModelState.IsValid) return View(eventCreateVM);
+                ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name");
                 eventUpdateVM.Images = existedEvent.Images;
                 return View(eventUpdateVM);
             }
@@ -200,7 +200,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 if (files.Length > 4)
                 {
                     ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
-                    ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name"); if (!ModelState.IsValid) return View(eventCreateVM);
+                    ViewBag.Speakers = new SelectList(await appDbContext.speakers.AsNoTracking().ToListAsync(), "Id", "Name");
                     eventUpdateVM.Images = existedEvent.Images;
 
                     ModelState.AddModelError("Photos", "Minimum 4 Photos!");

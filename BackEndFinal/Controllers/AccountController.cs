@@ -213,8 +213,13 @@ namespace BackEndFinal.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-        public  IActionResult ResetPassword()
+        public async Task<IActionResult> ResetPassword(string email, string token)
         {
+            var existUser = await _userManager.FindByEmailAsync(email);
+            if (existUser is null) return NotFound();
+            bool result = await _userManager
+                .VerifyUserTokenAsync(existUser, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", token);
+            if (result is false) return Content("Token expired");
             return View();
         }
         [HttpPost]
@@ -226,6 +231,7 @@ namespace BackEndFinal.Controllers
                 return View();
             }
             await _userManager.ResetPasswordAsync(appUser, token, resetPasswordVM.Password);
+            await _userManager.UpdateSecurityStampAsync(appUser);
             return RedirectToAction("Login ","Account");
         }
 
