@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BackEndFinal.Data;
+using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
@@ -7,9 +10,24 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
     [Authorize(Roles ="Admin")]
     public class DashBoardController : Controller
     {
+        private readonly AppDbContext _context;
+
+        public DashBoardController(AppDbContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
-            return View();
+            var dashboardViewModel = new DashboardViewModel
+            {
+                TotalUsers = _context.Users.Count(),
+                TotalRoles = _context.Roles.Count(),
+                TotalCourses = _context.courses.Count(),
+                RecentUsers = _context.Users.Take(5).ToList(),
+                RecentCourses = _context.courses.OrderByDescending(c => c.CreatedTime).Take(5).ToList()
+            };
+
+            return View(dashboardViewModel);
         }
     }
 }

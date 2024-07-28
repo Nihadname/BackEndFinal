@@ -1,6 +1,62 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DashboardViewModel
 @{
+    ViewData["Title"] = "Dashboard";
 }
-<h1>cdcdd</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">@Model.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Roles</h5>
+                    <p class="card-text">@Model.TotalRoles</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Courses</h5>
+                    <p class="card-text">@Model.TotalCourses</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    Recent Users
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var user in Model.RecentUsers)
+                    {
+                        <li class="list-group-item">@user.UserName - @user.Email</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    Recent Courses
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var course in Model.RecentCourses)
+                    {
+                        <li class="list-group-item">@course.Title - @course.Description</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
