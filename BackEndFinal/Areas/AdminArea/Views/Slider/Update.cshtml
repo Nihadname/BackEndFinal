@@ -1,0 +1,31 @@
+﻿@model SliderUpdateVM
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Update Category</h4>
+            <p class="card-description">Update category details</p>
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <form method="post" class="forms-sample" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="photo"></label>
+                    <input asp-for="photo" class="form-control" placeholder="photo">
+                    <span class="text-danger" asp-validation-for="photo"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SliderContent.Title"></label>
+                    <input asp-for="SliderContent.Title" class="form-control" placeholder="Title">
+                    <span class="text-danger" asp-validation-for="SliderContent.Title"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SliderContent.Desc"></label>
+                    <input asp-for="SliderContent.Desc" class="form-control" placeholder="Desc">
+                    <span class="text-danger" asp-validation-for="SliderContent.Desc"></span>
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

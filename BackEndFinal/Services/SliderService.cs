@@ -28,9 +28,9 @@ namespace BackEndFinal.Services
         {
             return _SliderRepository.GetAllAsync(skip, take, includes);
         }
-        public Task<Slider> GetSliderByIdAsync(int? id)
+        public Task<Slider> GetSliderByIdAsync(int? id, params Expression<Func<Slider, object>>[] includes)
         {
-            return _SliderRepository.GetByIdAsync(id);
+            return _SliderRepository.GetByIdAsync(id,includes);
         }
 
         public Task UpdateSliderAsync(Slider Slider)
