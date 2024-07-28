@@ -9,7 +9,7 @@ namespace BackEndFinal.ViewModels
         public string? Email { get; set; }
         public string? imageUrl { get; set; }
         public IFormFile photo {  get; set; }
-        public List<CourseRequest> CourseRequests { get; set; } // Add this property
+        public List<CourseRequest> CourseRequests { get; set; } 
 
     }
 }

@@ -40,7 +40,7 @@ namespace BackEndFinal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddImage(UserProfileVM userProfileVM)
+        public async Task<IActionResult> AddImage(PhotoVM userProfileVM)
         {
             var existingUser = await _userManager.GetUserAsync(User);
             if (existingUser == null) return RedirectToAction("Index", "Home");
@@ -55,19 +55,14 @@ namespace BackEndFinal.Controllers
                     ModelState.AddModelError("photo", "Only image files are allowed.");
                     return RedirectToAction(nameof(Index));
                 }
-                if (!newProfileImage.CheckSize(100000000))
-                {
-                    ModelState.AddModelError("photo", "The image size is too large. Maximum allowed size is 500KB.");
-                    return RedirectToAction(nameof(Index));
-                }
 
                 if (!string.IsNullOrEmpty(existingUser.imageUrl))
                 {
-                    existingUser.imageUrl.DeleteFile();
+                    existingUser.imageUrl.DeleteFile("teacher");
                 }
 
                 // Save the new image file
-                existingUser.imageUrl = await newProfileImage.SaveFile();
+                existingUser.imageUrl = await newProfileImage.SaveFile("teacher");
                 var result = await _userManager.UpdateAsync(existingUser);
                 if (!result.Succeeded)
                 {
