@@ -17,6 +17,10 @@
                 <h3><a href="course-details.html">@item.Title</a></h3>
                 <p>@(item.Description.Length >= 50 ? item.Description.Substring(0, 50) : item.Description)...</p>
                 <a class="default-btn" href="course-details.html">read more</a>
+                <form asp-action="RequestCourse" asp-controller="CourseRequest" method="post" style="display:inline;">
+                    <input type="hidden" name="courseName" value="@item?.Title" />
+                    <button type="submit" class="default-btn">Request to Buy</button>
+                </form>
             </div>
         </div>
     </div>
