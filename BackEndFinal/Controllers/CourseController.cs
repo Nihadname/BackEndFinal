@@ -3,6 +3,7 @@ using BackEndFinal.Models;
 using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +68,7 @@ namespace BackEndFinal.Controllers
             return View(courseDetailVM);
         }
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddComment(CourseDetailVM courseDetailVM)
         {
             ModelState.Remove(nameof(CourseDetailVM.Course));
@@ -93,6 +95,12 @@ namespace BackEndFinal.Controllers
             }
 
             var currentUser = await userManager.GetUserAsync(User);
+            //if (currentUser == null)
+            //{
+
+            //    return View(RedirectToAction("LogIn", "Account"));
+
+            //}
             var comment = new Comment
             {
                 AppUserId = currentUser.Id,
