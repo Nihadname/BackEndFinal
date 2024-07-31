@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Comment>
+<div class="single-blog-widget mb-50">
+    <h3>Comments</h3>
+    <div class="list-group">
+        <p> @Model.Count() Comment totaly</p>
+        @foreach (var item in Model)
+        {
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@item.AppUser.UserName</h5>
+
+                    @if (item.AppUser.imageUrl is not null)
+                    {
+                        <img width="60px" src="~/img/teacher/@item.AppUser.imageUrl" alt="Profile Image">
+
+                    }
+                    <small>@item.CreatedAt</small>
+                </div>
+                <p class="mb-1">@item.Content</p>
+            </div>
+            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <a asp-action="Delete" asp-controller="Comment" asp-route-id="@item.Id">Delete</a>
+            }
+        }
+    </div>
+</div>

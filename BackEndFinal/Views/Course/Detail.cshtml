@@ -55,10 +55,49 @@
                             </ul>
                             <h3 class="red">Course Fee: $@Model.Course.Price</h3>
                         </div>
-                       
                     </div>
                 </div>
+                <div class="single-blog-widget mb-50">
+                    <h3>Comments</h3>
+                    <div class="list-group">
+                        <p>@Model.Course.Comments.Count() Comments totaly</p>
+                        @foreach (var item in Model.Course.Comments)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">@item.AppUser.UserName</h5>
+                                    @if (item.AppUser.imageUrl is not null)
+                                    {
+                                        <img width="60px" src="~/img/teacher/@item.AppUser.imageUrl" alt="Profile Image">
+                                    }
+                                    <small>@item.CreatedAt</small>
+                                </div>
+                                <p class="mb-1">@item.Content</p>
+                                @if (User.Identity.Name == item.AppUser.UserName /* || User.IsInRole("Admin") */)
+                                {
+                                    <a asp-action="Delete" asp-controller="Course" asp-route-id="@item.Id">Delete</a>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Add Comment Form -->
+                <div class="single-blog-widget mb-50">
+                    <h3>Add a Comment</h3>
+                    <form asp-action="AddComment" method="post">
+                        <input type="hidden" asp-for="CommentForm.CourseId" value="@Model.Course.Id" />
+                        <div class="form-group">
+                            <label asp-for="CommentForm.Content"></label>
+                            <textarea asp-for="CommentForm.Content" class="form-control"></textarea>
+                            <span asp-validation-for="CommentForm.Content" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <!-- End Add Comment Form -->
             </div>
+
             <div class="col-md-4">
                 <div class="blog-sidebar right">
                     <div class="single-blog-widget mb-50">

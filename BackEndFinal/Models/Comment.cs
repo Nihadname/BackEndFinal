@@ -10,12 +10,9 @@ namespace BackEndFinal.Models
 
         public string Content { get; set; }
         public string AppUserId { get; set; }
-        [ValidateNever]
 
         public AppUser AppUser { get; set; }
         public int CourseId { get; set; }
-        [ValidateNever]
-
         public Course Course { get; set; }
         public DateTime CreatedAt { get; set; }
     }

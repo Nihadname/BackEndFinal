@@ -17,16 +17,19 @@ namespace BackEndFinal.Controllers
     {
         private readonly ICourseService courseService;
         private readonly ICategoryService _categoryService;
+        private readonly ICommentService commentService;
+
         private readonly UserManager<AppUser> userManager;
         private readonly AppDbContext appDbContext;
         private IBlogService _blogService;
-        public CourseController(ICourseService courseService, ICategoryService categoryService, IBlogService blogService, AppDbContext appDbContext, UserManager<AppUser> userManager)
+        public CourseController(ICourseService courseService, ICategoryService categoryService, IBlogService blogService, AppDbContext appDbContext, UserManager<AppUser> userManager, ICommentService commentService)
         {
             this.courseService = courseService;
             _categoryService = categoryService;
             _blogService = blogService;
             this.appDbContext = appDbContext;
             this.userManager = userManager;
+            this.commentService = commentService;
         }
 
         public async Task<IActionResult> Index(string keyword = "")
@@ -63,6 +66,45 @@ namespace BackEndFinal.Controllers
 
             return View(courseDetailVM);
         }
+        [HttpPost]
+        public async Task<IActionResult> AddComment(CourseDetailVM courseDetailVM)
+        {
+            ModelState.Remove(nameof(CourseDetailVM.Course));
+            ModelState.Remove(nameof(CourseDetailVM.Blogs));
+
+            if (!ModelState.IsValid)
+            {
+                var course = await courseService.GetAllCourseQuery()
+                    .Include(s => s.courseImages)
+                    .Include(s => s.courseTags).ThenInclude(s => s.Tag)
+                    .Include(s => s.Comments).ThenInclude(s => s.AppUser)
+                    .FirstOrDefaultAsync(s => s.Id == courseDetailVM.CommentForm.CourseId);
+
+                var blogs = await _blogService.GetAllBlogAsync(0, 3, s => s.Images);
+
+                var courseDetailVM2 = new CourseDetailVM
+                {
+                    Course = course,
+                    Blogs = blogs,
+                    CommentForm = courseDetailVM.CommentForm
+                };
+
+                return View("Detail", courseDetailVM2);
+            }
+
+            var currentUser = await userManager.GetUserAsync(User);
+            var comment = new Comment
+            {
+                AppUserId = currentUser.Id,
+                CourseId = courseDetailVM.CommentForm.CourseId,
+                Content = courseDetailVM.CommentForm.Content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await commentService.AddCommentAsync(comment);
+
+            return RedirectToAction(nameof(Detail), new { id = courseDetailVM.CommentForm.CourseId });
+        }
 
 
         public async Task<IActionResult> CoursesInCategory(int? id, int page=1)
@@ -85,7 +127,17 @@ namespace BackEndFinal.Controllers
             };
             return View(CourseInCategoryVM);
         }
-     
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return BadRequest();
+            var existedComment = await commentService.GetCommentByIdAsync(id);
+            if (existedComment == null) return NotFound();
+            int courseId = existedComment.CourseId;
+
+            await commentService.DeleteCommentAsync(existedComment);
+            return RedirectToAction(nameof(Detail), new { id = courseId });
+        }
+
 
 
     }
