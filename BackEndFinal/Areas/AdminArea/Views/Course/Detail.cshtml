@@ -29,11 +29,13 @@
                 }
                 <h4>@Model.Title</h4>
                 <p>@Model.Description</p>
+                <h1>TeacherName</h1>
                 @foreach(var item in Model.courseTeachers)
                 {
 
                     <li>@item.Teacher.Name</li>
                 }
+                <h1>Tags</h1>
                 @foreach (var item in Model.courseTags)
                 {
                     <li>@item.Tag.Name</li>

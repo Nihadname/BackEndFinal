@@ -7,19 +7,21 @@ using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
     [Area("AdminArea")]
-
     public class CourseController : Controller
     {
         private readonly ICourseService courseService;
-        private readonly ISubscriberService subscriberService; 
+        private readonly ISubscriberService subscriberService;
         private readonly ITeacherService teacherService;
         private readonly ICategoryService categoryService;
         private readonly IEmailService emailService;
         private readonly AppDbContext appDbContext;
+
         public CourseController(ICourseService courseService, ICategoryService categoryService, AppDbContext appDbContext, ITeacherService teacherService, IEmailService emailService, ISubscriberService subscriberService)
         {
             this.courseService = courseService;
@@ -35,32 +37,32 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             var courses = courseService.GetAllCourseQuery();
             if (!string.IsNullOrEmpty(searchText))
             {
-
                 courses = courses.Where(s => s.Title.ToLower().Contains(searchText.ToLower()) ||
-                                         s.Description.ToLower().Contains(searchText.ToLower()));
+                                             s.Description.ToLower().Contains(searchText.ToLower()));
             }
-            var usersForActualForm =await courses.Include(s=>s.Category).ToListAsync();
-          
+            var usersForActualForm = await courses.Include(s => s.Category).ToListAsync();
             return View(usersForActualForm);
         }
+
         public async Task<IActionResult> Detail(int? id)
         {
-            if(id == null) return BadRequest();
-            
-            var existedTeacher=await courseService.GetAllCourseQuery().Include(s=>s.courseImages).Include(s=>s.courseTeachers)
-                .ThenInclude(s=>s.Teacher).Include(s=>s.courseTags).ThenInclude(s=>s.Tag)
-                .FirstOrDefaultAsync(s=>s.Id==id);
-            if(existedTeacher == null) return BadRequest();
+            if (id == null) return BadRequest();
+
+            var existedTeacher = await courseService.GetAllCourseQuery().Include(s => s.courseImages).Include(s => s.courseTeachers)
+                .ThenInclude(s => s.Teacher).Include(s => s.courseTags).ThenInclude(s => s.Tag)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            if (existedTeacher == null) return BadRequest();
             return View(existedTeacher);
         }
+
         public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0,0), "Id", "Name");
-            //ViewBag.Teachers=new SelectList(await teacherService.GetAllTeacherAsync(0,0), "Id", "Name");
+            ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
             ViewBag.Teachers = new SelectList(await teacherService.GetAllTeacherAsync(0, 0), "Id", "Name");
             ViewBag.Tags = new SelectList(await appDbContext.tags.AsNoTracking().ToListAsync(), "Id", "Name");
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CourseCreateVM courseCreateVM)
@@ -133,7 +135,9 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             {
                 TagId = tid
             }).ToList();
+
             await courseService.AddCourseAsync(newCourse);
+
             var allSubs = await subscriberService.GetAlSubscriberAsync(0, 0);
             var emailRecipients = allSubs.Select(sub => sub.EmailAddress).ToList();
 
@@ -151,6 +155,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
 
             return RedirectToAction("Index");
         }
+
         public async Task<IActionResult> SetMainPhoto(int? id)
         {
             if (id == null) return BadRequest();
@@ -165,6 +170,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             await appDbContext.SaveChangesAsync();
             return RedirectToAction("Detail", new { id = existedPhoto.CourseId });
         }
+
         public async Task<IActionResult> DeleteImage(int? id)
         {
             if (id == null) return BadRequest();
@@ -175,6 +181,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             await appDbContext.SaveChangesAsync();
             return RedirectToAction("Update", new { id = existedPhoto.CourseId });
         }
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return BadRequest();
@@ -183,40 +190,40 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             foreach (var image in existedPhoto.courseImages)
             {
                 image.Name.DeleteFile("course");
-
             }
             appDbContext.courses.Remove(existedPhoto);
             await appDbContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
         public async Task<IActionResult> Update(int? id)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
             ViewBag.Teachers = new SelectList(await teacherService.GetAllTeacherAsync(0, 0), "Id", "Name");
             ViewBag.Tags = new SelectList(await appDbContext.tags.AsNoTracking().ToListAsync(), "Id", "Name");
             if (id == null) return BadRequest();
-            var existedBlog = await courseService.GetCourseByIdAsync(id, s => s.courseImages, s => s.Category);
-            if (existedBlog == null) return NotFound();
+            var existedCourse = await courseService.GetCourseByIdAsync(id, s => s.courseImages, s => s.Category);
+            if (existedCourse == null) return NotFound();
             return View(new CourseUpdateVM
             {
-                CategoryId = existedBlog.CategoryId,
-                Title = existedBlog.Title,
-                Description = existedBlog.Description,
-                Starts = existedBlog.Starts,
-                AboutCourse = existedBlog.AboutCourse,
-                HowToApply = existedBlog.HowToApply,
-                Assessments = existedBlog.Assessments,
-                SkillLevel = existedBlog.SkillLevel,
-                CERTIFICATION = existedBlog.CERTIFICATION,
-                ClassDuration = existedBlog.ClassDuration,
-                Language = existedBlog.Language,
-                courseImages= existedBlog.courseImages,
-                Price = existedBlog.Price,
-                Students = existedBlog.Students,
-                Duration = existedBlog.Duration,
-                
+                CategoryId = existedCourse.CategoryId,
+                Title = existedCourse.Title,
+                Description = existedCourse.Description,
+                Starts = existedCourse.Starts,
+                AboutCourse = existedCourse.AboutCourse,
+                HowToApply = existedCourse.HowToApply,
+                Assessments = existedCourse.Assessments,
+                SkillLevel = existedCourse.SkillLevel,
+                CERTIFICATION = existedCourse.CERTIFICATION,
+                ClassDuration = existedCourse.ClassDuration,
+                Language = existedCourse.Language,
+                courseImages = existedCourse.courseImages,
+                Price = existedCourse.Price,
+                Students = existedCourse.Students,
+                Duration = existedCourse.Duration,
             });
         }
+
         [HttpPost]
         public async Task<IActionResult> Update(int? id, CourseUpdateVM vm)
         {
@@ -231,20 +238,18 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 vm.courseImages = existedCourse.courseImages;
                 return View(vm);
             }
-            CourseImage CourseImage = new CourseImage();
 
             List<CourseImage> list = new();
             var files = vm.Photos;
-            vm.courseImages = existedCourse.courseImages;
-            if (files is not null)
+            if (files != null)
             {
                 if (files.Length > 4)
                 {
                     vm.courseImages = existedCourse.courseImages;
-
                     ModelState.AddModelError("Photos", "Minimum 4 Photos!");
                     return View(vm);
                 }
+
                 foreach (var file in files)
                 {
                     if (!file.CheckContentType())
@@ -253,16 +258,19 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                         return View(vm);
                     }
 
+                    var courseImage = new CourseImage
+                    {
+                        Name = await file.SaveFile("course"),
+                        CourseId = existedCourse.Id,
+                        IsMain = false
+                    };
 
-                    CourseImage.Name = await file.SaveFile("blog");
-                    CourseImage.CourseId = existedCourse.Id;
-
-                    CourseImage.IsMain = false;
-
-                    list.Add(CourseImage);
+                    list.Add(courseImage);
                 }
+
                 existedCourse.courseImages = list;
             }
+
             existedCourse.CategoryId = vm.CategoryId;
             existedCourse.Title = vm.Title;
             existedCourse.Description = vm.Description;
@@ -277,6 +285,12 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             existedCourse.Price = vm.Price;
             existedCourse.Students = vm.Students;
             existedCourse.Duration = vm.Duration;
+
+            // Clear existing course teachers and tags
+            appDbContext.coursesTeachers.RemoveRange(appDbContext.coursesTeachers.Where(ct => ct.CourseId == existedCourse.Id));
+            appDbContext.courseTags.RemoveRange(appDbContext.courseTags.Where(ct => ct.CourseId == existedCourse.Id));
+
+            // Add new course teachers and tags
             existedCourse.courseTeachers = vm.TeacherIds.Select(tid => new CourseTeacher
             {
                 CourseId = existedCourse.Id,
@@ -288,9 +302,9 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 CourseId = existedCourse.Id,
                 TagId = tid
             }).ToList();
+
             await courseService.UpdateCourseAsync(existedCourse);
-            return RedirectToAction("Index");   
+            return RedirectToAction("Index");
         }
     }
-
 }
