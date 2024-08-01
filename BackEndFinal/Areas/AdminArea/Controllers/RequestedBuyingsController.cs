@@ -62,5 +62,14 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
 
             return RedirectToAction("Index");
         }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if(id is null) return BadRequest();
+            var existedRequest= await _appDbContext.CourseRequests.AsNoTracking().FirstOrDefaultAsync(s=>s.Id==id);
+            if(existedRequest == null) return NotFound();
+             _appDbContext.CourseRequests.Remove(existedRequest);
+            await _appDbContext.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
     }
 }

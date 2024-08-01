@@ -91,7 +91,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
 
-                        <img src="@(string.IsNullOrEmpty(ViewBag.ImageUrl) ? "https://via.placeholder.com/120" : Url.Content($"~/img/{ViewBag.ImageUrl}"))" alt="Profile Image">
+                        <img src="@(string.IsNullOrEmpty(ViewBag.ImageUrl) ? "https://via.placeholder.com/120" : Url.Content($"~/img/teacher/{ViewBag.ImageUrl}"))" alt="Profile Image">
 
                         <span class="nav-profile-name">@ViewBag.FullName</span>
                     }

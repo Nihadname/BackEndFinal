@@ -1,5 +1,6 @@
 ﻿using BackEndFinal.Data;
 using BackEndFinal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace BackEndFinal.Controllers
             _context = context;
         }
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> RequestCourse(string courseName)
         {
             var user = await _userManager.GetUserAsync(User);
