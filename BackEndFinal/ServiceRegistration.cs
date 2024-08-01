@@ -32,6 +32,7 @@ namespace BackEndFinal
             services.AddScoped<IEmailService,  EmailService>();
             services.AddScoped<ISpeakerService,SpeakerService>();
            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ITagService , TagService>();
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;

@@ -1,0 +1,36 @@
+﻿@model Tag
+<div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Basic Table</h4>
+            <p class="card-description">
+                Add class <code>.table</code>
+            </p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>TagName</th>
+                            <th>CoursesHavingThisRole</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.Name</td>
+                            <td>
+                                @foreach (var item in Model.courseTags)
+                                {
+                                    <li>@item.Course.Title (@item.Course.Description)</li>
+
+                                }
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

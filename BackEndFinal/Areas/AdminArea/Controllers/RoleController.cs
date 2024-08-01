@@ -27,6 +27,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string RoleName)
         {
             if (!string.IsNullOrEmpty(RoleName))
@@ -97,6 +98,7 @@ await _userManager.RemoveFromRolesAsync(user, userRoles);
         [HttpPost]
         public async Task<IActionResult> Update(string id,string NewRole)
         {
+            if(!ModelState.IsValid) return BadRequest("it can not be recieving empty value");
             if (id is null) return BadRequest();
             var existedRole=await _roleManager.FindByIdAsync(id);
             if (existedRole == null) return NotFound();
