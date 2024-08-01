@@ -108,8 +108,8 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             var existingCategory = await categoryService.GetAllCategoryQuery().AnyAsync(h => h.Name == category.Name);
             if (existingCategory)
             {
-                ModelState.AddModelError(string.Empty, "A category with the same name already exists.");
-                return View();
+                ModelState.AddModelError("Name", "A category with the same name already exists.");
+                return View(category);
             }
             existedCategory.Name = category.Name;
             existedCategory.Description = category.Description;

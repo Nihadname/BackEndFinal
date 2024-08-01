@@ -50,11 +50,7 @@
                     <select asp-for="CategoryId" asp-items="categories">
                     </select>
                 </div>
-                <div class="form-group">
-                    <label asp-for="SelectedSpeakerIds"></label>
-                    <select asp-for="SelectedSpeakerIds" class="form-control" asp-items="ViewBag.Speakers" multiple></select>
-                    <span asp-validation-for="SelectedSpeakerIds" class="text-danger"></span>
-                </div>
+                
 
                 <button type="submit" class="btn btn-primary me-2">Submit</button>
             </form>
