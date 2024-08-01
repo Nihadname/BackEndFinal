@@ -120,7 +120,7 @@ await _userManager.RemoveFromRolesAsync(user, userRoles);
 
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError("Name", error.Description);
             }
             return View(existedRole); 
         }

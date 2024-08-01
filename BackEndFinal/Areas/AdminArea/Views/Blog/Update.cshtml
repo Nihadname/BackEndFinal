@@ -25,11 +25,11 @@
                 {
                     <p>No images found.</p>
                 }
-                <h4 class="card-title">Product Create form</h4>
+                <h4 class="card-title">Product Update form</h4>
                 <form enctype="multipart/form-data" method="post" class="forms-sample">
                     <div class="form-group">
                         <label asp-for="Title"></label>
-                        <input asp-for="Title" class="form-control" placeholder="Name">
+                        <input asp-for="Title" class="form-control" placeholder="Title">
                         <span class="text-danger" asp-validation-for="Title"></span>
                     </div>
                     <div class="form-group">
@@ -49,12 +49,14 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Photos"></label>
-                        <input asp-for="Photos" class="form-control" placeholder="Count">
+                        <input asp-for="Photos" class="form-control" type="file" multiple>
                         <span class="text-danger" asp-validation-for="Photos"></span>
                     </div>
                     <div class="form-group">
-                        <select asp-for="CategoryId" asp-items="@ViewBag.Categories">
+                        <label asp-for="CategoryId"></label>
+                        <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-control">
                         </select>
+                        <span class="text-danger" asp-validation-for="CategoryId"></span>
                     </div>
 
                     <button type="submit" class="btn btn-primary mr-2">Update</button>

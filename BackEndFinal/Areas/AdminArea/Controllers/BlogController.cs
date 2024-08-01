@@ -116,7 +116,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             var existedBlog=await _blogService.GetBlogByIdAsync(id,s=>s.Images,s=>s.Category);
             if(existedBlog == null) return NotFound();
             return View(existedBlog);
-        } 
+        }
 
         public async Task<IActionResult> Update(int? id)
         {
@@ -129,23 +129,25 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 Title = existedBlog.Title,
                 Content = existedBlog.Content,
                 Writer = existedBlog.Writer,
-                Quote = existedBlog.quote,
+                Quote = existedBlog.quote, 
                 blogImages = existedBlog.Images,
+                CategoryId = existedBlog.CategoryId,
             });
         }
+
         [HttpPost]
-        public async Task<IActionResult> Update(int? id,BlogUpdateVM blogUpdateVM)
+        public async Task<IActionResult> Update(int? id, BlogUpdateVM blogUpdateVM)
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
             if (id == null) return BadRequest();
             var existedBlog = await _blogService.GetBlogByIdAsync(id, s => s.Images, s => s.Category);
             if (existedBlog == null) return NotFound();
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 blogUpdateVM.blogImages = existedBlog.Images;
-                return View(blogUpdateVM); }
-            BlogImage blogImage = new();
+                return View(blogUpdateVM);
+            }
 
-            List<BlogImage> list = new();
             var files = blogUpdateVM.Photos;
             blogUpdateVM.blogImages = existedBlog.Images;
             if (files is not null)
@@ -153,34 +155,39 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 if (files.Length > 4)
                 {
                     blogUpdateVM.blogImages = existedBlog.Images;
-
-                    ModelState.AddModelError("Photos", "Minimum 4 Photos!");
+                    ModelState.AddModelError("Photos", "Maximum 4 Photos!");
                     return View(blogUpdateVM);
                 }
+
+                List<BlogImage> list = new();
                 foreach (var file in files)
                 {
                     if (!file.CheckContentType())
                     {
-                        ModelState.AddModelError("Photos", "Choose right type!");
+                        ModelState.AddModelError("Photos", "Choose the right type!");
                         return View(blogUpdateVM);
                     }
-                   
 
-                    blogImage.imageUrl = await file.SaveFile("blog");
-                    blogImage.BlogId = existedBlog.Id;
-                    
-                        blogImage.IsMain = false;
-                    
+                    var blogImage = new BlogImage
+                    {
+                        imageUrl = await file.SaveFile("blog"),
+                        BlogId = existedBlog.Id,
+                        IsMain = false
+                    };
                     list.Add(blogImage);
                 }
                 existedBlog.Images = list;
             }
-            existedBlog.Title= blogUpdateVM.Title;
+
+            existedBlog.Title = blogUpdateVM.Title;
             existedBlog.Content = blogUpdateVM.Content;
             existedBlog.Writer = blogUpdateVM.Writer;
             existedBlog.quote = blogUpdateVM.Quote;
-            existedBlog.CategoryId = existedBlog.CategoryId;
-             appDbContext.blogs.Update(existedBlog);
+            existedBlog.CategoryId = blogUpdateVM.CategoryId; 
+
+            
+            appDbContext.Entry(existedBlog).State = EntityState.Modified;
+
             await appDbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
