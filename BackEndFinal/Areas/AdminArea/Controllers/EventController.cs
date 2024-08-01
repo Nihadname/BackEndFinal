@@ -181,8 +181,13 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         public async Task<IActionResult> Update(int? id, EventUpdateVM eventUpdateVM)
         {
             if (id == null) return BadRequest();
-            var existedEvent = await appDbContext.events.Include(s=>s.Images).Include(s=>s.Category).Include(s=>s.Speakers).FirstOrDefaultAsync(x => x.Id == id);
+            var existedEvent = await appDbContext.events
+                .Include(s => s.Images)
+                .Include(s => s.Category)
+                .Include(s => s.Speakers)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (existedEvent == null) return NotFound();
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
@@ -190,12 +195,9 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                 eventUpdateVM.Images = existedEvent.Images;
                 return View(eventUpdateVM);
             }
-            EventImage eventImage = new();
 
-            List<EventImage> list = new();
             var files = eventUpdateVM.Photos;
-            eventUpdateVM.Images = existedEvent.Images;
-            if (files is not null)
+            if (files != null && files.Length > 0)
             {
                 if (files.Length > 4)
                 {
@@ -206,48 +208,41 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                     ModelState.AddModelError("Photos", "Minimum 4 Photos!");
                     return View(eventUpdateVM);
                 }
-                //existedEvent.Speakers.Clear();
-                //foreach (var speakerId in eventUpdateVM.SelectedSpeakerIds)
-                //{
-                //    var speaker = await appDbContext.speakers.FindAsync(speakerId);
-                //    if (speaker != null)
-                //    {
-                //        existedEvent.Speakers.Add(speaker);
-                //    }
-                //}
+
+                List<EventImage> newImages = new List<EventImage>();
                 foreach (var file in files)
                 {
                     if (!file.CheckContentType())
                     {
-                        ModelState.AddModelError("Photos", "Choose right type!");
+                        ModelState.AddModelError("Photos", "Choose the right type!");
                         return View(eventUpdateVM);
                     }
 
+                    var newImage = new EventImage
+                    {
+                        Name = await file.SaveFile("event"),
+                        EventId = existedEvent.Id,
+                        IsMain = files[0] == file
+                    };
 
-                    eventImage.Name = await file.SaveFile("event");
-                    eventImage.EventId = existedEvent.Id;
-                 
-                  
-                        eventImage.IsMain = false;
-                   
-                    list.Add(eventImage);
+                    newImages.Add(newImage);
                 }
-              
-                existedEvent.Images = list;
-                
+
+                existedEvent.Images = newImages;
             }
+
             existedEvent.Title = eventUpdateVM.Title;
             existedEvent.Description = eventUpdateVM.Description;
             existedEvent.Location = eventUpdateVM.Location;
             existedEvent.CategoryId = eventUpdateVM.CategoryId;
-            existedEvent.EndTime = eventUpdateVM.EndTime;
             existedEvent.StartTime = eventUpdateVM.StartTime;
+            existedEvent.EndTime = eventUpdateVM.EndTime;
             existedEvent.HeldTime = eventUpdateVM.HeldTime;
+
             appDbContext.events.Update(existedEvent);
             await appDbContext.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
-
-
         }
         public async Task<IActionResult> DeleteImage(int? id)
         {
