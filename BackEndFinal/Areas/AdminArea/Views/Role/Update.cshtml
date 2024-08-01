@@ -1,23 +1,30 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IdentityRole
-<div class="col-md-6 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Default form</h4>
-            <p class="card-description">
-                Basic form layout
-            </p>
-            <form method="post" class="forms-sample">
-                <div class="form-group">
-                    <label>RoleName</label>
-                    <input type="text" name="NewRole" class="form-control" placeholder="NewRole" value="@Model.Name">
-                    <span class="text-danger">
-                        @Html.ValidationMessage("ErrorUpdate");
-                    </span>
-                </div>
 
-                <button type="submit" class="btn btn-primary me-2">Submit</button>
-            </form>
-        </div>
+@{
+    ViewData["Title"] = "Update Role";
+}
+
+<h1>Update Role</h1>
+
+<form asp-action="Update">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <input type="submit" value="Update" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

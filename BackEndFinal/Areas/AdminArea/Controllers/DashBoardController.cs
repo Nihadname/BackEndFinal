@@ -16,15 +16,15 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public async  Task<IActionResult> Index()
         {
             var dashboardViewModel = new DashboardViewModel
             {
-                TotalUsers = _context.Users.Count(),
-                TotalRoles = _context.Roles.Count(),
-                TotalCourses = _context.courses.Count(),
-                RecentUsers = _context.Users.Take(5).ToList(),
-                RecentCourses = _context.courses.OrderByDescending(c => c.CreatedTime).Take(5).ToList()
+                TotalUsers = await _context.Users.CountAsync(),
+                TotalRoles = await _context.Roles.CountAsync(),
+                TotalCourses = await _context.courses.CountAsync(),
+                RecentUsers = await _context.Users.Take(5).ToListAsync(),
+                RecentCourses = await _context.courses.OrderByDescending(c => c.CreatedTime).Take(5).ToListAsync()
             };
 
             return View(dashboardViewModel);

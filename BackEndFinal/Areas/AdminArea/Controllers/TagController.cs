@@ -1,5 +1,6 @@
 ﻿using BackEndFinal.Models;
 using BackEndFinal.Services.interfaces;
+using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
@@ -35,13 +36,12 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Create(string TagName)
+        public async Task<IActionResult> Create(TagVIewModel tagVIewModel)
         {
-            if (string.IsNullOrEmpty(TagName))  return BadRequest();
-            Tag tag = new();
-            tag.Name = TagName;
+            if(!ModelState.IsValid) return View(tagVIewModel);
+            Tag tag = new Tag();
+            tag.Name = tagVIewModel.Name;
             await _tagService.AddTagAsync(tag);
-
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Update(int? id)
@@ -49,17 +49,17 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             if (id == null) return BadRequest();
             var existedTag = await _tagService.GetAllTagQuery().FirstOrDefaultAsync(s => s.Id == id);
             if (existedTag == null) return NotFound();
-            return View(existedTag);
+            return View(new TagVIewModel { Name=existedTag.Name});
         }
         [HttpPost]
-        public async Task<IActionResult> Update(int? id,string NewTag)
+        public async Task<IActionResult> Update(int? id, TagVIewModel tagVIewModel)
         {
-            if (!ModelState.IsValid) return BadRequest("it can not be recieving empty value");
+            if (!ModelState.IsValid) return View(tagVIewModel);
 
             if (id == null) return BadRequest();
             var existedTag = await _tagService.GetAllTagQuery().FirstOrDefaultAsync(s => s.Id == id);
             if (existedTag == null) return NotFound();
-            existedTag.Name = NewTag;
+            existedTag.Name = tagVIewModel.Name;
            await _tagService.UpdateTagAsync(existedTag);
             return RedirectToAction(nameof(Index));
 

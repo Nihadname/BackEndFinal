@@ -3,6 +3,7 @@ using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
@@ -28,20 +29,26 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string RoleName)
+        public async Task<IActionResult> Create(IdentityRole identityRole)
         {
-            if (!string.IsNullOrEmpty(RoleName))
+            if (!string.IsNullOrEmpty(identityRole.Name))
             {
-                if (!await _roleManager.RoleExistsAsync(RoleName))
+                if (!await _roleManager.RoleExistsAsync(identityRole.Name))
                 {
-                    await _roleManager.CreateAsync(new IdentityRole() { Name = RoleName });
+                    await _roleManager.CreateAsync(new IdentityRole() { Name = identityRole.Name });
                     return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("Name", "this already exists");
+
+                    return View(identityRole);
                 }
 
             }
-            return BadRequest();
-           
-           
+             ModelState.AddModelError("Name", "this can not be empty");
+            return View(identityRole);
+
         }
         public async Task<IActionResult> Detail(string id)
         {
@@ -90,31 +97,32 @@ await _userManager.RemoveFromRolesAsync(user, userRoles);
         }
         public async Task<IActionResult> Update(string id)
         {
-            if(id is null) return BadRequest();
-            var existedRole =await _roleManager.FindByIdAsync(id);
-            if(existedRole == null) return NotFound();
-          return  View(existedRole);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Update(string id,string NewRole)
-        {
-            if(!ModelState.IsValid) return BadRequest("it can not be recieving empty value");
             if (id is null) return BadRequest();
-            var existedRole=await _roleManager.FindByIdAsync(id);
+            var existedRole = await _roleManager.FindByIdAsync(id);
             if (existedRole == null) return NotFound();
-            existedRole.Name = NewRole;
-          IdentityResult result=  await _roleManager.UpdateAsync(existedRole);
+            return View(existedRole);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(string id, IdentityRole identityRole)
+        {
+            if (string.IsNullOrEmpty(identityRole.Name)) return View(identityRole);
+            if (id is null) return BadRequest();
+            var existedRole = await _roleManager.FindByIdAsync(id);
+            if (existedRole == null) return NotFound();
+
+            existedRole.Name = identityRole.Name;
+            IdentityResult result = await _roleManager.UpdateAsync(existedRole);
             if (result.Succeeded)
             {
                 return RedirectToAction(nameof(Index));
-
             }
+
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("ErrorUpdate", error.Description);
+                ModelState.AddModelError("", error.Description);
             }
-            return View();
-
+            return View(existedRole); 
         }
 
     }

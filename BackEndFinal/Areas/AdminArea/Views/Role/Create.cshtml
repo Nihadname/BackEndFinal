@@ -1,4 +1,6 @@
-﻿<div class="col-md-6 grid-margin stretch-card">
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+<div class="col-md-6 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Default form</h4>
@@ -7,8 +9,9 @@
             </p>
             <form method="post" class="forms-sample">
                 <div class="form-group">
-                    <label >RoleName</label>
-                    <input type="text" name="RoleName" class="form-control"  placeholder="rolename">
+                    <label asp-for="Name"></label>
+                    <input  asp-for="Name" class="form-control" placeholder="rolename">
+                    <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
              
                 <button type="submit" class="btn btn-primary me-2">Submit</button>

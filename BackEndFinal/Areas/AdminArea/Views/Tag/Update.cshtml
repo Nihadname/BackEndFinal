@@ -1,4 +1,4 @@
-﻿@model Tag
+﻿@model TagVIewModel
 <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -8,10 +8,10 @@
             </p>
             <form method="post" class="forms-sample">
                 <div class="form-group">
-                    <label>TagName</label>
-                    <input type="text" name="NewTag" class="form-control" placeholder="NewTag" value="@Model.Name">
-                    <span class="text-danger">
-                        @Html.ValidationMessage("ErrorUpdate");
+                    <label asp-for="Name"></label>
+                    <input  asp-for="Name" class="form-control" placeholder="NewTag" value="@Model.Name">
+                    <span class="text-danger" asp-validation-for="Name">
+                        
                     </span>
                 </div>
 
