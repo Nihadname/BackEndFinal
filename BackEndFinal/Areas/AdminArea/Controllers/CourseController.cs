@@ -286,11 +286,9 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             existedCourse.Students = vm.Students;
             existedCourse.Duration = vm.Duration;
 
-            // Clear existing course teachers and tags
             appDbContext.coursesTeachers.RemoveRange(appDbContext.coursesTeachers.Where(ct => ct.CourseId == existedCourse.Id));
             appDbContext.courseTags.RemoveRange(appDbContext.courseTags.Where(ct => ct.CourseId == existedCourse.Id));
 
-            // Add new course teachers and tags
             existedCourse.courseTeachers = vm.TeacherIds.Select(tid => new CourseTeacher
             {
                 CourseId = existedCourse.Id,

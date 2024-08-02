@@ -62,6 +62,14 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             existedTag.Name = tagVIewModel.Name;
            await _tagService.UpdateTagAsync(existedTag);
             return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return BadRequest();
+            var existedTag = await _tagService.GetAllTagQuery().Include(s => s.courseTags).ThenInclude(s => s.Course).FirstOrDefaultAsync(s => s.Id == id);
+            if (existedTag == null) return NotFound();
+            await _tagService.DeleteTagAsync(existedTag);
+            return RedirectToAction(nameof(Index));
 
         }
 
