@@ -30,15 +30,15 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         }
         public async Task<IActionResult> Detail(int? id)
         {
-            if(id == null) return BadRequest();
-            var existedSpeaker=await speakerService.GetSpeakerByIdAsync(id,s=>s.Event);
-            if(existedSpeaker  == null) return NotFound();
+            if (id == null) return BadRequest();
+            var existedSpeaker = await speakerService.GetSpeakerByIdAsync(id, s => s.Event);
+            if (existedSpeaker == null) return NotFound();
             return View(existedSpeaker);
 
         }
         public async Task<IActionResult> Create()
         {
-            ViewBag.Events = new SelectList(await eventService.GetAllEventAsync(0, 0,s=>s.Speakers), "Id", "Title");
+            ViewBag.Events = new SelectList(await eventService.GetAllEventAsync(0, 0, s => s.Speakers), "Id", "Title");
             return View();
         }
 
@@ -61,12 +61,12 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 speaker.ImageUrl = await newProfileImage.SaveFile("teacher");
-             
+
             }
-          
+
             speaker.Name = speakerCreateVM.Name;
             speaker.EventId = speakerCreateVM.EventId;
-            speaker.position  = speakerCreateVM.Position;
+            speaker.position = speakerCreateVM.Position;
             await speakerService.AddSpeakerAsync(speaker);
             return RedirectToAction("Index");
         }
@@ -80,6 +80,52 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             await speakerService.DeleteSpeakerAsync(existedSpeaker);
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Update(int? id)
+        {
+            ViewBag.Events = new SelectList(await eventService.GetAllEventAsync(0, 0, s => s.Speakers), "Id", "Title");
 
+            if (id == null) return BadRequest();
+            var existedSpeaker = await speakerService.GetSpeakerByIdAsync(id, s => s.Event);
+            if (existedSpeaker == null) return NotFound();
+            return View(new SpeakerUpdateVM
+            {
+                Name = existedSpeaker.Name,
+                EventId = existedSpeaker.EventId,
+                Position = existedSpeaker.position,
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(int? id, SpeakerUpdateVM model)
+        {
+            ViewBag.Events = new SelectList(await eventService.GetAllEventAsync(0, 0, s => s.Speakers), "Id", "Title");
+
+            if (id == null) return BadRequest();
+            var existedSpeaker = await speakerService.GetSpeakerByIdAsync(id, s => s.Event);
+            if (existedSpeaker == null) return NotFound();
+            if(!ModelState.IsValid) return  View(model);
+            var newProfileImage = model.Photo;
+            if (newProfileImage != null)
+            {
+                if (!newProfileImage.CheckContentType())
+                {
+                    ModelState.AddModelError("photo", "Only image files are allowed.");
+                    return RedirectToAction(nameof(Index));
+                }
+
+                if (!string.IsNullOrEmpty(existedSpeaker.ImageUrl))
+                {
+                    existedSpeaker.ImageUrl.DeleteFile("teacher");
+                }
+
+                existedSpeaker.ImageUrl = await newProfileImage.SaveFile("teacher");
+               
+            }
+
+            existedSpeaker.position = model.Position;
+            existedSpeaker.Name = model.Name;
+            existedSpeaker.EventId = model.EventId;
+            await speakerService.UpdateSpeakerAsync(existedSpeaker);
+            return RedirectToAction("Index");
+        }
     }
 }
