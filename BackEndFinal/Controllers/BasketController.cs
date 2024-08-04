@@ -4,6 +4,7 @@ using BackEndFinal.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BackEndFinal.Controllers
 {
@@ -11,11 +12,14 @@ namespace BackEndFinal.Controllers
     {
         private readonly AppDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
+        private readonly StripeSettings _stripeSettings;
 
-        public BasketController(AppDbContext appDbContext, UserManager<AppUser> userManager)
+        public BasketController(AppDbContext appDbContext, UserManager<AppUser> userManager, IOptions<StripeSettings> stripeOptions)
         {
             _appDbContext = appDbContext;
             _userManager = userManager;
+            _stripeSettings = stripeOptions.Value;
+
         }
 
         public async  Task<IActionResult> Index()
@@ -41,9 +45,12 @@ namespace BackEndFinal.Controllers
                         Price = item.Course.Price,
                         TotalPrice = item.Course.Price * item.Quantity,
                         Quantity=item.Quantity,
+                      
                     });
                 }
             }
+            ViewBag.PublishableKey = _stripeSettings.PublishableKey;
+
             return View(listVMs);
         }
         [HttpPost]

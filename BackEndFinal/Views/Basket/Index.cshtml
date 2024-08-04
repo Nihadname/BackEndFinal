@@ -1,15 +1,12 @@
-﻿@model List<BasketListVM>
-@{
- Layout=null;
- int TotalPrice=0;
-}
+﻿@model IEnumerable<BasketListVM>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basket</title>
- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <style>
         body {
@@ -18,17 +15,20 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
         .basket {
             background-color: #fff;
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
+
         .basket-header {
             display: flex;
             justify-content: space-between;
@@ -37,14 +37,17 @@
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
-        .basket-header h2 {
-            margin: 0;
-        }
+
+            .basket-header h2 {
+                margin: 0;
+            }
+
         .basket-items {
             list-style: none;
             padding: 0;
             margin: 0;
         }
+
         .basket-item {
             display: flex;
             align-items: center;
@@ -52,80 +55,125 @@
             padding: 10px 0;
             border-bottom: 1px solid #dee2e6;
         }
-        .basket-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-right: 20px;
-        }
+
+            .basket-item img {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 8px;
+                margin-right: 20px;
+            }
+
         .basket-item-info {
             flex: 1;
         }
+
         .basket-item-title {
             font-size: 18px;
             margin: 0 0 5px;
         }
+
         .basket-item-price, .basket-item-total {
             font-size: 16px;
             color: #6c757d;
         }
+
         .basket-item-actions {
             display: flex;
             align-items: center;
         }
+
         .basket-item-quantity {
             font-size: 16px;
             margin: 0 10px;
         }
+
         .basket-item-remove {
             color: #dc3545;
             cursor: pointer;
         }
+
         .basket-summary {
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
         }
+
         .basket-summary-total {
             font-size: 18px;
             font-weight: bold;
         }
     </style>
+
 </head>
 <body>
     <div class="container">
         <div class="basket">
             <div class="basket-header">
                 <h2>Your Basket</h2>
-                <a asp-action="Index" asp-Controller="Course" class="btn btn-primary">Continue Shopping</a>
+                <a asp-action="Index" asp-controller="Course" class="btn btn-primary">Continue Shopping</a>
             </div>
             <ul class="basket-items">
                 @foreach (var item in Model)
                 {
                     <li class="basket-item">
-                    <img src="~/img/course/@item.Image" alt="course">
+                        <img src="~/img/course/@item.Image" alt="course">
                         <div class="basket-item-info">
                             <p class="basket-item-title">@item.Title</p>
                             <p class="basket-item-price">$@item.Price</p>
                             <p class="basket-item-total">Total: $@item.TotalPrice</p>
                         </div>
                         <div class="basket-item-actions">
-                                                        <span class="basket-item-quantity">Qty: @item.Quantity</span>
-                            <a asp-action="Delete" asp-controller="Basket" asp-route-id="@item.CourseId">Delete</a>
+                            <span class="basket-item-quantity">Qty: @item.Quantity</span>
+                            <a asp-action="Delete" class="basket-item-remove" data-id="@item.CourseId" asp-controller="Basket" asp-route-id="@item.CourseId">Delete</a>
                         </div>
                     </li>
                 }
             </ul>
             <div class="basket-summary">
                 <span class="basket-summary-total">Total: $@Model.Sum(item => item.TotalPrice)</span>
+                <button id="checkout-button">Checkout</button>
             </div>
         </div>
     </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('@ViewBag.PublishableKey');
 
-    <script src="~/js/Backend.js"></script>
+        var checkoutButton = document.getElementById('checkout-button');
 
+        checkoutButton.addEventListener('click', function () {
+            // Collect basket items
+            var basketItems = [];
+            document.querySelectorAll('.basket-item').forEach(function (item) {
+                var courseId = item.querySelector('.basket-item-remove').getAttribute('data-id');
+                var title = item.querySelector('.basket-item-title').innerText;
+                var price = parseInt(item.querySelector('.basket-item-price').innerText.replace('$', '')) * 100; // Convert to cents
+                var quantity = parseInt(item.querySelector('.basket-item-quantity').innerText.replace('Qty: ', ''));
+                basketItems.push({ courseId, title, price, quantity });
+            });
+
+            fetch('/Payment/CreateCheckoutSession', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ items: basketItems })
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (data && data.id) {
+                        return stripe.redirectToCheckout({ sessionId: data.id });
+                    } else {
+                        console.error('Invalid JSON response');
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
 </body>
 </html>
