@@ -31,11 +31,18 @@ namespace BackEndFinal.Controllers
         public async Task<IActionResult> Index(int page=1)
         {
            HomeViewModel model = new HomeViewModel();
-            model.sliders =await _sliderService.GetAllSlidersAsync(0, 0, s=>s.SliderContent);
-            model.offeredAdvantages = await _overlayService.GetAllOfferedAdvantagesAsync(0, 3);
-            ICollection<Event> events = await _eventService.GetAllEventAsync(0, 8, s => s.Speakers, skip => skip.Category);
-            model.events = events.OrderByDescending(e => e.HeldTime).ToList();
-           model.WhyChoose= await _appDbContext.whyChooses.AsNoTracking().FirstOrDefaultAsync();
+            model.sliders =await _sliderService
+                .GetAllSlidersAsync(0, 0, s=>s.SliderContent);
+            model.offeredAdvantages = await _overlayService
+                .GetAllOfferedAdvantagesAsync(0, 3);
+            ICollection<Event> events = await _eventService
+                .GetAllEventAsync(0, 8, s => s.Speakers, skip => skip.Category);
+            model.events = events
+                .OrderByDescending(e => e.HeldTime)
+                .ToList();
+           model.WhyChoose= await _appDbContext.whyChooses
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
             //model.testimonialAreas=await _appDbContext.testimonialAreas.AsNoTracking().ToListAsync();
             var query = _blogService.GetAllBlogQuery();
             var blogsQuery = query.Include(s => s.Images).AsNoTracking();

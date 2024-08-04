@@ -79,5 +79,6 @@ return _blogRepository.GetAllAsync(skip, take, includes);
            if(OfferedAdvantages is null) throw new ArgumentNullException(nameof(Blog));
            return _blogRepository.UpdateAsync(OfferedAdvantages);
         }
+
     }
 }
