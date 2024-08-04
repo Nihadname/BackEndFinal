@@ -38,7 +38,8 @@ namespace BackEndFinal.Data
         public DbSet<CourseTag> courseTags { get; set; }
         public DbSet<CourseRequest> CourseRequests { get; set; }
         public DbSet<Comment> comments { get; set; }
-
+        public DbSet<Basket> baskets { get; set; }
+        public DbSet<BaskerCourse> baskerCourses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Ensure this is called first

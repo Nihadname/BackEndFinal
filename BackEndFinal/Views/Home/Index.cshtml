@@ -175,7 +175,60 @@
             </div>
         </div>
 
-        @await Component.InvokeAsync("Blog")
+        <div class="row">
+            @foreach (var blog in paginationModel)
+            {
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="single-blog">
+                        <div class="blog-img">
+                            <a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id">
+                                @{
+                                    var mainImage = blog.Images?.FirstOrDefault(s => s.IsMain == true);
+                                }
+                                <img src="~/img/blog/@(mainImage != null ? mainImage.imageUrl : "default.jpg")" alt="blog">
+                            </a>
+                            <div class="blog-hover">
+                                <a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id"><i class="fa fa-link"></i></a>
+                            </div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-top">
+                                <p>By @blog.Writer / @blog.CreatedTime?.ToString("d, MMMM yyyy") / <i class="fa fa-comments-o"></i> 4</p>
+                            </div>
+                            <div class="blog-bottom">
+                                <h2><a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id">@blog.Title</a></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    @if (paginationModel.HasPrev)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = paginationModel.CurrentPage - 1 })">Previous</a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= paginationModel.TotalPage; i++)
+                    {
+                        <li class="page-item @(paginationModel.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (paginationModel.HasNext)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = paginationModel.CurrentPage + 1 })">Next</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+
 
     </div>
 </div>

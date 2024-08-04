@@ -54,6 +54,10 @@
                                 <li>Assessments: <span>@Model.Course.Assessments</span></li>
                             </ul>
                             <h3 class="red">Course Fee: $@Model.Course.Price</h3>
+                            <form asp-controller="Basket" asp-action="Add" asp-route-CourseId="@Model.Course.Id" method="post">
+                                <button>AddBasket</button>
+                                </form>
+                      
                         </div>
                     </div>
                 </div>

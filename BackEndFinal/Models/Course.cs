@@ -29,6 +29,7 @@ namespace BackEndFinal.Models
         public string? CERTIFICATION { get; set; }
         public int Price { get; set; }
 
+        public ICollection<BaskerCourse> BaskerProducts { get; set; }
 
         //[NotMapped]
         //public string ShortDesc => Description.Length >= 50 ? Description.Substring(0, 50) : Description;

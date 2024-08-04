@@ -28,6 +28,7 @@ namespace BackEndFinal.Controllers
             _blogService = blogService;
             _subscriberService = subscriberService;
         }
+       
         public async Task<IActionResult> Index(int page=1)
         {
            HomeViewModel model = new HomeViewModel();
