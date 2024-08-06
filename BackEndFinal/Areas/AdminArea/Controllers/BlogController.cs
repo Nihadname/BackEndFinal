@@ -140,8 +140,10 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
         {
             ViewBag.Categories = new SelectList(await categoryService.GetAllCategoryAsync(0, 0), "Id", "Name");
             if (id == null) return BadRequest();
+
             var existedBlog = await _blogService.GetBlogByIdAsync(id, s => s.Images, s => s.Category);
             if (existedBlog == null) return NotFound();
+
             if (!ModelState.IsValid)
             {
                 blogUpdateVM.blogImages = existedBlog.Images;
@@ -149,8 +151,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
             }
 
             var files = blogUpdateVM.Photos;
-            blogUpdateVM.blogImages = existedBlog.Images;
-            if (files is not null)
+            if (files != null)
             {
                 if (files.Length > 4)
                 {
@@ -159,7 +160,7 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                     return View(blogUpdateVM);
                 }
 
-                List<BlogImage> list = new();
+                List<BlogImage> newImages = new();
                 foreach (var file in files)
                 {
                     if (!file.CheckContentType())
@@ -167,27 +168,33 @@ namespace BackEndFinal.Areas.AdminArea.Controllers
                         ModelState.AddModelError("Photos", "Choose the right type!");
                         return View(blogUpdateVM);
                     }
+                    foreach (var oldImage in existedBlog.Images)
+                    {
+                        oldImage.imageUrl.DeleteFile("blog");
+                        appDbContext.blogImages.Remove(oldImage);
+
+                    }
 
                     var blogImage = new BlogImage
                     {
                         imageUrl = await file.SaveFile("blog"),
                         BlogId = existedBlog.Id,
-                        IsMain = false
+                        IsMain = newImages.Count == 0
                     };
-                    list.Add(blogImage);
+                    newImages.Add(blogImage);
                 }
-                existedBlog.Images = list;
+
+               
+                existedBlog.Images = newImages;
             }
 
             existedBlog.Title = blogUpdateVM.Title;
             existedBlog.Content = blogUpdateVM.Content;
             existedBlog.Writer = blogUpdateVM.Writer;
             existedBlog.quote = blogUpdateVM.Quote;
-            existedBlog.CategoryId = blogUpdateVM.CategoryId; 
+            existedBlog.CategoryId = blogUpdateVM.CategoryId;
 
-            
-            appDbContext.Entry(existedBlog).State = EntityState.Modified;
-
+            appDbContext.blogs.Update(existedBlog);
             await appDbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

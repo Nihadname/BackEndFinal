@@ -33,7 +33,7 @@ namespace BackEndFinal.Controllers
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                        UnitAmount = item.Price, // Amount in cents
+                        UnitAmount = item.Price,
                         Currency = "usd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
@@ -65,6 +65,7 @@ namespace BackEndFinal.Controllers
         {
             return View();
         }
+
 
     }
 
