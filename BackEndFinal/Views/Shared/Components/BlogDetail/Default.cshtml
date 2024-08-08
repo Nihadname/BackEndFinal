@@ -3,7 +3,7 @@
 {
     <div class="single-post mb-30">
         <div class="single-post-img">
-            <a href="blog-details.html">
+            <a asp-action="Detail" asp-controller="Blog" asp-route-id="@blog.Id">
                 <img src="~/img/blog/@blog.Images.FirstOrDefault(s=>s.IsMain==true).imageUrl" width="60px" alt="post">
                 <div class="blog-hover">
                     <i class="fa fa-link"></i>

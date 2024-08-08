@@ -57,7 +57,11 @@ namespace BackEndFinal.Controllers
         public async Task<IActionResult> Add(int? CourseId)
         {
             if (CourseId == null) return BadRequest();
-            if (!User.Identity.IsAuthenticated) return RedirectToAction("Login", "Account");
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new { success = false, message = "User is not authenticated", redirectUrl = Url.Action("Login", "Account") });
+
+            }
             AppUser existedUser =await _userManager.GetUserAsync(User);
             Course existedCourse = await _appDbContext.courses.FirstOrDefaultAsync(s => s.Id == CourseId);
             if (existedCourse == null) return NotFound();
@@ -67,7 +71,7 @@ namespace BackEndFinal.Controllers
             {
                 BasketCourse.Quantity++;
                 await _appDbContext.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Course added to basket" });
             }
             if (existedBasket != null)
             {
@@ -79,9 +83,9 @@ namespace BackEndFinal.Controllers
 
                 });
                 await _appDbContext.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "Course added to basket" });
             }
-          
+
             Basket Newbasket = new Basket()
             {
                 AppUserId = existedUser.Id
@@ -95,12 +99,12 @@ namespace BackEndFinal.Controllers
             baskerCourse.CourseId = (int)CourseId;
             await _appDbContext.baskerCourses.AddAsync(baskerCourse);
             await _appDbContext.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Json(new { success = true, message = "Course added to basket" });
 
 
         }
 
-  
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return BadRequest();
@@ -111,7 +115,7 @@ namespace BackEndFinal.Controllers
             if (BasketCourse == null) return NotFound();
             _appDbContext.baskerCourses.Remove(BasketCourse);
             await _appDbContext.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return Json(new { success = true, message = "Course deleted from basket" });
         }
     }
 }

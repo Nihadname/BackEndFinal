@@ -116,7 +116,7 @@
             <ul class="basket-items">
                 @foreach (var item in Model)
                 {
-                    <li class="basket-item">
+                    <li class="basket-item" data-price="@item.Price">
                         <img src="~/img/course/@item.Image" alt="course">
                         <div class="basket-item-info">
                             <p class="basket-item-title">@item.Title</p>
@@ -125,7 +125,7 @@
                         </div>
                         <div class="basket-item-actions">
                             <span class="basket-item-quantity">Qty: @item.Quantity</span>
-                            <a asp-action="Delete" class="basket-item-remove" data-id="@item.CourseId" asp-controller="Basket" asp-route-id="@item.CourseId">Delete</a>
+                            <a  class="basket-item-remove" data-id="@item.CourseId">Delete</a>
                         </div>
                     </li>
                 }
@@ -136,8 +136,12 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="~/js/Backend.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
+    
         var stripe = Stripe('@ViewBag.PublishableKey');
 
         var checkoutButton = document.getElementById('checkout-button');
