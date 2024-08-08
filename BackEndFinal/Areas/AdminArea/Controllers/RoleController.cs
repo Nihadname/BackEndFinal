@@ -1,5 +1,6 @@
 ﻿using BackEndFinal.Models;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
     [Area("AdminArea")]
+    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

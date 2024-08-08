@@ -2,11 +2,13 @@
 using BackEndFinal.Models;
 using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
     [Area("AdminArea")]
+    [Authorize(Roles = "Admin")]
     public class SliderController : Controller
     {
         private readonly ISliderService sliderService;

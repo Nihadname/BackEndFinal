@@ -1,11 +1,12 @@
 ﻿using BackEndFinal.Services.interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
     [Area("AdminArea")]
-
+    [Authorize(Roles = "Admin")]
     public class CommentController : Controller
     {
         private  readonly ICommentService commentService;

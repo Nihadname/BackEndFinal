@@ -4,6 +4,7 @@ using BackEndFinal.Models;
 using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
     [Area("AdminArea")]
+    [Authorize(Roles = "Admin")]
     public class SpeakerController : Controller
     {
         private readonly ISpeakerService speakerService;

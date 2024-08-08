@@ -4,6 +4,7 @@ using BackEndFinal.Models;
 using BackEndFinal.Services;
 using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,8 @@ using System.Globalization;
 
 namespace BackEndFinal.Areas.AdminArea.Controllers
 {
-    [Area("AdminArea")] 
+    [Area("AdminArea")]
+    [Authorize(Roles = "Admin")]
     public class EventController : Controller
     {
         private readonly IEventService eventService;
