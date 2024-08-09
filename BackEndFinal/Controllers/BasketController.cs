@@ -40,7 +40,7 @@ namespace BackEndFinal.Controllers
                     listVMs.Add(new BasketListVM()
                     {
                         CourseId = item.Id,
-                        Image = item.Course.courseImages.FirstOrDefault(s => s.IsMain is true)?.Name,
+                        Image = item.Course.courseImages.FirstOrDefault(s => s.IsMain ==true)?.Name,
                         Title = item.Course.Title,
                         Price = item.Course.Price,
                         TotalPrice = item.Course.Price * item.Quantity,

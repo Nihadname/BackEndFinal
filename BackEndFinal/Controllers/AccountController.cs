@@ -55,7 +55,7 @@ namespace BackEndFinal.Controllers
                 return View(registerVM);
             }
 
-            await _userManager.AddToRoleAsync(appUser, nameof(RolesEnum.Admin));
+            await _userManager.AddToRoleAsync(appUser, nameof(RolesEnum.Member));
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
             string link = Url.Action(nameof(VerifyEmail), "Account", new { email = appUser.Email, token = token }, Request.Scheme, Request.Host.ToString());
 

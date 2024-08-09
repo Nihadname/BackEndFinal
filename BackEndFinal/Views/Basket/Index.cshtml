@@ -114,6 +114,7 @@
                 <a asp-action="Index" asp-controller="Course" class="btn btn-primary">Continue Shopping</a>
             </div>
             <ul class="basket-items">
+                @if(Model is not  null){
                 @foreach (var item in Model)
                 {
                     <li class="basket-item" data-price="@item.Price">
@@ -126,12 +127,17 @@
                         <div class="basket-item-actions">
                             <button class="quantity-btn" data-id="@item.CourseId" onclick="changeQuantity(this, -1)"><i class="fas fa-minus updating"></i></button>
 
-                            <input type="number" class="form-control" value="@item.Quantity" min="1" readonly>
+                                <input type="number" class="form-control Quantity" value="@item.Quantity" min="1" readonly>
                             <button class="quantity-btn" data-id="@item.CourseId" onclick="changeQuantity(this, 1)"><i class="fas fa-plus"></i></button>
 
                             <a  class="basket-item-remove" data-id="@item.CourseId">Delete</a>
                         </div>
-                    </li>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <h1>There is no course in your basket </h1>
                 }
             </ul>
             <div class="basket-summary">
@@ -156,7 +162,7 @@
                 var courseId = item.querySelector('.basket-item-remove').getAttribute('data-id');
                 var title = item.querySelector('.basket-item-title').innerText;
                 var price = parseInt(item.querySelector('.basket-item-price').innerText.replace('$', '')) * 100; // Convert to cents
-                var quantity = parseInt(item.querySelector('.basket-item-quantity').innerText.replace('Qty: ', ''));
+                var quantity = parseInt(item.querySelector('.Quantity').value);
                 basketItems.push({ courseId, title, price, quantity });
             });
 

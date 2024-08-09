@@ -6,7 +6,7 @@
             <div class="course-img">
                 <a asp-action="Detail" asp-controller="Course" asp-route-id="@item.Id">
                     @{
-                        var courseImage = item?.courseImages?.FirstOrDefault();
+                        var courseImage = item?.courseImages?.FirstOrDefault(s=>s.IsMain is true);
                         var courseImageUrl = courseImage != null ? courseImage.Name : "default-course.jpg";
                     }
                     <img src="~/img/course/@courseImageUrl" alt="course">

@@ -1,7 +1,9 @@
 using BackEndFinal.Data;
+using BackEndFinal.Helpers;
 using BackEndFinal.Models;
 using BackEndFinal.Services.interfaces;
 using BackEndFinal.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -18,7 +20,9 @@ namespace BackEndFinal.Controllers
         private readonly IBlogService _blogService;
         private readonly ISubscriberService _subscriberService;
         private readonly AppDbContext _appDbContext;
-        public HomeController(ISliderService sliderService, ISliderContentService sliderContentService, IOfferedAdvantageService overlayService, IEventService eventService, AppDbContext appDbContext, IBlogService blogService, ISubscriberService subscriberService)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public HomeController(ISliderService sliderService, ISliderContentService sliderContentService, IOfferedAdvantageService overlayService, IEventService eventService, AppDbContext appDbContext, IBlogService blogService, ISubscriberService subscriberService, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _sliderService = sliderService;
             _sliderContentService = sliderContentService;
@@ -27,8 +31,10 @@ namespace BackEndFinal.Controllers
             _appDbContext = appDbContext;
             _blogService = blogService;
             _subscriberService = subscriberService;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
-       
+
         public async Task<IActionResult> Index(int page=1)
         {
            HomeViewModel model = new HomeViewModel();
@@ -75,6 +81,32 @@ await _subscriberService.AddSubscriberAsync(newSubscriber);
             TempData["SuccessMessage"] = "Subscription successful!";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> SeedData()
+        {
+            foreach (var item in Enum.GetValues(typeof(RolesEnum)))
+            {
+                await _roleManager.CreateAsync(new IdentityRole { Name = item.ToString() });
+            }
+
+            var adminUser = new AppUser() { Email = "info@meeting.az", FullName = "Super Admin" };
+            var Student = new AppUser() { Email = "Student@meeting.az", FullName = "Student2", UserName = "Student1" };
+            string password = "Raska2024!!";
+            string password2 = "Salam12@";
+            IdentityResult result = await _userManager.CreateAsync(adminUser, password);
+            IdentityResult result1 = await _userManager.CreateAsync(Student, password2);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(adminUser, "Member");
+
+            }
+            if (result1.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(Student, "Admin");
+
+            }
+            return Content("OK");
         }
     }
 }
