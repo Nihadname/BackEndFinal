@@ -98,4 +98,30 @@ document.querySelectorAll(".basket-item-remove").forEach(btn => {
     }
 });
             });
-        });
+});
+
+function changeQuantity(button, delta) {
+    const id = $(button).data('id');
+    $.ajax({
+        url: "/Basket/ChangeQuantity",
+        type: 'POST',
+        data: { id: id, amount: delta },
+        success: function (result) {
+            if (result.success) {
+                const input = $(button).siblings('input');
+                let value = parseInt(input.val());
+                value = isNaN(value) ? 0 : value;
+                value += delta;
+                if (value < 1) value = 1;
+                input.val(value);
+
+                const basketItem = $(button).closest('.basket-item');
+                const price = parseFloat(basketItem.data('price'));
+                const totalPriceElement = basketItem.find('.basket-item-total');
+                totalPriceElement.text('Total: $' + (price * value).toFixed(2));
+
+                $('.basket-summary-total').text('Total: $' + result.totalPrice.toFixed(2));
+            }
+        }
+    });
+}

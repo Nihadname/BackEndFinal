@@ -145,29 +145,6 @@
     <script src="~/js/Backend.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        function changeQuantity(button, delta) {
-            const id = $(button).data('id');
-            $.ajax({
-                url: "/Basket/ChangeQuantity",
-                type: 'POST',
-                data: { id: id, amount: delta },
-                success: function (result) {
-                    if (result.success) {
-                        const input = $(button).siblings('input');
-                        let value = parseInt(input.val());
-                        value = isNaN(value) ? 0 : value;
-                        value += delta;
-                        if (value < 1) value = 1;
-                        input.val(value);
-
-                        const priceElement = $(button).closest('.product-row').find('.product-price');
-                        const price = parseFloat(priceElement.data('price'));
-                        priceElement.text('$' + (price * value).toFixed(2));
-                        $('#total-price').text(result.totalPrice.toFixed(2));
-                    }
-                }
-            });
-        }
         var stripe = Stripe('@ViewBag.PublishableKey');
 
         var checkoutButton = document.getElementById('checkout-button');

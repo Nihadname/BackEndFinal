@@ -123,12 +123,21 @@ namespace BackEndFinal.Controllers
             if (id == null) return BadRequest();
             AppUser existedUser = await _userManager.GetUserAsync(User);
             if (existedUser == null) return Unauthorized();
-
+            Basket existedBasket = await _appDbContext.baskets
+    .Include(s => s.BaskerProducts)
+    .ThenInclude(bp => bp.Course)
+    .FirstOrDefaultAsync(b => b.AppUserId == existedUser.Id);
             BaskerCourse BasketCourse = await _appDbContext.baskerCourses.Include(s => s.Basket).FirstOrDefaultAsync(s => s.Id == id && s.Basket.AppUserId == existedUser.Id);
             if (BasketCourse == null) return NotFound();
             BasketCourse.Quantity += amount;
-          await  _appDbContext.SaveChangesAsync();
-            return Ok();
+            if (BasketCourse.Quantity < 1)
+            {
+                BasketCourse.Quantity = 1;
+            }
+            await  _appDbContext.SaveChangesAsync();
+            var totalPrice = existedBasket.BaskerProducts.Sum(bp => bp.Course.Price * bp.Quantity);
+
+            return Json(new { success = true, totalPrice = totalPrice });
         }
     }
 }
