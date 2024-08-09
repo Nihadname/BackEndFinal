@@ -40,9 +40,10 @@ namespace BackEndFinal.Data
         public DbSet<Comment> comments { get; set; }
         public DbSet<Basket> baskets { get; set; }
         public DbSet<BaskerCourse> baskerCourses { get; set; }
+        public DbSet<WishlistItem> wishlist { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // Ensure this is called first
+            base.OnModelCreating(modelBuilder); 
 
             //modelBuilder.ApplyConfiguration(new SliderConfiguration());
             //modelBuilder.ApplyConfiguration(new SliderContentConfiguration());

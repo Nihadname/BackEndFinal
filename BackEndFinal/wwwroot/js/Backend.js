@@ -125,3 +125,25 @@ function changeQuantity(button, delta) {
         }
     });
 }
+function toggleWishlist(element, CourseId) {
+    const isAdded = $(element).hasClass('added');
+
+    $.ajax({
+        url: isAdded ? '/Wishlist/RemoveFromWishlist' : '/Wishlist/AddToWishlist',
+        type: 'POST',
+        data: { CourseId: CourseId },
+        success: function (response) {
+            if (response.success) {
+                if (isAdded) {
+                    $(element).removeClass('added');
+                    $(element).css('color', 'white');
+                } else {
+                    $(element).addClass('added');
+                    $(element).css('color', 'red'); 
+                }
+            } else {
+                alert('An error occurred. Please try again.');
+            }
+        }
+    });
+}

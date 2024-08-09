@@ -1,0 +1,11 @@
+﻿@model IEnumerable<WishlistItem>
+
+<h2>Your Wishlist</h2>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>@item.Course.Title</li>
+        <button onclick="removeFromWishlist(@item.CourseID)">Remove</button>
+    }
+</ul>

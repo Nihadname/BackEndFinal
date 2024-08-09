@@ -30,6 +30,7 @@ namespace BackEndFinal.Models
         public int Price { get; set; }
 
         public ICollection<BaskerCourse> BaskerProducts { get; set; }
+        public ICollection<WishlistItem> WishlistProducts { get; set; }
 
         //[NotMapped]
         //public string ShortDesc => Description.Length >= 50 ? Description.Substring(0, 50) : Description;

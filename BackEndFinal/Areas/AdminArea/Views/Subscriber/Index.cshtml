@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Subscriber>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <button type="button" class="btn btn-success mb-3">
+            <a class="text-black text-decoration-none" asp-action="create"> Create</a>
+        </button>
+        @foreach (var sub in Model)
+        {
+            <tr>
+                <td>@sub.EmailAddress</td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@sub.Id" method="post" id="delete-form-@sub.Id" style="display:none;">
+                        <input name="__RequestVerificationToken" type="hidden" />
+                    </form>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete('@sub.Id')">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmDelete(roleId) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+        });
+
+        swalWithBootstrapButtons.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form to delete the role
+                document.getElementById('delete-form-' + roleId).submit();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire({
+                    title: "Cancelled",
+                    text: "Your role is safe :)",
+                    icon: "error"
+                });
+            }
+        });
+    }
+</script>

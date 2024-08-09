@@ -26,7 +26,21 @@
                         <button type="submit" class="default-btn">Request to Buy</button>
                     </form>
                 }
+                <i class="fa fa-heart wishlist-icon" data-product-id="@item.Id" onclick="toggleWishlist(this, @item.Id)"></i>
+
             </div>
         </div>
     </div>
 }
+<style>
+     .wishlist-icon {
+         cursor: pointer;
+         font-size: 24px;
+         color: white; 
+         transition: color 0.3s ease;
+     }
+
+         .wishlist-icon.added {
+             color: red;
+         }
+</style>
