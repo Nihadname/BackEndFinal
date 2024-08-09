@@ -117,5 +117,18 @@ namespace BackEndFinal.Controllers
             await _appDbContext.SaveChangesAsync();
             return Json(new { success = true, message = "Course deleted from basket" });
         }
+        [HttpPost]
+        public async Task<IActionResult> ChangeQuantity(int? id,int amount)
+        {
+            if (id == null) return BadRequest();
+            AppUser existedUser = await _userManager.GetUserAsync(User);
+            if (existedUser == null) return Unauthorized();
+
+            BaskerCourse BasketCourse = await _appDbContext.baskerCourses.Include(s => s.Basket).FirstOrDefaultAsync(s => s.Id == id && s.Basket.AppUserId == existedUser.Id);
+            if (BasketCourse == null) return NotFound();
+            BasketCourse.Quantity += amount;
+          await  _appDbContext.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

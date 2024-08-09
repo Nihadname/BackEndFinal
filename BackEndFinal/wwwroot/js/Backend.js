@@ -1,4 +1,3 @@
-const AddBasketButton = document.querySelectorAll(".AddBasket");
 
 function isValidUrl(string) {
     try {
@@ -9,7 +8,7 @@ function isValidUrl(string) {
     }
 }
 
-AddBasketButton.forEach(btn => {
+document.querySelectorAll(".AddBasket").forEach(btn => {
     btn.addEventListener("click", function () {
         const CourseId = $(this).attr("course-Id");
         $.ajax({
@@ -42,8 +41,7 @@ AddBasketButton.forEach(btn => {
 });
 });
 
-const DeleteButton = document.querySelectorAll(".basket-item-remove");
-DeleteButton.forEach(btn => {
+document.querySelectorAll(".basket-item-remove").forEach(btn => {
     btn.addEventListener("click", function () {
         const CourseIdThis = $(this).attr("data-id");
         const basketItem = $(this).closest(".basket-item");
