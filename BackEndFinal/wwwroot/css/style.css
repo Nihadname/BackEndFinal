@@ -2857,3 +2857,13 @@ textarea {
     border: 1px solid #EC1C23;
     color: #fff;
 }
+.wishlist-icon {
+    cursor: pointer;
+    font-size: 24px;
+    color: gray;
+    transition: color 0.3s ease;
+}
+
+    .wishlist-icon.added {
+        color: red;
+    }

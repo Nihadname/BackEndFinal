@@ -21,6 +21,8 @@
                     <input type="hidden" name="courseName" value="@item?.Title" />
                     <button type="submit" class="default-btn">Request to Buy</button>
                 </form>
+                <a data-product-id="@item.Id" onclick="toggleWishlist(@item.Id)">Add To WishList</a>
+
             </div>
         </div>
     </div>

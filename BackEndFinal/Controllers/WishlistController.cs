@@ -68,9 +68,8 @@ namespace BackEndFinal.Controllers
             return Json(new { success = true });
         }
 
-        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> RemoveFromWishlist(int? CourseId)
+        public async Task<IActionResult> RemoveFromWishlist(int CourseId)
         {
             if (CourseId == null) return BadRequest();
 
@@ -80,7 +79,7 @@ namespace BackEndFinal.Controllers
             string existedUserId = user.Id;
 
             var wishlistItem = await _appDbContext.wishlist
-                .FirstOrDefaultAsync(w => w.UserId == existedUserId && w.CourseID == CourseId.Value);
+                .FirstOrDefaultAsync(w => w.UserId == existedUserId && w.CourseID == CourseId);
 
             if (wishlistItem == null)
             {
@@ -90,7 +89,7 @@ namespace BackEndFinal.Controllers
             _appDbContext.wishlist.Remove(wishlistItem);
             await _appDbContext.SaveChangesAsync();
 
-            return Json(new { success = true });
+            return RedirectToAction("Index");
         }
     }
 }

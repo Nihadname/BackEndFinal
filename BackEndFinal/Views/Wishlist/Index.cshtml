@@ -6,6 +6,6 @@
     @foreach (var item in Model)
     {
         <li>@item.Course.Title</li>
-        <button onclick="removeFromWishlist(@item.CourseID)">Remove</button>
+        <a asp-action="RemoveFromWishlist" asp-route-CourseId="@item.CourseID">Delete</a>
     }
 </ul>

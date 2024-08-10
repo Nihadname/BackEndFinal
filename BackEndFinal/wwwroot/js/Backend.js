@@ -125,25 +125,32 @@ function changeQuantity(button, delta) {
         }
     });
 }
-function toggleWishlist(element, CourseId) {
-    const isAdded = $(element).hasClass('added');
-
+function toggleWishlist(CourseId) {
     $.ajax({
-        url: isAdded ? '/Wishlist/RemoveFromWishlist' : '/Wishlist/AddToWishlist',
+        url: '/Wishlist/AddToWishlist',
         type: 'POST',
         data: { CourseId: CourseId },
         success: function (response) {
             if (response.success) {
-                if (isAdded) {
-                    $(element).removeClass('added');
-                    $(element).css('color', 'white');
-                } else {
-                    $(element).addClass('added');
-                    $(element).css('color', 'red'); 
-                }
+                Swal.fire({
+                    icon: "success",
+                    title: response.message,
+                    timer: 1500
+                });
             } else {
-                alert('An error occurred. Please try again.');
+                Swal.fire({
+                    icon: "error",
+                    title: response.message,
+                    timer: 1500
+                });
             }
+        },
+        error: function (response) {
+            Swal.fire({
+                icon: "error",
+                title:"somethign went wrong!",
+                timer: 1500
+            });
         }
     });
 }
